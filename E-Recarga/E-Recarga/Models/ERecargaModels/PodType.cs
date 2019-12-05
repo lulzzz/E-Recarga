@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace E_Recarga.Models
+namespace E_Recarga.Models.ERecargaModels
 {
-    public enum PodType
+    public class PodType
     {
-        Normal,
-        Ultra
+        [key]
+        public PodEnum Id { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Tipo de Posto")]
+        public string Name { get; set; }
     }
 }
