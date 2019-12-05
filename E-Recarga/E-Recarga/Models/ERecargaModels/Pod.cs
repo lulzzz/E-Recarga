@@ -7,11 +7,6 @@ using System.Web;
 
 namespace E_Recarga.Models.ERecargaModels
 {
-    public enum PodType {
-        Normal,
-        Fast
-    }
-
     public class Pod
     {
         [ForeignKey("Station")]
@@ -19,7 +14,12 @@ namespace E_Recarga.Models.ERecargaModels
         public Station Station { get; set; }
 
         [Key]
+        [Column(Order = 1)]
         public int Id { get; set; }
+
+        [Key]
+        [Column(Order = 2)]
+        public int Identifier{ get; set; }
         public PodType Type { get; set; }
         public IList<Appointment> Appointments { get; set; }
     }
