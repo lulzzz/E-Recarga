@@ -10,7 +10,7 @@ namespace E_Recarga.Models.ERecargaModels
         [ForeignKey("Company")]
         [DisplayName("Empresa")]
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
+        public virtual Company Company { get; set; }
 
         [Key]
         public int Id { get; set; }
@@ -46,6 +46,6 @@ namespace E_Recarga.Models.ERecargaModels
         public string Region { get; set; }
 
         [DisplayName("Postos")]
-        public IList<Pod> Pods { get; set; }
+        public virtual IList<Pod> Pods { get; set; }
     }
 }

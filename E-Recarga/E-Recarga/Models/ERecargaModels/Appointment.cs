@@ -13,22 +13,22 @@ namespace E_Recarga.Models.ERecargaModels
         [ForeignKey("Company")]
         [DisplayName("Empresa")]
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
+        public virtual Company Company { get; set; }
 
         [ForeignKey("Station")]
         [DisplayName("Estação")]
         public int StationId { get; set; }
-        public Station Station { get; set; }
+        public virtual Station Station { get; set; }
 
         [ForeignKey("Pod")]
         [DisplayName("Posto")]
         public int PodId { get; set; }
-        public Pod Pod { get; set; }
+        public virtual Pod Pod { get; set; }
 
         [ForeignKey("User")]
         [DisplayName("Utilizador")]
         public int UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         [Key]
         public int Id { get; set; }
@@ -45,6 +45,6 @@ namespace E_Recarga.Models.ERecargaModels
         public DateTime End { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public AppointmentStatus Status { get; set; }
+        public virtual AppointmentStatus Status { get; set; }
     }
 }
