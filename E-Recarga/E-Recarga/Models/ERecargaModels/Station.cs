@@ -46,5 +46,6 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Display(Name = "Postos")]
         public virtual IList<Pod> Pods { get; set; }
+        public virtual IList<Employee> Employees { get; set; }
     }
 }
