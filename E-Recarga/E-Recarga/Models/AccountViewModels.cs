@@ -64,20 +64,25 @@ namespace E_Recarga.Models
 
     public class RegisterViewModel
     {
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Display(Name = "Nome")]
+        [StringLength(maximumLength: 100, ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
+        public string Name { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Comfirmar password")]
+        [Compare("Password", ErrorMessage = "As passwords não são iguais")]
         public string ConfirmPassword { get; set; }
     }
 

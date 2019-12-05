@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace E_Recarga.Models.ERecargaModels
 {
@@ -13,28 +10,42 @@ namespace E_Recarga.Models.ERecargaModels
         [ForeignKey("Company")]
         [DisplayName("Empresa")]
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
+        public virtual Company Company { get; set; }
 
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Nome Comercial")]
-        [StringLength(maximumLength: 100,ErrorMessage = "O {0}  entre {2} à {3} caracteres", MinimumLength = 3)]
+        [StringLength(maximumLength: 100,ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
         public string ComercialName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Nome da Rua")]
+        [StringLength(maximumLength: 100, ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
         public string StreetName { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Número do Edifícil")]
+        [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve estar entre {1} e {2}")]
         public int BuildingNumber { get; set; }
 
-        [Required(ErrorMessage = "Código postal é obrigatório")]
-        [RegularExpression("[0-9]{4}([\\-][0-9]{3})?")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Código Postal")]
+        [RegularExpression("[0-9]{4}([\\-][0-9]{3})?", ErrorMessage = "O {0} deve estar no formato: 1234-567")]
         public string PostalCode { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Freguesia")]
+        [StringLength(maximumLength: 100, ErrorMessage = "A {0} deve conter entre {2} a {1} caracteres", MinimumLength = 3)]
         public string Parish { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Região")]
+        [StringLength(maximumLength: 100, ErrorMessage = "A {0} deve conter entre {2} a {1} caracteres", MinimumLength = 3)]
         public string Region { get; set; }
 
-        [Required]
-        public int BasePrice { get; set; }
-        public IList<Pod> Pods { get; set; }
+        [DisplayName("Postos")]
+        public virtual IList<Pod> Pods { get; set; }
     }
 }
