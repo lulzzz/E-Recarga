@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace E_Recarga.Models
+﻿namespace E_Recarga.Models
 {
-    public enum PodEnum
+    public enum PodTypeEnum
     {
         Normal,
         Fast

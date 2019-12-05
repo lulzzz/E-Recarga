@@ -1,32 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace E_Recarga.Models.ERecargaModels
 {
     public class Appointment
     {
         [ForeignKey("Company")]
-        [DisplayName("Empresa")]
+        [Display(Name = "Empresa")]
         public int CompanyId { get; set; }
         public virtual Company Company { get; set; }
 
         [ForeignKey("Station")]
-        [DisplayName("Estação")]
+        [Display(Name = "Estação")]
         public int StationId { get; set; }
         public virtual Station Station { get; set; }
 
         [ForeignKey("Pod")]
-        [DisplayName("Posto")]
+        [Display(Name = "Posto")]
         public int PodId { get; set; }
         public virtual Pod Pod { get; set; }
 
         [ForeignKey("User")]
-        [DisplayName("Utilizador")]
+        [Display(Name = "Utilizador")]
         public int UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
@@ -34,7 +30,7 @@ namespace E_Recarga.Models.ERecargaModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [DisplayName("Custo")]
+        [Display(Name = "Custo")]
         [Range(0.00,double.MaxValue)]
         public double Cost { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace E_Recarga.Models.ERecargaModels
@@ -8,12 +7,12 @@ namespace E_Recarga.Models.ERecargaModels
     {
         //TODO: check and nullify cascade delete
         [ForeignKey("Station")]
-        [DisplayName("Estação")]
+        [Display(Name = "Estação")]
         public int? StationId { get; set; }
         public virtual Station Station { get; set; }
 
         [ForeignKey("Company")]
-        [DisplayName("Empresa")]
+        [Display(Name = "Empresa")]
         public int CompanyId { get; set; }
         public virtual Station Company { get; set; }
     }
