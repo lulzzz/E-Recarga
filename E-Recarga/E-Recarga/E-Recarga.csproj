@@ -177,11 +177,12 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ERecargaModels\Appointment.cs" />
+    <Compile Include="Models\ERecargaModels\AppointmentStatus.cs" />
     <Compile Include="Models\ERecargaModels\Company.cs" />
+    <Compile Include="Models\ERecargaModels\ERecargaEnums.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ERecargaModels\Pod.cs" />
-    <Compile Include="Models\ERecargaModels\PodType.cs" />
     <Compile Include="Models\ERecargaModels\Price.cs" />
     <Compile Include="Models\ERecargaModels\Station.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
