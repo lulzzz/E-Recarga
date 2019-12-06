@@ -5,7 +5,7 @@ namespace E_Recarga.Models.ERecargaModels
     public class PodType
     {
         [Key]
-        public int PodTypeEnum { get; set; }
+        public PodTypeEnum Id { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Tipo de Posto")]

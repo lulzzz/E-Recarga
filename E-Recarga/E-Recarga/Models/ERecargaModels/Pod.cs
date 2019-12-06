@@ -9,7 +9,7 @@ namespace E_Recarga.Models.ERecargaModels
     {
         [ForeignKey("Station")]
         [Display(Name = "Estação")]
-        public int StationID { get; set; }
+        public int StationId { get; set; }
         public virtual Station Station { get; set; }
 
         [Key]
@@ -17,7 +17,7 @@ namespace E_Recarga.Models.ERecargaModels
 
         [ForeignKey("PodType")]
         [Display(Name = "Tipo de posto")]
-        public int PodId { get; set; }
+        public PodTypeEnum PodId { get; set; }
         public virtual PodType PodType { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]

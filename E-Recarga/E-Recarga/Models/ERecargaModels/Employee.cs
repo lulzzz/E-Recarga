@@ -14,6 +14,6 @@ namespace E_Recarga.Models.ERecargaModels
         [ForeignKey("Company")]
         [Display(Name = "Empresa")]
         public int CompanyId { get; set; }
-        public virtual Station Company { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

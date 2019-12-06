@@ -23,7 +23,7 @@ namespace E_Recarga.Models.ERecargaModels
 
         [ForeignKey("User")]
         [Display(Name = "Utilizador")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
         [Key]
@@ -39,6 +39,9 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public DateTime End { get; set; }
+
+        [ForeignKey("Status")]
+        public AppointmentStatusEnum AppointmentStatusId { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public virtual AppointmentStatus Status { get; set; }

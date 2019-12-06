@@ -15,7 +15,7 @@ namespace E_Recarga.Models.ERecargaModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [Display(Name = "Nome Comercial")]
+        [Display(Name = "Nome da Estação")]
         [StringLength(maximumLength: 100,ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
         public string ComercialName { get; set; }
 
