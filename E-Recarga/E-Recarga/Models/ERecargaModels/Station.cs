@@ -31,7 +31,7 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Código Postal")]
-        [RegularExpression("[0-9]{4}([\\-][0-9]{3})?", ErrorMessage = "O {0} deve estar no formato: 1234-567")]
+        [RegularExpression("([0-9]{4}[\\-][0-9]{3})?", ErrorMessage = "O {0} deve estar no formato: 1234-567")]
         public string PostalCode { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]

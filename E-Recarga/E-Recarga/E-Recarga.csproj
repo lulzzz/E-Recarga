@@ -173,11 +173,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912062124570_FistMigration.cs" />
+    <Compile Include="Migrations\201912062124570_FistMigration.Designer.cs">
+      <DependentUpon>201912062124570_FistMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ERecargaModels\Appointment.cs" />
     <Compile Include="Models\ERecargaModels\AppointmentStatus.cs" />
     <Compile Include="Models\ERecargaModels\Company.cs" />
     <Compile Include="Models\ERecargaModels\Employee.cs" />
+    <Compile Include="Models\ERecargaModels\ERecargaDbContext.cs" />
     <Compile Include="Models\ERecargaModels\ERecargaEnums.cs" />
     <Compile Include="Models\ERecargaModels\PodType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -261,6 +267,11 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201912062124570_FistMigration.resx">
+      <DependentUpon>201912062124570_FistMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
