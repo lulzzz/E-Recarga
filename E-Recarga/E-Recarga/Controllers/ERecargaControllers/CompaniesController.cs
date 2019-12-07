@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
+    [Authorize(Roles = nameof(RoleEnum.Administrator))]
     public class CompaniesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
