@@ -14,7 +14,12 @@ namespace E_Recarga.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Display(Name = "Nome")]
+        [StringLength(maximumLength: 100, ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
         public string Name { get; set; }
+
+        [Range(0.00, double.MaxValue)]
         public double Wallet { get; set; }
         public virtual IList<Appointment> Appointments { get; set; }
 
