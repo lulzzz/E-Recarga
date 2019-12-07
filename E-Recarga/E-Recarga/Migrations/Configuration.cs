@@ -42,7 +42,7 @@ namespace E_Recarga.Migrations
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             foreach (var Role in Enum.GetValues(typeof(RoleEnum)).OfType<RoleEnum>())
             {
-                if (roleManager.RoleExists(Role.ToString()))
+                if (!roleManager.RoleExists(Role.ToString()))
                     context.Roles.AddOrUpdate(new IdentityRole(Role.ToString()));
             }
 
