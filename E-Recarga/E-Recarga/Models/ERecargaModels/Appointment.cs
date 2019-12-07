@@ -35,12 +35,15 @@ namespace E_Recarga.Models.ERecargaModels
         public double Cost { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Display(Name = "Inicio da Marcação")]
         public DateTime Start { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Display(Name = "Fim da marcação")]
         public DateTime End { get; set; }
 
         [ForeignKey("Status")]
+        [Display(Name = "Estado da Marcação")]
         public AppointmentStatusEnum AppointmentStatusId { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
