@@ -1,0 +1,42 @@
+﻿@model E_Recarga.Models.ERecargaModels.Pod
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Pod</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PodType.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PodType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Station.ComercialName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station.ComercialName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isActive)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
