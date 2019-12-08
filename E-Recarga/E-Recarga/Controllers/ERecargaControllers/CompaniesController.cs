@@ -11,7 +11,7 @@ using E_Recarga.Models.ERecargaModels;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
-    [Authorize(Roles = nameof(RoleEnum.Administrator))]
+    //[Authorize(Roles = nameof(RoleEnum.Administrator))]
     public class CompaniesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
@@ -20,6 +20,20 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult Index()
         {
             return View(db.Companies.ToList());
+        }
+
+        public ActionResult Managers()
+        {
+            var adminId = db.Roles
+                .Where(role => role.Name == nameof(RoleEnum.Administrator))
+                .FirstOrDefault().Id;
+
+            var employees = from u in db.Employees
+                            where u.Roles.Any(r => r.RoleId == adminId)
+                            select u;
+
+
+            return View(employees);
         }
 
         // GET: Companies/Details/5
