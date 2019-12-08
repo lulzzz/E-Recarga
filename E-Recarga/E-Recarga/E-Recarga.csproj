@@ -224,6 +224,7 @@
     <Content Include="Images\image10b.png" />
     <Content Include="Images\Logo-128.png" />
     <Content Include="Images\Logo-64.png" />
+    <Content Include="Images\qualidade-reconhecida.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
