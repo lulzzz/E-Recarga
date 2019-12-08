@@ -219,7 +219,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\car_recharge.jpg" />
     <Content Include="Images\favicon.ico" />
+    <Content Include="Images\image10b.png" />
     <Content Include="Images\Logo-128.png" />
     <Content Include="Images\Logo-64.png" />
     <Content Include="Scripts\bootstrap.js" />
