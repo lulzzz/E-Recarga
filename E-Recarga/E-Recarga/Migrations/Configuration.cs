@@ -45,13 +45,6 @@ namespace E_Recarga.Migrations
                 if (!roleManager.RoleExists(Role.ToString()))
                     context.Roles.AddOrUpdate(new IdentityRole(Role.ToString()));
             }
-
-            //context.Roles
-            //    .AddOrUpdate(x => x.Id,
-            //    Enum.GetValues(typeof(RoleEnum))
-            //                    .OfType<RoleEnum>()
-            //                    .Select(x => new IdentityRole() { Name = x.ToString() })
-            //                    .ToArray());
         }
     }
 }
