@@ -159,9 +159,10 @@
     </div>
 }
 
-<div>
+@*<div>
     @Html.ActionLink("Back to List", "Index")
-</div>
+</div>*@
+<a href="javascript:void(0);" onclick="history.go(-1);">Voltar</a>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
