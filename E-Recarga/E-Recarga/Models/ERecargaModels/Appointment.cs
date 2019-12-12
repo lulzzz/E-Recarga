@@ -45,8 +45,6 @@ namespace E_Recarga.Models.ERecargaModels
         [ForeignKey("Status")]
         [Display(Name = "Estado da Marcação")]
         public AppointmentStatusEnum AppointmentStatusId { get; set; }
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public virtual AppointmentStatus Status { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +16,7 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Nome da Estação")]
-        [StringLength(maximumLength: 100,ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
+        [StringLength(maximumLength: 100, ErrorMessage = "O {0} deve conter {2} a {1} caracteres", MinimumLength = 3)]
         public string ComercialName { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]

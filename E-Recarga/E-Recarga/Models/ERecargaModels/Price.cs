@@ -19,13 +19,16 @@ namespace E_Recarga.Models.ERecargaModels
         public int Time { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "O preço tem de ser positivo.")]
+        [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
         [Display(Name = "Custo do Posto Normal")]
         public double CostNormal { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "O preço tem de ser positivo.")]
+        [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
         [Display(Name = "Custo do Posto Ultra")]
         public double CostUltra { get; set; }
+
+        [Display(Name = "Ativo")]
+        public bool Active { get; set; }
     }
 }

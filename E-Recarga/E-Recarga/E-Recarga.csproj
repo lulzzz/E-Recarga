@@ -187,6 +187,10 @@
     <Compile Include="Migrations\201912070238587_ApplicationUser_FieldValidation.Designer.cs">
       <DependentUpon>201912070238587_ApplicationUser_FieldValidation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912122335086_PriceActiveField.cs" />
+    <Compile Include="Migrations\201912122335086_PriceActiveField.Designer.cs">
+      <DependentUpon>201912122335086_PriceActiveField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ERecargaModels\Appointment.cs" />
@@ -327,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912070238587_ApplicationUser_FieldValidation.resx">
       <DependentUpon>201912070238587_ApplicationUser_FieldValidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912122335086_PriceActiveField.resx">
+      <DependentUpon>201912122335086_PriceActiveField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
