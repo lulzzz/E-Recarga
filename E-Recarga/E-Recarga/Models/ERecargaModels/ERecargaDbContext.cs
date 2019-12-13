@@ -9,6 +9,11 @@ namespace E_Recarga.Models.ERecargaModels
 {
     public class ERecargaDbContext : ApplicationDbContext
     {
+        public ERecargaDbContext() : base()
+        {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ERecargaDbContext>());
+        }
+
         public DbSet<Company> Companies { get; set; }
         public DbSet<Station> Stations { get; set; }
         public DbSet<Pod> Pods { get; set; }
