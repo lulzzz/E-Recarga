@@ -87,6 +87,21 @@ namespace E_Recarga.Migrations
                 new Station() { Id = 15, BuildingNumber = 7, ComercialName = "Station E", CompanyId = 3, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada"}
                 );
 
+            int podId = 1;
+            for(int i = 1; i < 16; i++)
+            {
+                for (int j = 1; j < 11; j++) {
+                    context.Pods.AddOrUpdate(x => x.Id,
+                        new Pod() { Id = podId++, isActive = true, StationId = i, PodId = PodTypeEnum.Normal });
+                }
+
+                for (int j = 1; j < 11; j++)
+                {
+                    context.Pods.AddOrUpdate(x => x.Id,
+                        new Pod() { Id = podId++, isActive = true, StationId = i, PodId = PodTypeEnum.Fast });
+                }
+            }
+
             //Create Users
             var store = new UserStore<ApplicationUser>(context);
             var manager = new UserManager<ApplicationUser>(store);
