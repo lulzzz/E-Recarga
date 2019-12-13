@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -36,11 +38,36 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(employee);
         }
 
-        // GET: Employees/Create
-        public ActionResult Create()
+        [NonAction]
+        private void CreateEmployeeHelper(int companyId, int? stationId)
         {
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name");
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName");
+            if (User.Identity.AuthenticationType == nameof(RoleEnum.Administrator))
+            {
+                ViewBag.Role = nameof(RoleEnum.CompanyManager);
+                ViewBag.StationId = null;
+            }
+            else
+            {
+                var loggedUserID = User.Identity.GetUserId();
+                var manager = db.Employees.Where(user => user.Id == loggedUserID).SingleOrDefault();
+
+                if (stationId == null)
+                {
+                    ViewBag.StationId = new SelectList(db.Stations.Where(s => s.CompanyId == manager.CompanyId), "Id", "ComercialName");
+                }
+                else
+                {
+                    ViewBag.StationId = stationId;
+                    ViewBag.Role = nameof(RoleEnum.Employee);
+                }
+            }
+
+            ViewBag.CompanyId = companyId;
+        }
+        // GET: Employees/Create
+        public ActionResult Create(int companyId, int? stationId)
+        {
+            CreateEmployeeHelper(companyId, stationId);
             return View();
         }
 
@@ -49,7 +76,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Wallet,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StationId,CompanyId")] Employee employee)
+        public ActionResult Create(int companyId, int? stationId,[Bind(Include = "Id,Name,Wallet,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StationId,CompanyId")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -58,8 +85,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name", employee.CompanyId);
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", employee.StationId);
+            CreateEmployeeHelper(companyId, stationId);
             return View(employee);
         }
 
