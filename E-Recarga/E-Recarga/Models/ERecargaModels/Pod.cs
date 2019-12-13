@@ -22,7 +22,7 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Posto Ativo")]
-        public Boolean isActive { get; set; }
+        public bool isActive { get; set; }
 
         [Display(Name = "Marcações")]
         public virtual IList<Appointment> Appointments { get; set; }

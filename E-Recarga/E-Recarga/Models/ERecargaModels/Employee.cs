@@ -5,7 +5,6 @@ namespace E_Recarga.Models.ERecargaModels
 {
     public class Employee : ApplicationUser
     {
-        //TODO: check and nullify cascade delete
         [ForeignKey("Station")]
         [Display(Name = "Estação")]
         public int? StationId { get; set; }

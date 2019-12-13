@@ -22,8 +22,8 @@ namespace E_Recarga.Migrations
                         AppointmentStatusId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
-                .ForeignKey("dbo.Pods", t => t.PodId, cascadeDelete: false)
+                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: false)
+                .ForeignKey("dbo.Pods", t => t.PodId, cascadeDelete: true)
                 .ForeignKey("dbo.Stations", t => t.StationId, cascadeDelete: false)
                 .ForeignKey("dbo.AppointmentStatus", t => t.AppointmentStatusId, cascadeDelete: false)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId)
