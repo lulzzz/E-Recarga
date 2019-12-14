@@ -26,7 +26,6 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Número do Edifício")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0,4:d}:{0,3:d}")]
         [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve estar entre {1} e {2}")]
         public int BuildingNumber { get; set; }
 
