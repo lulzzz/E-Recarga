@@ -145,30 +145,18 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Companies/Delete/5
-        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
+        [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult Delete(int? id)
         {
-            Company company;
-
-            if (!User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            if (id == null)
             {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-
-                company = db.Companies.Find(id);
-                if (company == null)
-                {
-                    return HttpNotFound();
-                }
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            else
+
+            Company company = db.Companies.Find(id);
+            if (company == null)
             {
-                var userId = User.Identity.GetUserId();
-                var user = db.Employees.Include(x => x.Company)
-                            .Where(x => x.Id == userId).SingleOrDefault();
-                company = user.Company;
+                return HttpNotFound();
             }
 
             return View(company);
@@ -177,15 +165,12 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
+        [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult DeleteConfirmed(int id)
         {
             Company company = db.Companies.Find(id);
             db.Companies.Remove(company);
             db.SaveChanges();
-
-            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                return RedirectToAction("Index", "Home");
 
             return RedirectToAction("Index");
         }
