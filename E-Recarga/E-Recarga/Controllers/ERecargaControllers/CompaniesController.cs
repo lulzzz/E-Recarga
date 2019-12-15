@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using E_Recarga.ViewModels;
 using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
@@ -42,7 +43,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
         public ActionResult Details(int? id)
         {
-            Company company;
+            CompanyViewModel viewModel = new CompanyViewModel();
 
             if (!User.IsInRole(nameof(RoleEnum.CompanyManager)))
             {
@@ -51,21 +52,28 @@ namespace E_Recarga.Controllers.ERecargaControllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                company = db.Companies.Find(id);
-                if (company == null)
+                viewModel.Company = db.Companies.Find(id);
+                if (viewModel.Company == null)
                 {
                     return HttpNotFound();
                 }
+
+                var role = db.Roles
+                .Where(x => x.Name == nameof(RoleEnum.CompanyManager))
+                .FirstOrDefault().Id;
+
+                viewModel.Managers = viewModel.Company
+                    .Employees.Where(x => x.Roles.Any(r => r.RoleId == role)).ToList();
             }
             else
             {
                 var userId = User.Identity.GetUserId();
                 var user = db.Employees.Include(x => x.Company)
                             .Where(x => x.Id == userId).SingleOrDefault();
-                company = user.Company;
+                viewModel.Company = user.Company;
             }
 
-            return View(company);
+            return View(viewModel);
         }
 
         // GET: Companies/Create
