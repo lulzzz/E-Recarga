@@ -32,64 +32,70 @@
     </dl>
 
     <div class="text-right">
-        @Html.ActionLink("Editar", "Edit", new { id = Model.Id })
+        @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
+        {
+            @Html.ActionLink("Editar", "Edit")
+        }
+        else
+        {
+            @Html.ActionLink("Editar", "Edit", new { id = Model.Id })
+        }
     </div>
     <hr />
 </div>
 
-@*@if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
-    {*@
-<br /><h3>Estações</h3>
-<div class="text-right">
-    @Html.ActionLink("Criar", "Create", "Stations", new { companyId = Model.Id}, null)<br /><br />
-</div>
-@if (Model.Stations.Count == 0)
+@if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
 {
-    <p>Não existem estações atribuídas à empresa.</p>
-    <br /><br />
-}
-else
-{
-    <div id="t_est">
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Stations[0].ComercialName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Stations[0].Parish)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Stations[0].Region)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model.Stations)
-            {
+    <br /><h3>Estações</h3>
+    <div class="text-right">
+        @Html.ActionLink("Criar", "Create", "Stations", new { companyId = Model.Id }, null)<br /><br />
+    </div>
+    if (Model.Stations.Count == 0)
+    {
+        <p>Não existem estações atribuídas à empresa.</p>
+        <br /><br />
+    }
+    else
+    {
+        <div id="t_est">
+            <table class="table">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ComercialName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Parish)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Region)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", "Stations", new { id = item.Id }, null) |
-                        @Html.ActionLink("Detalhes", "Details", "Stations", new { id = item.Id }, null) |
-                        @Html.ActionLink("Eliminar", "Delete", "Stations", new { id = item.Id }, null)
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Stations[0].ComercialName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Stations[0].Parish)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Stations[0].Region)
+                    </th>
+                    <th></th>
                 </tr>
-            }
 
-        </table>
-    </div><hr /><br />
+                @foreach (var item in Model.Stations)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ComercialName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Parish)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Region)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", "Stations", new { id = item.Id }, null) |
+                            @Html.ActionLink("Detalhes", "Details", "Stations", new { id = item.Id }, null) |
+                            @Html.ActionLink("Eliminar", "Delete", "Stations", new { id = item.Id }, null)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div><hr /><br />
+    }
 }
-
-@*}*@
 
 <div>
     <h3>Funcionários</h3>
@@ -154,9 +160,9 @@ else
         </div>
     }
     <hr /><br /><br />
-    @*@if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.Administrator)))
-    {*@
+    @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.Administrator)))
+    {
         @Html.ActionLink("Voltar", "Index")
-    @* } *@
+    }
 </div>
 

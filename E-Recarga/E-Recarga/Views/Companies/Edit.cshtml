@@ -1,4 +1,5 @@
 ﻿@model E_Recarga.Models.ERecargaModels.Company
+@using E_Recarga.Models
 
 @{
     ViewBag.Title = "Edit";
@@ -49,9 +50,18 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div>
+        @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
+        {
+            @Html.ActionLink("Voltar", "Details")
+        }
+        else
+        {
+            <a href="javascript:void(0);" onclick="history.go(-1);">Voltar</a>
+            @* @Html.ActionLink("Voltar", "Index") *@
+        }
+
+    </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
