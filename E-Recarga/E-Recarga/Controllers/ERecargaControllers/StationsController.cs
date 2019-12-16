@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -15,31 +17,48 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Stations
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Index()
         {
-            var stations = db.Stations.Include(s => s.Company);
+            var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+            var stations = company.Stations;
             return View(stations.ToList());
         }
 
         // GET: Stations/Details/5
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Details(int? id)
         {
-            if (id == null)
+            Station station;
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                station = db.Stations.Find(id);
+                if (station == null)
+                {
+                    return HttpNotFound();
+                }
             }
-            Station station = db.Stations.Find(id);
-            if (station == null)
+            else
             {
-                return HttpNotFound();
+                var user = db.Employees.Find(User.Identity.GetUserId());
+                if(user.Station == null)
+                    return HttpNotFound();
+
+                station = user.Station;
             }
+
             return View(station);
         }
 
         // GET: Stations/Create
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Create()
         {
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name");
             return View();
         }
 
@@ -48,8 +67,12 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,CompanyId,ComercialName,StreetName,BuildingNumber,PostalCode,Parish,Region")] Station station)
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        public ActionResult Create([Bind(Include = "ComercialName,StreetName,BuildingNumber,PostalCode,Parish,Region")] Station station)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+            station.CompanyId = user.CompanyId;
+
             if (ModelState.IsValid)
             {
                 db.Stations.Add(station);
@@ -57,13 +80,15 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name", station.CompanyId);
             return View(station);
         }
 
         // GET: Stations/Edit/5
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Edit(int? id)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -73,7 +98,11 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name", station.CompanyId);
+            else if(station.CompanyId != user.CompanyId)
+            {
+                return HttpNotFound();
+            }
+
             return View(station);
         }
 
@@ -82,7 +111,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,CompanyId,ComercialName,StreetName,BuildingNumber,PostalCode,Parish,Region")] Station station)
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        public ActionResult Edit([Bind(Include = "ComercialName,StreetName,BuildingNumber,PostalCode,Parish,Region")] Station station)
         {
             if (ModelState.IsValid)
             {
@@ -90,13 +120,16 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name", station.CompanyId);
+
             return View(station);
         }
-
+        //TODO: Attempt to change the ID from the model from the client
         // GET: Stations/Delete/5
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Delete(int? id)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -106,12 +139,18 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
+            else if (station.CompanyId != user.CompanyId)
+            {
+                return HttpNotFound();
+            }
+
             return View(station);
         }
 
         // POST: Stations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DeleteConfirmed(int id)
         {
             Station station = db.Stations.Find(id);

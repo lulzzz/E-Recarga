@@ -120,6 +120,8 @@ namespace E_Recarga.Migrations
             };
 
             var workers = new List<Employee>();
+            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace@worker.pt", UserName = $"Wallace@worker.pt", CompanyId = 1, StationId = 1 });
+            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana@worker.pt", UserName = $"Joana@worker.pt", CompanyId = 2, StationId = 6 });
             for(int j = 1; j < 4; j++)
             {
                 for (int i = 1; i < 6; i++)

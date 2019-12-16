@@ -112,22 +112,25 @@
 
                 @foreach (var item in Model.Employees)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
-                        </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    @if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    {
                         <td>
                             @Html.ActionLink("Editar", "Edit", "Employees", new { id = item.Id }, null) |
                             @Html.ActionLink("Detalhes", "Details", "Employees", new { id = item.Id }, null) |
                             @Html.ActionLink("Eliminar", "Delete", "Employees", new { id = item.Id }, null)
                         </td>
-                    </tr>
+                    }
+                </tr>
                 }
             </table>
         </div>
@@ -146,7 +149,7 @@
 }
 @if (Model.Pods.Where(x => x.isActive == true).ToList().Count == 0)
 {
-    <p>Não existem postos ativos!.</p>
+    <p>Não existem postos ativos na estação @Model.ComercialName!.</p>
     <br /><br />
 }
 else
@@ -190,9 +193,9 @@ else
                         @Html.DisplayFor(modelItem => item.isActive)
                     </td>
                     <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Detalhes", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Marcações", "Details", new { id = item.Id })
+                        @Html.ActionLink("Editar", "Edit","Pods", new { id = item.Id }, null) |
+                        @Html.ActionLink("Detalhes", "Details", "Pods", new { id = item.Id }, null) |
+                        @Html.ActionLink("Marcações", "Appoitments", "Pods", new { id = item.Id }, null)
                     </td>
                 </tr>
             }
