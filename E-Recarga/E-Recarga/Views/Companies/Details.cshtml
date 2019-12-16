@@ -99,9 +99,12 @@
 
 <div>
     <h3>Funcionários</h3>
-    <div class="text-right">
-        @Html.ActionLink("Criar", "Create", "Employees", new { companyId = Model.Company.Id }, null)<br /><br />
-    </div>
+    @if (Request.IsAuthenticated && !User.IsInRole(nameof(RoleEnum.CompanyManager)))
+    {
+        <div class="text-right">
+            @Html.ActionLink("Criar", "Create", "Employees", new { companyId = Model.Company.Id }, null)<br /><br />
+        </div>
+    }
 
     @if (Model.Company.Employees.Count == 0)
     {
@@ -121,10 +124,10 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Company.Employees[0].PhoneNumber)
                     </th>
-                    @if (Request.IsAuthenticated && !User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
                     {
                         <th>
-                            @Html.DisplayNameFor(model => model.Company.Employees[0].Station.ComercialName)
+                            @Html.DisplayNameFor(model => model.Company.Stations[0].ComercialName)
                         </th>
                     }
                     <th></th>

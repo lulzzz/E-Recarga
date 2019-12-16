@@ -1,15 +1,17 @@
 ﻿@model E_Recarga.Models.ERecargaModels.Station
+@using E_Recarga.Models
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<center>
+    <br /><h1> @Html.DisplayFor(model => model.Company.Name): @Html.DisplayFor(model => model.ComercialName)</h1><br />
+</center>
 
 <div>
-    <h4>Station</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal" size="+1.5">
         <dt>
             @Html.DisplayNameFor(model => model.Company.Name)
         </dt>
@@ -65,10 +67,138 @@
         <dd>
             @Html.DisplayFor(model => model.Region)
         </dd>
-
     </dl>
+
+    <div class="text-right">
+        @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
+        {
+            @Html.ActionLink("Editar", "Edit")
+        }
+    </div>
+    <hr />
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+
+<br />
+<div>
+    <h3>Funcionários</h3>
+    @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
+    {
+        <div class="text-right">
+             @Html.ActionLink("Criar", "Create", "Employees", new { companyId = Model.CompanyId, stationId = Model.Id }, null)<br /><br />
+        </div>
+    }
+
+    @if (Model.Employees.Count == 0)
+    {
+        <p>Não existem trabalhadores atribuídos à estação.</p>
+    }
+    else
+    {
+        <div id="tableWorkers">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employees[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employees[0].Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employees[0].PhoneNumber)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Employees)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    @if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    {
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", "Employees", new { id = item.Id }, null) |
+                            @Html.ActionLink("Detalhes", "Details", "Employees", new { id = item.Id }, null) |
+                            @Html.ActionLink("Eliminar", "Delete", "Employees", new { id = item.Id }, null)
+                        </td>
+                    }
+                </tr>
+                }
+            </table>
+        </div>
+    }
+</div>
+
+
+<br />
+<h3>Postos</h3>
+
+@if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
+{
+    <div class="text-right">
+        @Html.ActionLink("Criar", "Create", "Pods", new { stationId = Model.Id }, null)<br /><br />
+    </div>
+}
+@if (Model.Pods.Where(x => x.isActive == true).ToList().Count == 0)
+{
+    <p>Não existem postos ativos na estação @Model.ComercialName!.</p>
+    <br /><br />
+}
+else
+{
+    <div id="stationPods">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pods[0].PodType.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pods[0].Station.ComercialName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pods[0].isActive)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Pods)
+            {
+                <tr>
+                    @if (item.PodType.Id == PodTypeEnum.Fast)
+                    {
+                        <td>
+                            <span class="glyphicon glyphicon-flash" style="font-size:25px;color:greenyellow;text-shadow:2px 2px 4px #000000;"></span>
+                            @Html.DisplayFor(modelItem => item.PodType.Name)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <span class="glyphicon glyphicon-flash" style="font-size:25px;color:firebrick;text-shadow:2px 2px 4px #000000;"></span>
+                            @Html.DisplayFor(modelItem => item.PodType.Name)
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Station.ComercialName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.isActive)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit","Pods", new { id = item.Id }, null) |
+                        @Html.ActionLink("Detalhes", "Details", "Pods", new { id = item.Id }, null) |
+                        @Html.ActionLink("Marcações", "Appoitments", "Pods", new { id = item.Id }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div><hr /><hr />
+}
