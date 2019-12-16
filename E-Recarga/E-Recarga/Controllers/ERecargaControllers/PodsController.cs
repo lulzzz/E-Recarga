@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -15,15 +17,43 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Pods
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Index()
         {
-            var pods = db.Pods.Include(p => p.PodType).Include(p => p.Station);
+            var user = db.Employees.Find(User.Identity.GetUserId());
+            IQueryable<Pod> pods;
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                pods = db.Pods
+                        .Include(p => p.PodType)
+                        .Include(p => p.Station)
+                        .Where(p => p.Station.CompanyId == user.CompanyId);
+            }
+            else
+            {
+                if(user.StationId != null)
+                {
+                    pods = db.Pods
+                            .Include(p => p.PodType)
+                            .Include(p => p.Station)
+                            .Where(p => p.StationId == user.StationId);
+                }
+                else
+                {
+                    pods = new List<Pod>().AsQueryable();
+                }
+            }
+
             return View(pods.ToList());
         }
 
         // GET: Pods/Details/5
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Details(int? id)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -33,14 +63,29 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                if(pod.Station.CompanyId != user.CompanyId)
+                    return HttpNotFound();
+            }
+            else
+            {
+                if (pod.Station.Id != user.StationId)
+                    return HttpNotFound();
+            }
+
             return View(pod);
         }
 
         // GET: Pods/Create
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Create()
         {
+            var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+
             ViewBag.PodId = new SelectList(db.PodTypes, "Id", "Name");
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName");
+            ViewBag.StationId = new SelectList(company.Stations, "Id", "ComercialName");
             return View();
         }
 
@@ -49,8 +94,11 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StationId,PodId,isActive")] Pod pod)
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        public ActionResult Create([Bind(Include = "StationId,PodId,isActive")] Pod pod)
         {
+            var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+
             if (ModelState.IsValid)
             {
                 db.Pods.Add(pod);
@@ -59,13 +107,16 @@ namespace E_Recarga.Controllers.ERecargaControllers
             }
 
             ViewBag.PodId = new SelectList(db.PodTypes, "Id", "Name", pod.PodId);
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", pod.StationId);
+            ViewBag.StationId = new SelectList(company.Stations, "Id", "ComercialName", pod.StationId);
             return View(pod);
         }
 
         // GET: Pods/Edit/5
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Edit(int? id)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -75,8 +126,21 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                if (pod.Station.CompanyId != user.CompanyId)
+                    return HttpNotFound();
+            }
+            else
+            {
+                if (pod.Station.Id != user.StationId)
+                    return HttpNotFound();
+            }
+
             ViewBag.PodId = new SelectList(db.PodTypes, "Id", "Name", pod.PodId);
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", pod.StationId);
+            ViewBag.StationId = new SelectList(user.Company.Stations, "Id", "ComercialName", pod.StationId);
+
             return View(pod);
         }
 
@@ -85,22 +149,29 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,StationId,PodId,isActive")] Pod pod)
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
+        public ActionResult Edit([Bind(Include = "StationId,PodId,isActive")] Pod pod)
         {
+            var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+
             if (ModelState.IsValid)
             {
                 db.Entry(pod).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             ViewBag.PodId = new SelectList(db.PodTypes, "Id", "Name", pod.PodId);
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", pod.StationId);
+            ViewBag.StationId = new SelectList(company.Stations, "Id", "ComercialName", pod.StationId);
             return View(pod);
         }
 
         // GET: Pods/Delete/5
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Delete(int? id)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -110,12 +181,19 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
+
+            if (pod.Station.CompanyId != user.CompanyId)
+            {
+                return HttpNotFound();
+            }
+
             return View(pod);
         }
 
         // POST: Pods/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DeleteConfirmed(int id)
         {
             Pod pod = db.Pods.Find(id);
