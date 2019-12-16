@@ -28,5 +28,6 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Display(Name = "Trabalhadores")]
         public virtual IList<Employee> Employees { get; set; }
+        public virtual IList<Appointment> Appointments { get; set; }
     }
 }
