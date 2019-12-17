@@ -3,7 +3,7 @@ namespace E_Recarga.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class FistMigration : DbMigration
+    public partial class FirstMigration : DbMigration
     {
         public override void Up()
         {
@@ -13,8 +13,8 @@ namespace E_Recarga.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         CompanyId = c.Int(nullable: false),
-                        StationId = c.Int(nullable: false),
-                        PodId = c.Int(nullable: false),
+                        StationId = c.Int(),
+                        PodId = c.Int(),
                         UserId = c.String(maxLength: 128),
                         Cost = c.Double(nullable: false),
                         Start = c.DateTime(nullable: false),
@@ -22,10 +22,10 @@ namespace E_Recarga.Migrations
                         AppointmentStatusId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: false)
-                .ForeignKey("dbo.Pods", t => t.PodId, cascadeDelete: true)
-                .ForeignKey("dbo.Stations", t => t.StationId, cascadeDelete: false)
-                .ForeignKey("dbo.AppointmentStatus", t => t.AppointmentStatusId, cascadeDelete: false)
+                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
+                .ForeignKey("dbo.Pods", t => t.PodId)
+                .ForeignKey("dbo.Stations", t => t.StationId)
+                .ForeignKey("dbo.AppointmentStatus", t => t.AppointmentStatusId)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId)
                 .Index(t => t.CompanyId)
                 .Index(t => t.StationId)
@@ -49,7 +49,7 @@ namespace E_Recarga.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        Name = c.String(),
+                        Name = c.String(nullable: false, maxLength: 100),
                         Wallet = c.Double(nullable: false),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
@@ -138,22 +138,13 @@ namespace E_Recarga.Migrations
                         isActive = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.PodTypes", t => t.PodId, cascadeDelete: false)
+                .ForeignKey("dbo.PodTypes", t => t.PodId)
                 .ForeignKey("dbo.Stations", t => t.StationId, cascadeDelete: true)
                 .Index(t => t.StationId)
                 .Index(t => t.PodId);
             
             CreateTable(
                 "dbo.PodTypes",
-                c => new
-                    {
-                        Id = c.Int(nullable: false),
-                        Name = c.String(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.AppointmentStatus",
                 c => new
                     {
                         Id = c.Int(nullable: false),
@@ -170,10 +161,20 @@ namespace E_Recarga.Migrations
                         Time = c.Int(nullable: false),
                         CostNormal = c.Double(nullable: false),
                         CostUltra = c.Double(nullable: false),
+                        Active = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Stations", t => t.StationId, cascadeDelete: true)
                 .Index(t => t.StationId);
+            
+            CreateTable(
+                "dbo.AppointmentStatus",
+                c => new
+                    {
+                        Id = c.Int(nullable: false),
+                        Name = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -190,7 +191,6 @@ namespace E_Recarga.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Prices", "StationId", "dbo.Stations");
             DropForeignKey("dbo.Appointments", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
@@ -200,6 +200,7 @@ namespace E_Recarga.Migrations
             DropForeignKey("dbo.Appointments", "PodId", "dbo.Pods");
             DropForeignKey("dbo.Appointments", "CompanyId", "dbo.Companies");
             DropForeignKey("dbo.AspNetUsers", "StationId", "dbo.Stations");
+            DropForeignKey("dbo.Prices", "StationId", "dbo.Stations");
             DropForeignKey("dbo.Pods", "StationId", "dbo.Stations");
             DropForeignKey("dbo.Pods", "PodId", "dbo.PodTypes");
             DropForeignKey("dbo.Stations", "CompanyId", "dbo.Companies");
@@ -222,8 +223,8 @@ namespace E_Recarga.Migrations
             DropIndex("dbo.Appointments", new[] { "StationId" });
             DropIndex("dbo.Appointments", new[] { "CompanyId" });
             DropTable("dbo.AspNetRoles");
-            DropTable("dbo.Prices");
             DropTable("dbo.AppointmentStatus");
+            DropTable("dbo.Prices");
             DropTable("dbo.PodTypes");
             DropTable("dbo.Pods");
             DropTable("dbo.Stations");

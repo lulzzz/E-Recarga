@@ -13,12 +13,12 @@ namespace E_Recarga.Models.ERecargaModels
 
         [ForeignKey("Station")]
         [Display(Name = "Estação")]
-        public int StationId { get; set; }
+        public int? StationId { get; set; }
         public virtual Station Station { get; set; }
 
         [ForeignKey("Pod")]
         [Display(Name = "Posto")]
-        public int PodId { get; set; }
+        public int? PodId { get; set; }
         public virtual Pod Pod { get; set; }
 
         [ForeignKey("User")]

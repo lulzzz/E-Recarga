@@ -99,7 +99,7 @@
 
 <div>
     <h3>Funcionários</h3>
-    @if (Request.IsAuthenticated && !User.IsInRole(nameof(RoleEnum.CompanyManager)))
+    @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
     {
         <div class="text-right">
             @Html.ActionLink("Criar", "Create", "Employees", new { companyId = Model.Company.Id }, null)<br /><br />

@@ -7,13 +7,13 @@ namespace E_Recarga.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class PriceActiveField : IMigrationMetadata
+    public sealed partial class FirstMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(PriceActiveField));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201912122335086_PriceActiveField"; }
+            get { return "201912170220596_FirstMigration"; }
         }
         
         string IMigrationMetadata.Source

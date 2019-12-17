@@ -179,17 +179,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201912062124570_FistMigration.cs" />
-    <Compile Include="Migrations\201912062124570_FistMigration.Designer.cs">
-      <DependentUpon>201912062124570_FistMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201912070238587_ApplicationUser_FieldValidation.cs" />
-    <Compile Include="Migrations\201912070238587_ApplicationUser_FieldValidation.Designer.cs">
-      <DependentUpon>201912070238587_ApplicationUser_FieldValidation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201912122335086_PriceActiveField.cs" />
-    <Compile Include="Migrations\201912122335086_PriceActiveField.Designer.cs">
-      <DependentUpon>201912122335086_PriceActiveField.cs</DependentUpon>
+    <Compile Include="Migrations\201912170220596_FirstMigration.cs" />
+    <Compile Include="Migrations\201912170220596_FirstMigration.Designer.cs">
+      <DependentUpon>201912170220596_FirstMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -326,14 +318,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912062124570_FistMigration.resx">
-      <DependentUpon>201912062124570_FistMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912070238587_ApplicationUser_FieldValidation.resx">
-      <DependentUpon>201912070238587_ApplicationUser_FieldValidation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912122335086_PriceActiveField.resx">
-      <DependentUpon>201912122335086_PriceActiveField.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912170220596_FirstMigration.resx">
+      <DependentUpon>201912170220596_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -25,7 +25,6 @@ namespace E_Recarga.Models.ERecargaModels
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<PodType>()
                 .Property(s => s.Id)
@@ -34,6 +33,8 @@ namespace E_Recarga.Models.ERecargaModels
             modelBuilder.Entity<AppointmentStatus>()
                 .Property(s => s.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

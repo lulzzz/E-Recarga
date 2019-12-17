@@ -59,7 +59,10 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Create()
         {
-            return View();
+            var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+            Station station = new Station() { Company = company };
+
+            return View(station);
         }
 
         // POST: Stations/Create
@@ -154,6 +157,17 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult DeleteConfirmed(int id)
         {
             Station station = db.Stations.Find(id);
+            var employees = station.Employees
+                .Where(x => x.StationId == station.Id);
+
+            employees.ToList()
+                .ForEach(r =>
+                    {
+                        r.StationId = null;
+                        db.Entry(r).State = EntityState.Modified;
+                    }
+                );
+
             db.Stations.Remove(station);
             db.SaveChanges();
             return RedirectToAction("Index");
