@@ -1,13 +1,14 @@
-﻿@model E_Recarga.Models.ERecargaModels.Employee
+﻿@model E_Recarga.ViewModels.EmployeeViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<center>
+    <br /><h2>Detalhes</h2><br />
+</center>
 
 <div>
-    <h4>Employee</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -19,14 +20,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Wallet)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Wallet)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
 
@@ -35,27 +28,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
+            @Html.DisplayNameFor(model => model.Employee.UserName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EmailConfirmed)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PasswordHash)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SecurityStamp)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SecurityStamp)
+            @Html.DisplayFor(model => model.Employee.UserName)
         </dd>
 
         <dt>
@@ -67,72 +44,33 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+            @Html.DisplayNameFor(model => model.EmployeeType)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
+            @Html.DisplayFor(model => model.EmployeeType)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+            @Html.DisplayNameFor(model => model.Employee.Company.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TwoFactorEnabled)
+            @Html.DisplayFor(model => model.Employee.Company.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
+            @Html.DisplayNameFor(model => model.Employee.Station.ComercialName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LockoutEndDateUtc)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LockoutEnabled)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LockoutEnabled)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AccessFailedCount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccessFailedCount)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Company.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Company.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Station.ComercialName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Station.ComercialName)
+            @Html.DisplayFor(model => model.Employee.Station.ComercialName)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Employee.Id }) |
+    @*@Html.ActionLink("Back to List", "Index")*@
+    <a href="javascript:void(0);" onclick="history.go(-1);">Voltar</a>
 </p>

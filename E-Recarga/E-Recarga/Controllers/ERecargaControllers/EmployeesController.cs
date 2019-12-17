@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using E_Recarga.ViewModels;
+using System.Collections.Generic;
+using System;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -24,6 +25,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Employees/Details/5
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -35,40 +37,89 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
-            return View(employee);
+
+            EmployeeViewModel employeeVM = new EmployeeViewModel(employee);
+
+            //System.Web.Security.Roles.Enabled = true;
+            var roleId = employee.Roles.FirstOrDefault().RoleId;
+            var role = db.Roles.Where(x => x.Id == roleId).FirstOrDefault();
+
+            string pt_role;
+            Enum_Dictionnary.Translator.TryGetValue(role.Name, out pt_role);
+            employeeVM.EmployeeType = pt_role;
+            return View(employeeVM);
         }
 
         [NonAction]
-        private void CreateEmployeeHelper(int companyId, int? stationId)
+        private void CreateEmployeeHelper(EmployeeViewModel employeeVM)
         {
-            if (User.Identity.AuthenticationType == nameof(RoleEnum.Administrator))
+            string pt_role_manager, pt_role_employee;
+            Enum_Dictionnary.Translator.TryGetValue(nameof(RoleEnum.CompanyManager), out pt_role_manager);
+            Enum_Dictionnary.Translator.TryGetValue(nameof(RoleEnum.Employee), out pt_role_employee);
+
+            employeeVM.RoleEnums = new List<string>();
+
+            if (User.IsInRole(nameof(RoleEnum.Administrator)))
             {
-                ViewBag.Role = nameof(RoleEnum.CompanyManager);
-                ViewBag.StationId = null;
+                if(employeeVM.CompanyId == 0)
+                    employeeVM.CompaniesList = new SelectList(db.Companies, "Id", "Name");
+                else
+                    employeeVM.CompaniesList = new SelectList(db.Companies.Where(c=>c.Id==employeeVM.CompanyId), "Id", "Name");
+
+                employeeVM.RoleEnums.Add(pt_role_manager);
             }
             else
             {
-                var loggedUserID = User.Identity.GetUserId();
-                var manager = db.Employees.Where(user => user.Id == loggedUserID).SingleOrDefault();
+                employeeVM.CompaniesList = new SelectList(db.Companies.Where(c => c.Id == employeeVM.CompanyId), "Id", "Name");
 
-                if (stationId == null)
+                if (employeeVM.StationId == null)
                 {
-                    ViewBag.StationId = new SelectList(db.Stations.Where(s => s.CompanyId == manager.CompanyId), "Id", "ComercialName");
+                    employeeVM.RoleEnums.Add(pt_role_employee);
+                    employeeVM.RoleEnums.Add(pt_role_manager);
                 }
                 else
                 {
-                    ViewBag.StationId = stationId;
-                    ViewBag.Role = nameof(RoleEnum.Employee);
+                    employeeVM.RoleEnums.Add(pt_role_employee);
                 }
             }
-
-            ViewBag.CompanyId = companyId;
         }
+
+
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         // GET: Employees/Create
-        public ActionResult Create(int companyId, int? stationId)
+        public ActionResult Create(int? companyId, int? stationId)
         {
-            CreateEmployeeHelper(companyId, stationId);
-            return View();
+            if (User.IsInRole(nameof(RoleEnum.Employee)))
+                RedirectToAction("Index","Home");
+            if (stationId != null && User.IsInRole(nameof(RoleEnum.Administrator)))
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            int company_Id = 0;
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                var loggedUserID = User.Identity.GetUserId();
+                var manager = db.Employees.Where(user => user.Id == loggedUserID).SingleOrDefault();
+                company_Id = manager.CompanyId;
+
+                if (stationId != null)
+                {
+                    Station station = db.Stations.Find(stationId);
+                    Company company = db.Companies.Find(company_Id);
+
+                    if (station == null || company.Stations.Contains(station) == false)
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+            }
+            else
+            {
+                if (companyId != null)
+                    company_Id = (int) companyId;
+            }
+
+            EmployeeViewModel employeeVM = new EmployeeViewModel() {StationId = stationId, CompanyId = company_Id};
+            CreateEmployeeHelper(employeeVM);
+            return View(employeeVM);
         }
 
         // POST: Employees/Create
@@ -76,20 +127,57 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(int companyId, int? stationId,[Bind(Include = "Id,Name,Wallet,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StationId,CompanyId")] Employee employee)
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
+        public ActionResult Create(EmployeeViewModel employeeVM) //TODO: BINDS EXCLUDE PARAMeters
         {
+            Employee employee = new Employee();
             if (ModelState.IsValid)
             {
-                db.Users.Add(employee);
-                db.SaveChanges();
+                employee.Name = employeeVM.Name;
+                employee.UserName = employee.Email = employeeVM.Email;
+                employee.PhoneNumber = employeeVM.PhoneNumber;
+                employee.CompanyId = employeeVM.CompanyId;
+                employee.StationId = employeeVM.StationId;
+
+                string role = Enum_Dictionnary.GetKeyFromValue(employeeVM.EmployeeType);
+
+
+                //Create Users
+                var store = new UserStore<ApplicationUser>(new ERecargaDbContext());
+                var manager = new UserManager<ApplicationUser>(store);
+
+                string password = "" + employee.Name.Trim(' ') + employee.PhoneNumber + ".";
+
+                var res = manager.Create(employee, password);
+                if (res.Succeeded)
+                    manager.AddToRole(employee.Id, role);
+                //
+
                 return RedirectToAction("Index");
             }
 
-            CreateEmployeeHelper(companyId, stationId);
-            return View(employee);
+            CreateEmployeeHelper(employeeVM);
+            return View(employeeVM);
+        }
+
+        [NonAction]
+        private void EditHelper(EmployeeViewModel employeeVM)
+        {
+            string pt_role_manager, pt_role_employee;
+            Enum_Dictionnary.Translator.TryGetValue(nameof(RoleEnum.CompanyManager), out pt_role_manager);
+            Enum_Dictionnary.Translator.TryGetValue(nameof(RoleEnum.Employee), out pt_role_employee);
+
+            employeeVM.RoleEnums = new List<string> {
+                pt_role_manager,
+                pt_role_employee
+            };
+
+            employeeVM.StationsList = new SelectList(db.Stations.Where(s => s.CompanyId == employeeVM.CompanyId), "Id", "ComercialName", (employeeVM.StationId).ToString());
+            employeeVM.CompaniesList = new SelectList(db.Companies,"Id","Name",(employeeVM.CompanyId).ToString());
         }
 
         // GET: Employees/Edit/5
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -101,9 +189,33 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name", employee.CompanyId);
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", employee.StationId);
-            return View(employee);
+
+            var loggedUserID = User.Identity.GetUserId();
+            var manager = db.Employees.Where(user => user.Id == loggedUserID).SingleOrDefault();
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)) && employee.CompanyId != manager.CompanyId)
+            {
+                return HttpNotFound();
+            }
+
+            var roleId = employee.Roles.FirstOrDefault().RoleId;
+            string roleName = db.Roles.Where(x => x.Id == roleId).FirstOrDefault().Name;
+
+            if (User.IsInRole(nameof(RoleEnum.Administrator)) && roleName != nameof(RoleEnum.CompanyManager))
+            {
+                return HttpNotFound();
+            }
+
+            string pt_role;
+            Enum_Dictionnary.Translator.TryGetValue(roleName, out pt_role);
+
+            EmployeeViewModel employeeVM = new EmployeeViewModel() {Name = employee.Name,
+                Username = employee.UserName, Email = employee.Email, PhoneNumber= employee.PhoneNumber,
+                EmployeeType = pt_role, CompanyName = employee.Company.Name, CompanyId = employee.CompanyId,
+                StationId = employee.StationId, Id = id};
+
+            EditHelper(employeeVM);
+            return View(employeeVM);
         }
 
         // POST: Employees/Edit/5
@@ -111,17 +223,53 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Wallet,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StationId,CompanyId")] Employee employee)
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
+        public ActionResult Edit(EmployeeViewModel employeeVM)
         {
             if (ModelState.IsValid)
             {
+                Employee employee = db.Employees.Find(employeeVM.Id);
+                employee.Name = employeeVM.Name;
+                employee.PhoneNumber = employeeVM.PhoneNumber;
+                employee.UserName = employee.Email = employeeVM.Email;
+                
+                if (User.IsInRole(nameof(RoleEnum.Administrator)))
+                    employee.CompanyId = employeeVM.CompanyId;
+                else
+                {
+                    string employee_role = Enum_Dictionnary.GetKeyFromValue(employeeVM.EmployeeType);
+
+                    if (employee_role == nameof(RoleEnum.CompanyManager))
+                    {
+                        employee.StationId = null;
+                    }
+                    else
+                    {
+                        employee.StationId = employeeVM.StationId;
+                    }
+
+                    //Mudar os roles
+                    var roleId = employee.Roles.FirstOrDefault().RoleId;
+                    var role = db.Roles.Where(x => x.Id == roleId).FirstOrDefault();
+
+                    if (role.Name != employee_role)
+                    {
+                        var store = new UserStore<ApplicationUser>(new ERecargaDbContext());
+                        var manager = new UserManager<ApplicationUser>(store);
+                        manager.RemoveFromRole(employee.Id, role.Name);
+                        manager.AddToRole(employee.Id, employee_role);
+                    }
+                    //
+                }
+                
                 db.Entry(employee).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            ViewBag.CompanyId = new SelectList(db.Companies, "Id", "Name", employee.CompanyId);
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", employee.StationId);
-            return View(employee);
+
+            EditHelper(employeeVM);
+            return View(employeeVM);
         }
 
         // GET: Employees/Delete/5

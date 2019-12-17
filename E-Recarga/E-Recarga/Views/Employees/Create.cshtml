@@ -1,4 +1,5 @@
-﻿@model E_Recarga.Models.ERecargaModels.Employee
+﻿@model E_Recarga.ViewModels.EmployeeViewModel
+@using E_Recarga.Models
 
 @{
     ViewBag.Title = "Create";
@@ -7,35 +8,20 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
     <h4>Employee</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Wallet, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Wallet, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Wallet, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -56,41 +42,43 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.EmployeeType, "EmployeeType", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.EmployeeType, new SelectList(Model.RoleEnums), null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EmployeeType, "", new { @class = "text-danger" })
         </div>
     </div>
-    @if (ViewBag.StationId != null)
+
+    @if (User.IsInRole(nameof(RoleEnum.Administrator)))
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.StationId, "StationId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CompanyId, "CompanyId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("StationId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.StationId, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.CompanyId,(SelectList)Model.CompaniesList, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
             </div>
         </div>
     }
     else
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.StationId, htmlAttributes: new { @readonly = "readonly" , @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CompanyId, "CompanyId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.StationId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.CompanyId, (SelectList)Model.CompaniesList, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    @if (User.IsInRole(nameof(RoleEnum.CompanyManager)) && this.Model.StationId != null)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.StationId, "StationId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StationId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.StationId, "", new { @class = "text-danger" })
             </div>
         </div>
     }
-
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.CompanyId, "CompanyId", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -101,9 +89,10 @@
 }
 
 @*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
 <a href="javascript:void(0);" onclick="history.go(-1);">Voltar</a>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
