@@ -20,8 +20,9 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // GET: Employees
         public ActionResult Index()
         {
-            var users = db.Employees.Include(e => e.Company).Include(e => e.Station);
-            return View(users.ToList());
+            // var users = db.Employees.Include(e => e.Company).Include(e => e.Station);
+            //return View(users.ToList());
+            return View(db.Set<Employee>());
         }
 
         // GET: Employees/Details/5
