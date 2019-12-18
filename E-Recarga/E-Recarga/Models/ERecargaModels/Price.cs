@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
@@ -16,16 +17,20 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Hora")]
-        public int Time { get; set; }
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
+        public TimeSpan Time { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
-        [Display(Name = "Custo do Posto Normal")]
+        [Display(Name = "Custo Normal")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
         public double CostNormal { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
-        [Display(Name = "Custo do Posto Ultra")]
+        [Display(Name = "Custo Ultra")]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
         public double CostUltra { get; set; }
 
         [Display(Name = "Ativo")]

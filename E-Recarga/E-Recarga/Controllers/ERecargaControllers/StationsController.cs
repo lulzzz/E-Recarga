@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.App_Code;
 using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using E_Recarga.ViewModels;
 using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
@@ -60,9 +62,10 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult Create()
         {
             var company = db.Employees.Find(User.Identity.GetUserId()).Company;
-            Station station = new Station() { Company = company };
+            Station station = new Station();
+            StationViewModel viewModel = new StationViewModel() { _Station = station, CompanyName = company.Name };
 
-            return View(station);
+            return View(viewModel);
         }
 
         // POST: Stations/Create
@@ -71,19 +74,26 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
-        public ActionResult Create([Bind(Include = "ComercialName,StreetName,BuildingNumber,PostalCode,Parish,Region")] Station station)
+        public ActionResult Create(StationViewModel viewModel)
         {
             var user = db.Employees.Find(User.Identity.GetUserId());
-            station.CompanyId = user.CompanyId;
+            viewModel._Station.CompanyId = user.CompanyId;
 
             if (ModelState.IsValid)
             {
-                db.Stations.Add(station);
+                db.Stations.Add(viewModel._Station);
+
+                foreach (var price in ScheduleGenerator.GeneratePrices(viewModel.NormalCost, viewModel.FastCost)){
+                    price.StationId = viewModel._Station.Id;
+                    //viewModel._Station.Prices.Add(price);
+                    db.Prices.Add(price);
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(station);
+            return View(viewModel);
         }
 
         // GET: Stations/Edit/5
