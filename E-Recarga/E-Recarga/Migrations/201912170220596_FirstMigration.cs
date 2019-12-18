@@ -158,7 +158,7 @@ namespace E_Recarga.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         StationId = c.Int(nullable: false),
-                        Time = c.Int(nullable: false),
+                        Time = c.Time(nullable: false, precision: 7),
                         CostNormal = c.Double(nullable: false),
                         CostUltra = c.Double(nullable: false),
                         Active = c.Boolean(nullable: false),
