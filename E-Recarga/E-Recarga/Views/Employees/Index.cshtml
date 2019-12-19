@@ -1,31 +1,41 @@
-﻿@model IQueryable <E_Recarga.Models.ERecargaModels.Employee>
+﻿@model E_Recarga.ViewModels.EmployeeVMs.EmployeeIndexViewModel
+@using E_Recarga.Models
+
 
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Index</h2>
+<center>
+    <br />
+    <h3>Trabalhadores</h3>
+    <br />
+</center>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 
 @(Html
-        .Grid(Model)
-        .Build(columns =>
-        {
-            columns.Add(model => model.Name).;
-            columns.Add(model => model.Email);
-            columns.Add(model => model.Company.Name);
-        })
-        .Empty("Não existem dados")
-        .Filterable()
-        .Sortable()
-        .Pageable( pager =>
-        {
-            pager.PageSizes = new Dictionary<Int32, String > { { 0, "All" }, { 2, "2" }, { 4, "4" } };
-            pager.ShowPageSizes = true;
-            pager.PagesToDisplay = 3;
-            pager.RowsPerPage = 2;
-        })
+            .Grid(Model.EmployeesVM)
+            .Build(columns =>
+            {
+                columns.Add(model => model.Employee.Name);
+                columns.Add(model => model.Employee.Email);
+                columns.Add(model => model.Employee.PhoneNumber);
+                columns.Add(model => model.EmployeeType);
+                if (User.IsInRole(nameof(RoleEnum.Administrator)))
+                    columns.Add(model => model.Employee.Company.Name).Titled("Empresa");
+                columns.Add(model => model.Employee.Station.ComercialName).Titled("Estação");
+            })
+            .Empty("Não existem dados")
+            .Filterable()
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "10" }, { 10, "20" } };
+                pager.ShowPageSizes = true;
+                pager.PagesToDisplay = 3;
+                pager.RowsPerPage = 5;
+            })
 )
+
