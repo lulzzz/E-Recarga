@@ -309,8 +309,6 @@
     <Content Include="Views\Prices\Edit.cshtml" />
     <Content Include="Views\Prices\Index.cshtml" />
     <Content Include="Views\Companies\Managers.cshtml" />
-    <Content Include="Views\EmployeesVM\Delete.cshtml" />
-    <Content Include="Views\EmployeesVM\Edit.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Shared\MvcGrid\_Pager.cshtml" />
     <Content Include="Views\Shared\MvcGrid\_Grid.cshtml" />

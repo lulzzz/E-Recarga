@@ -28,7 +28,6 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public PartialViewResult IndexGrid(string search)
         {
-
             var company = db.Employees.Find(User.Identity.GetUserId()).Company;
             var stations = company.Stations;
 

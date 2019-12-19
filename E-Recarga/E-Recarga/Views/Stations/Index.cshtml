@@ -1,8 +1,13 @@
 ﻿<form class="navbar-form">
     <div class="form-group">
-        <input id ="GridSearch" type="text" class="form-control" placeholder="Search">
+        <br />
+        <label>Pesquisar: </label>&nbsp
+        <input id="GridSearch" type="text" class="form-control" placeholder="Preencher">
+        <br />
+        <br />
     </div>
-</form> 
+</form>
+
 
 @Html.AjaxGrid(Url.Action("IndexGrid"))
 
