@@ -206,6 +206,7 @@
     <Compile Include="ViewModels\CompanyViewModel.cs" />
     <Compile Include="ViewModels\EmployeeVMs\EmployeeIndexViewModel.cs" />
     <Compile Include="ViewModels\EmployeeVMs\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\StationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -313,6 +314,7 @@
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Shared\MvcGrid\_Pager.cshtml" />
     <Content Include="Views\Shared\MvcGrid\_Grid.cshtml" />
+    <Content Include="Views\Shared\_StationIndexPartialGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

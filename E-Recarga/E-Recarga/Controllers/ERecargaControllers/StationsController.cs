@@ -22,9 +22,20 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        public PartialViewResult IndexGrid(string search)
+        {
+
             var company = db.Employees.Find(User.Identity.GetUserId()).Company;
             var stations = company.Stations;
-            return View(stations.ToList());
+
+            return PartialView("_StationIndexPartialGrid", stations.Where(x => x.StreetName.ToLower().Contains(search.ToLower()) || 
+                                                                            x.Region.ToLower().Contains(search.ToLower()) ||
+                                                                            x.Parish.ToLower().Contains(search.ToLower()) ||
+                                                                            x.ComercialName.ToLower().Contains(search.ToLower())).AsQueryable());
         }
 
         // GET: Stations/Details/5

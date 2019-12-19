@@ -1,0 +1,15 @@
+﻿@model IQueryable<E_Recarga.Models.ERecargaModels.Station>
+
+@(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.Company.Name);
+            columns.Add(model => model.ComercialName );
+            columns.Add(model => model.BuildingNumber);
+            columns.Add(model => model.Parish);
+            columns.Add(model => model.Region);
+        })
+        .Empty("No data found")
+        .Sortable()
+)
