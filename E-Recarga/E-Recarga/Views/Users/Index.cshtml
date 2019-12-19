@@ -4,32 +4,46 @@
     <h2>Pesquisar</h2>
 </center>
 <br /><br />
-<form class="navbar-form">
-    @*<label>Filtrar por região</label>&nbsp*@
-    <div class="form-group" id="RegionSearch">
-        @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
-    </div>
+      <form class="navbar-form">
+          <div class="row" style="display:table;width: 100%;border: 1px solid bisque;border-radius: 10px;padding: 12px 80px 12px 50px; background-color: beige">
+              <div class="col-lg-10">
+                  <div class="form-group" id="RegionSearch">
+                      <label>Filtrar por região</label>&nbsp
+                      @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
+                      @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
+                  </div>
 
-    &nbsp @*<label>Tipo de carregamento </label> &nbsp*@
-    <div class="form-group" id="PodTypeSearch">
-        @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
-    </div>
+                  <br /><br />
+                  <div class="form-group" id="PodTypeSearch">
+                      <label>Tipo de carregamento </label> &nbsp
+                      @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
+                      @Html.ValidationMessageFor(model => model.PodType, "", new { @class = "text-danger" })
+                  </div>
 
-    &nbsp <label>Horário de Início </label> &nbsp
-    <divclass class="form-group" id="InitTimeSearch">
-        @Html.EditorFor(model => model.InitCharge, new { htmlAttributes = new { @class = "form-control", @id = "init_id" } })
-    </divclass>
+                  <br /><br />
+                  <divclass class="form-group" id="InitTimeSearch">
+                      <label>Horário de Início </label> &nbsp
+                      @Html.EditorFor(model => model.InitCharge, new { htmlAttributes = new { @class = "form-control", @id = "init_id" } })
+                      @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
 
-    &nbsp <label>Horário de Fim</label> &nbsp
-    <divclass class="form-group" id="EndTimeSearch">
-        @Html.EditorFor(model => model.EndCharge, new { htmlAttributes = new { @class = "form-control", @id = "end_id" } })
-    </divclass>
+                  </divclass>
 
-    &nbsp
-    <button type="submit" class="btn btn-info" onclick="myFunction()">
-        <font>Filtrar</font>
-    </button>
-</form>
+                  <br /><br />
+                  <divclass class="form-group" id="EndTimeSearch">
+                      &nbsp <label>Horário de Fim</label> &nbsp
+                      @Html.EditorFor(model => model.EndCharge, new { htmlAttributes = new { @class = "form-control", @id = "end_id" } })
+                      @Html.ValidationMessageFor(model => model.EndCharge, "", new { @class = "text-danger" })
+                  </divclass>
+              </div>
+
+              <div class="col-lg-offset-10" style="display:table-cell;vertical-align: middle;">
+                  <button type="submit" style="width:120px; height:50px; display: block; position: relative; margin:auto" class="btn btn-info" onclick="myFunction()">
+                      <font size="+1.2">Filtrar</font>
+                  </button>
+              </div>
+          </div>
+          
+      </form>
 <br /><br />
 
 
@@ -69,15 +83,3 @@
 
 
 @Html.AjaxGrid(Url.Action("IndexGrid"))
-
-@*<script>
-        window.onload = function () {
-            var searchs = document.getElementsByClassName("example");
-            var grid = new MvcGrid(document.querySelector('.mvc-grid'));
-            grid.query.set('region', searchs[0]);
-            grid.query.set('recharge_type', searchs[1]);
-            grid.query.set('init_time', searchs[2]);
-            grid.query.set('final_time', searchs[3]);
-            grid.reload();
-        };
-    </script>*@
