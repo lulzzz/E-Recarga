@@ -6,10 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
+    [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
     public class PricesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
@@ -17,48 +20,19 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // GET: Prices
         public ActionResult Index()
         {
-            var prices = db.Prices.Include(p => p.Station);
+            var user = db.Employees.Find(User.Identity.GetUserId());
+            IQueryable<Price> prices;
+
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                prices = db.Prices.Include(p => p.Station).Where(x=>x.Station.CompanyId == user.CompanyId);
+            }
+            else
+            {
+                prices = db.Prices.Include(p => p.Station).Where(x => x.StationId == user.StationId);
+            }
+
             return View(prices.ToList());
-        }
-
-        // GET: Prices/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Price price = db.Prices.Find(id);
-            if (price == null)
-            {
-                return HttpNotFound();
-            }
-            return View(price);
-        }
-
-        // GET: Prices/Create
-        public ActionResult Create()
-        {
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName");
-            return View();
-        }
-
-        // POST: Prices/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,StationId,Time,CostNormal,CostUltra")] Price price)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Prices.Add(price);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", price.StationId);
-            return View(price);
         }
 
         // GET: Prices/Edit/5
@@ -73,7 +47,24 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", price.StationId);
+
+            var user = db.Employees.Find(User.Identity.GetUserId());
+            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                if (price.Station.CompanyId != user.CompanyId)
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                if (price.Station.Id != user.StationId)
+                {
+                    return HttpNotFound();
+                }
+            }
+            ViewBag.PriceStationId = price.StationId;
+
             return View(price);
         }
 
@@ -82,42 +73,20 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,StationId,Time,CostNormal,CostUltra")] Price price)
+        public ActionResult Edit([Bind(Include = "Id,CostNormal,CostUltra")]Price price)
         {
+            var myPrice = db.Prices.Find(price.Id);
+            myPrice.CostNormal = price.CostNormal;
+            myPrice.CostUltra = price.CostUltra;
+
             if (ModelState.IsValid)
             {
-                db.Entry(price).State = EntityState.Modified;
+                db.Entry(myPrice).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StationId = new SelectList(db.Stations, "Id", "ComercialName", price.StationId);
-            return View(price);
-        }
 
-        // GET: Prices/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Price price = db.Prices.Find(id);
-            if (price == null)
-            {
-                return HttpNotFound();
-            }
             return View(price);
-        }
-
-        // POST: Prices/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Price price = db.Prices.Find(id);
-            db.Prices.Remove(price);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

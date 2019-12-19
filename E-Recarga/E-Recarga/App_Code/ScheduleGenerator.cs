@@ -15,7 +15,6 @@ namespace E_Recarga.App_Code
             {
                 prices.Add(new Price()
                 {
-                    Active = true,
                     Time = new TimeSpan(i,0,0),
                     CostNormal = normal,
                     CostUltra = fast

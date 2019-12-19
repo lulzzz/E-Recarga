@@ -32,8 +32,5 @@ namespace E_Recarga.Models.ERecargaModels
         [Display(Name = "Custo Ultra")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public double CostUltra { get; set; }
-
-        [Display(Name = "Ativo")]
-        public bool Active { get; set; }
     }
 }

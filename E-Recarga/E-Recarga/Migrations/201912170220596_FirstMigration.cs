@@ -161,7 +161,6 @@ namespace E_Recarga.Migrations
                         Time = c.Time(nullable: false, precision: 7),
                         CostNormal = c.Double(nullable: false),
                         CostUltra = c.Double(nullable: false),
-                        Active = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Stations", t => t.StationId, cascadeDelete: true)
