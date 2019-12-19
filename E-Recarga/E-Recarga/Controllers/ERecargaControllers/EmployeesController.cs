@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using E_Recarga.ViewModels;
 using System.Collections.Generic;
-using System;
+using E_Recarga.ViewModels.EmployeeVMs;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -18,11 +18,31 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Employees
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Index()
         {
             // var users = db.Employees.Include(e => e.Company).Include(e => e.Station);
             //return View(users.ToList());
-            return View(db.Set<Employee>());
+
+            List<Employee> employees = db.Employees.Include(e => e.Company).Include(e => e.Station).ToList();
+            if(User.IsInRole(nameof(RoleEnum.CompanyManager)))
+            {
+                var loggedUserID = User.Identity.GetUserId();
+                var manager = employees.Where(user => user.Id == loggedUserID).SingleOrDefault();
+                employees = employees.Where(e => e.CompanyId == manager.CompanyId).ToList();
+            }
+
+            EmployeeIndexViewModel employeesIndex = new EmployeeIndexViewModel();
+            List<EmployeeViewModel> employeesList = new List<EmployeeViewModel>();
+            foreach (Employee elem in employees)
+            {
+                var roleId = elem.Roles.FirstOrDefault().RoleId;
+                var role = db.Roles.Where(x => x.Id == roleId).FirstOrDefault();
+                employeesList.Add(new EmployeeViewModel() { Employee = elem, EmployeeType = role.Name });
+            }
+            employeesIndex.EmployeesVM = employeesList.AsQueryable();
+
+            return View(employeesIndex);
         }
 
         // GET: Employees/Details/5
