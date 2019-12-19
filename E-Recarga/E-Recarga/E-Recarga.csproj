@@ -178,6 +178,7 @@
     <Compile Include="Controllers\ERecargaControllers\PodsController.cs" />
     <Compile Include="Controllers\ERecargaControllers\PricesController.cs" />
     <Compile Include="Controllers\ERecargaControllers\StationsController.cs" />
+    <Compile Include="Controllers\ERecargaControllers\UsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -207,6 +208,7 @@
     <Compile Include="ViewModels\EmployeeVMs\EmployeeIndexViewModel.cs" />
     <Compile Include="ViewModels\EmployeeVMs\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\StationViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -313,9 +315,11 @@
     <Content Include="Views\Shared\MvcGrid\_Pager.cshtml" />
     <Content Include="Views\Shared\MvcGrid\_Grid.cshtml" />
     <Content Include="Views\Shared\_StationIndexPartialGrid.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ViewBag\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

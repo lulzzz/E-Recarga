@@ -1,0 +1,83 @@
+﻿@model E_Recarga.ViewModels.UserViewModel
+<br />
+<center>
+    <h2>Pesquisar</h2>
+</center>
+<br /><br />
+<form class="navbar-form">
+    @*<label>Filtrar por região</label>&nbsp*@
+    <div class="form-group" id="RegionSearch">
+        @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
+    </div>
+
+    &nbsp @*<label>Tipo de carregamento </label> &nbsp*@
+    <div class="form-group" id="PodTypeSearch">
+        @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
+    </div>
+
+    &nbsp <label>Horário de Início </label> &nbsp
+    <divclass class="form-group" id="InitTimeSearch">
+        @Html.EditorFor(model => model.InitCharge, new { htmlAttributes = new { @class = "form-control", @id = "init_id" } })
+    </divclass>
+
+    &nbsp <label>Horário de Fim</label> &nbsp
+    <divclass class="form-group" id="EndTimeSearch">
+        @Html.EditorFor(model => model.EndCharge, new { htmlAttributes = new { @class = "form-control", @id = "end_id" } })
+    </divclass>
+
+    &nbsp
+    <button type="submit" class="btn btn-info" onclick="myFunction()">
+        <font>Filtrar</font>
+    </button>
+</form>
+<br /><br />
+
+
+<script>
+    function myFunction() {
+        var grid = new MvcGrid(document.querySelector('.mvc-grid'));
+        var selectedRegion = $(document.getElementById("region_id")).children("option:selected").val();
+        var selectedType = $(document.getElementById("pod_id")).children("option:selected").val();
+        var startDate = $(document.getElementById('init_id')).val();
+        var endDate = $(document.getElementById('end_id')).val();
+
+        grid.query.set('region', selectedRegion);
+        grid.query.set('recharge_type', selectedType);
+        grid.query.set('init_time', startDate);
+        grid.query.set('final_time', endDate);
+
+        grid.reload();
+    }
+</script>
+
+<script>
+    window.onload = function () {
+        var grid = new MvcGrid(document.querySelector('.mvc-grid'));
+
+        var selectedRegion = $(document.getElementById("region_id")).children("option:selected").val();
+        var selectedType = $(document.getElementById("pod_id")).children("option:selected").val();
+        var startDate = $(document.getElementById('init_id')).val();
+        var endDate = $(document.getElementById('end_id')).val();
+
+        grid.query.set('region', selectedRegion);
+        grid.query.set('recharge_type', selectedType);
+        grid.query.set('init_time', startDate);
+        grid.query.set('final_time', endDate);
+        grid.reload();
+    }
+</script>
+
+
+@Html.AjaxGrid(Url.Action("IndexGrid"))
+
+@*<script>
+        window.onload = function () {
+            var searchs = document.getElementsByClassName("example");
+            var grid = new MvcGrid(document.querySelector('.mvc-grid'));
+            grid.query.set('region', searchs[0]);
+            grid.query.set('recharge_type', searchs[1]);
+            grid.query.set('init_time', searchs[2]);
+            grid.query.set('final_time', searchs[3]);
+            grid.reload();
+        };
+    </script>*@
