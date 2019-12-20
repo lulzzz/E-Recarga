@@ -40,6 +40,7 @@ namespace E_Recarga.Models.CustomValidators
                 return ValidationResult.Success;
             }
 
+            if(EndDate > StartDate)
             if (StartDate < DateTime.Now)
             {
                 return new ValidationResult($"A data inicial deve ser maior que a data atual");
@@ -48,13 +49,17 @@ namespace E_Recarga.Models.CustomValidators
             {
                 return new ValidationResult($"A data inicial não deve ultrapassar: {DateTime.Now.AddDays(7)}");
             }
-            else if (EndDate <= StartDate)
+            else if (EndDate < StartDate)
             {
                 return new ValidationResult("A data de fim deve ser maior que data inicial");
             }
-            else if (EndDate > DateTime.Now.AddDays(7))
+            else if (EndDate > StartDate.AddDays(7))
             {
-                return new ValidationResult($"A data de fim não deve ultrapassar: {StartDate.AddDays(7)}");
+                return new ValidationResult($"A data de fim não deve ultrapassar: {EndDate.AddDays(7)}");
+            }
+            else if (EndDate > StartDate.AddHours(5))
+            {
+                return new ValidationResult($"A data de fim não deve ultrapassar: {StartDate.AddHours(5)}");
             }
 
             return ValidationResult.Success;

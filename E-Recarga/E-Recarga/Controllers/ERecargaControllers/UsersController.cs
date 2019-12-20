@@ -16,6 +16,9 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult Index([Bind(Include = "Region,PodType,InitCharge,EndCharge")] UserViewModel userVM)
         {
             var stations = db.Stations;
+
+            userVM.EndCharge = DateTime.Now;
+            userVM.InitCharge = DateTime.Now;
             ViewBag.Regions = stations.Select(s => s.Region).Distinct().ToList();
             ViewBag.PodTypes = db.Pods.Select(p=>(p.PodType).Name).Distinct().ToList();
 

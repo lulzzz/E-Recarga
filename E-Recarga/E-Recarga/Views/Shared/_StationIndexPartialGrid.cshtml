@@ -1,23 +1,29 @@
 ﻿@model IQueryable<E_Recarga.Models.ERecargaModels.Station>
-
+@using E_Recarga.Models
 @(Html
-        .Grid(Model)
-        .Build(columns =>
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(model => model.Company.Name).Titled("Nome da Companhia");
+        columns.Add(model => model.ComercialName);
+        columns.Add(model => model.StreetName);
+        columns.Add(model => model.BuildingNumber);
+        columns.Add(model => model.Parish);
+        columns.Add(model => model.Region);
+        if (User.IsInRole(RoleEnum.User.ToString()))
+            columns.Add(model => @Html.ActionLink("Marcar", "Create", "Appointments", new { myModel = model}, null));
+        else if (User.IsInRole(RoleEnum.CompanyManager.ToString()) || User.IsInRole(RoleEnum.Employee.ToString()))
+            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null));
+    })
+        .Empty("Não existem dados")
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
         {
-            columns.Add(model => model.Company.Name);
-            columns.Add(model => model.ComercialName );
-            columns.Add(model => model.BuildingNumber);
-            columns.Add(model => model.Parish);
-            columns.Add(model => model.Region);
+            pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+            pager.ShowPageSizes = true;
+            pager.PagesToDisplay = 3;
+            pager.RowsPerPage = 5;
         })
-         .Empty("Não existem dados")
-            .Filterable()
-            .Sortable()
-            .Pageable(pager =>
-            {
-                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-                pager.ShowPageSizes = true;
-                pager.PagesToDisplay = 3;
-                pager.RowsPerPage = 5;
-            })
 )
+

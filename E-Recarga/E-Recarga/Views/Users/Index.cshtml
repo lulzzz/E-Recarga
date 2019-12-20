@@ -4,46 +4,46 @@
     <h2>Pesquisar</h2>
 </center>
 <br /><br />
-      <form class="navbar-form">
-          <div class="row" style="display:table;width: 100%;border: 1px solid bisque;border-radius: 10px;padding: 12px 80px 12px 50px; background-color: beige">
-              <div class="col-lg-10">
-                  <div class="form-group" id="RegionSearch">
-                      <label>Filtrar por região</label>&nbsp
-                      @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
-                      @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
-                  </div>
+<form class="navbar-form">
+    <div class="row" style="display:table;width: 100%;border: 1px solid bisque;border-radius: 10px;padding: 12px 80px 12px 50px; background-color: linen">
+        <div class="col-lg-10">
+            <div class="form-group" id="RegionSearch">
+                <label>Filtrar por região</label>&nbsp
+                @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
+                @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
+            </div>
 
-                  <br /><br />
-                  <div class="form-group" id="PodTypeSearch">
-                      <label>Tipo de carregamento </label> &nbsp
-                      @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
-                      @Html.ValidationMessageFor(model => model.PodType, "", new { @class = "text-danger" })
-                  </div>
+            <br /><br />
+            <div class="form-group" id="PodTypeSearch">
+                <label>Tipo de carregamento </label> &nbsp
+                @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
+                @Html.ValidationMessageFor(model => model.PodType, "", new { @class = "text-danger" })
+            </div>
 
-                  <br /><br />
-                  <divclass class="form-group" id="InitTimeSearch">
-                      <label>Horário de Início </label> &nbsp
-                      @Html.EditorFor(model => model.InitCharge, new { htmlAttributes = new { @class = "form-control", @id = "init_id" } })
-                      @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
+            <br /><br />
+            <divclass class="form-group" id="InitTimeSearch">
+                <label>Horário de Início </label> &nbsp
+                @Html.EditorFor(model => model.InitCharge, new { htmlAttributes = new { @class = "form-control", @id = "init_id" } })
+                @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
 
-                  </divclass>
+            </divclass>
 
-                  <br /><br />
-                  <divclass class="form-group" id="EndTimeSearch">
-                      &nbsp <label>Horário de Fim</label> &nbsp
-                      @Html.EditorFor(model => model.EndCharge, new { htmlAttributes = new { @class = "form-control", @id = "end_id" } })
-                      @Html.ValidationMessageFor(model => model.EndCharge, "", new { @class = "text-danger" })
-                  </divclass>
-              </div>
+            <br /><br />
+            <divclass class="form-group" id="EndTimeSearch">
+                &nbsp <label>Horário de Fim</label> &nbsp
+                @Html.EditorFor(model => model.EndCharge, new { htmlAttributes = new { @class = "form-control", @id = "end_id" } })
+                @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
+            </divclass>
+        </div>
 
-              <div class="col-lg-offset-10" style="display:table-cell;vertical-align: middle;">
-                  <button type="submit" style="width:120px; height:50px; display: block; position: relative; margin:auto" class="btn btn-info" onclick="myFunction()">
-                      <font size="+1.2">Filtrar</font>
-                  </button>
-              </div>
-          </div>
-          
-      </form>
+        <div class="col-lg-offset-10" style="display:table-cell;vertical-align: middle;">
+            <button type="submit" style="width:120px; height:50px; display: block; position: relative; margin:auto" class="btn btn-info" onclick="myFunction()">
+                <font size="+1.2">Filtrar</font>
+            </button>
+        </div>
+    </div>
+
+</form>
 <br /><br />
 
 
@@ -81,5 +81,26 @@
     }
 </script>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(function () {
+
+            $('#init_id').datetimepicker({
+                showClose: true,
+                showClear: true,
+                toolbarPlacement: 'top'
+            });
+            $('#end_id').datetimepicker({
+                showClose: true,
+                showClear: true,
+                toolbarPlacement: 'top',
+                stepping: 15
+            });
+        });
+    </script>
+
+}
 
 @Html.AjaxGrid(Url.Action("IndexGrid"))
