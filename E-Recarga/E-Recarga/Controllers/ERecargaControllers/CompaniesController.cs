@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using E_Recarga.App_Code;
 using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
 using E_Recarga.ViewModels;
@@ -181,6 +182,28 @@ namespace E_Recarga.Controllers.ERecargaControllers
             db.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        public ActionResult DashBoard()
+        {
+            DashboardViewModel model;
+            var companyId = db.Employees.Find(User.Identity.GetUserId()).CompanyId;
+
+            var stations = db.Stations.Include(x=>x.Appointments)
+                .Include(x=>x.Prices).Include(x=>x.Pods).Where(x=>x.CompanyId == companyId).ToList();
+
+            model = DataHandler.GetDashboardData(stations);
+
+            return View(model);
+        }
+
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        public PartialViewResult DashBoardStation(int stationId)
+        {
+
+
+            return PartialView();
         }
 
         protected override void Dispose(bool disposing)
