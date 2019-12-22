@@ -1,4 +1,5 @@
-﻿using E_Recarga.Models.ERecargaModels;
+﻿using E_Recarga.Models;
+using E_Recarga.Models.ERecargaModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,35 @@ namespace E_Recarga.App_Code
 {
     public class PriceGenerator
     {
-        public static double calculatePrice(DateTime init, DateTime end, List<Price> pricesList)
+        public static double CalculatePrice(DateTime init, DateTime end, IList<Price> pricesList, PodTypeEnum type)
         {
-            double finalPrice = 0;
-            int initH = init.Hour;
+            double price, finalPrice = 0.0;
+            int initH = init.Hour, endH = end.Hour;
+
+            price = pricesList.Where(l => l.Time.Hours == initH)
+                .Select(l => type == PodTypeEnum. Normal? l.CostNormal : l.CostUltra)
+                .FirstOrDefault();
+
+            finalPrice += (60 - init.Minute) * price / 60.0;
+
+            if(initH != endH)
+            {
+                price = pricesList.Where(l => l.Time.Hours == endH)
+                    .Select(l => type == PodTypeEnum.Normal ? l.CostNormal : l.CostUltra)
+                    .FirstOrDefault();
+
+                finalPrice += (60 - end.Minute) * price / 60.0;
+
+                initH++;
+
+                while (initH < endH)
+                {
+                    finalPrice += pricesList.Where(l => l.Time.Hours == initH)
+                        .Select(l => type == PodTypeEnum.Normal ? l.CostNormal : l.CostUltra)
+                        .FirstOrDefault();
+                    initH++;
+                }
+            }
 
             return finalPrice;
         }

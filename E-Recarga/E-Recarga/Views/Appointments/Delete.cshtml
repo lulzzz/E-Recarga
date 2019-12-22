@@ -12,7 +12,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Company.Name)
+            Empresa
         </dt>
 
         <dd>
@@ -20,15 +20,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Pod.Id)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Pod.Id)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Station.ComercialName)
+            Estação
         </dt>
 
         <dd>
@@ -36,11 +28,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Status.Name)
+            Posto
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Status.Name)
+            @Html.DisplayFor(model => model.Pod.Id)
         </dd>
 
         <dt>
@@ -75,6 +67,13 @@
             @Html.DisplayFor(model => model.End)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Status.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status.Name)
+        </dd>
     </dl>
 
     @using (Html.BeginForm()) {

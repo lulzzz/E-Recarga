@@ -1,7 +1,9 @@
 ﻿using E_Recarga.Models.ERecargaModels;
 using E_Recarga.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -48,7 +50,33 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
             return PartialView("_StationIndexPartialGrid",stationsQuery.AsQueryable());
         }
+        //get
+        public ActionResult AddMoney()
+        {
+            string userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            user.Wallet = 0;
+            return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0 });
+        }
 
+        //post
+        [HttpPost]
+        public ActionResult AddMoney([Bind(Include ="Name,Wallet,Input")]AddMoneyViewModel userVM)
+        {
+            if (ModelState.IsValid)
+            {
+                string userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
+
+                user.Wallet += userVM.Input;
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(userVM);
+        }
         // GET: Users/Details/5
         public ActionResult Details(int id)
         {

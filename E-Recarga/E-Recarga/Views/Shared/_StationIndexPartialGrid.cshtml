@@ -10,10 +10,10 @@
         columns.Add(model => model.BuildingNumber);
         columns.Add(model => model.Parish);
         columns.Add(model => model.Region);
-        if (User.IsInRole(RoleEnum.User.ToString()))
-            columns.Add(model => @Html.ActionLink("Marcar", "Create", "Appointments", new { myModel = model}, null));
-        else if (User.IsInRole(RoleEnum.CompanyManager.ToString()) || User.IsInRole(RoleEnum.Employee.ToString()))
-            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null));
+        if (User.IsInRole(nameof(RoleEnum.User)))
+            columns.Add(model => @Html.ActionLink("Marcar", "Create", "Appointments", new { myModel = model}, null)).Titled("Ação");
+        else if (User.IsInRole(nameof(RoleEnum.CompanyManager)) || User.IsInRole(nameof(RoleEnum.Employee)))
+            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null)).Titled("Ação");
     })
         .Empty("Não existem dados")
         .Filterable()

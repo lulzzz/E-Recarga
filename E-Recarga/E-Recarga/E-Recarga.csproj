@@ -165,7 +165,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\PriceGenerator.cs" />
+    <Compile Include="App_Code\PriceGenerator.cs" />
     <Compile Include="App_Code\ScheduleGenerator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -173,6 +173,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="ViewModels\AddMoneyViewModel.cs" />
     <Compile Include="Controllers\ERecargaControllers\AppointmentsController.cs" />
     <Compile Include="Controllers\ERecargaControllers\CompaniesController.cs" />
     <Compile Include="Controllers\ERecargaControllers\EmployeesController.cs" />
@@ -230,6 +231,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\accepted-payment-methods.png" />
     <Content Include="Images\car_recharge.jpg" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\image10b.png" />
@@ -323,6 +325,7 @@
     <Content Include="Views\Shared\MvcGrid\_Grid.cshtml" />
     <Content Include="Views\Shared\_StationIndexPartialGrid.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\AddMoney.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
