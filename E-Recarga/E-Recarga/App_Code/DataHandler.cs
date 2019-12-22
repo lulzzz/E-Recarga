@@ -14,7 +14,7 @@ namespace E_Recarga.App_Code
         {
             List<TopStation> topStations = new List<TopStation>();
 
-            var orderedStations = stations.OrderBy(s => {
+            var orderedStations = stations.OrderByDescending(s => {
                 var totalPrice = s.Appointments.Where(a =>
                                     a.Status.Id == AppointmentStatusEnum.Completed)
                                     .Sum(sum => sum.Cost);
@@ -33,6 +33,12 @@ namespace E_Recarga.App_Code
 
                 //Station
                 Top.Station = enumerator.Current;
+
+                if (Appointments.Count <= 0)
+                {
+                    topStations.Add(Top);
+                    continue;
+                }
 
                 //Profit
                 Top.TotalProfit = Appointments.Sum(a => a.Cost);
@@ -71,23 +77,46 @@ namespace E_Recarga.App_Code
                 //Average Cost of appointments
                 Top.AverageCost = Appointments.Average(a => a.Cost);
 
-                Top.AverageChargingTime = Appointments
-                        .Select(a => a.End.TimeOfDay - a.Start.TimeOfDay).Average(s => s.Hours);
+                //Top.AverageChargingTime = Appointments
+                //        .Select(a => a.End - a.Start).Average(s => s.Hours);
 
-                //Best and Worst time of day
-                var group = Appointments
-                        .GroupBy(a => a.Start.TimeOfDay, x => x.End.TimeOfDay - x.Start.TimeOfDay);
+                double sum = 0;
+                foreach (var ap in Appointments)
+                {
+                    sum += (ap.End - ap.Start).Hours;
+                }
+                Top.AverageChargingTime = sum;
 
-                Top.BestTimeAvg = group.Max(g => g.Average(a=> a.Hours));
-                Top.WorstTimeAvg = group.Min(g => g.Average(a=> a.Hours));
+
+                TimeSpan ts = new TimeSpan(0, 0, 0);
+                DateTime timeStart = new DateTime();
+                for (int x = 0; x < 24; x++)
+                {
+                    var quantity = Appointments.Where(a =>
+                    {
+                        DateTime start = a.Start.Date.AddHours(a.Start.Hour);
+                        DateTime end = a.End.Date.AddHours(a.End.Hour);
+                        timeStart = a.Start.Date + ts;
+                        DateTime timeEnd = a.End.Date + ts;
+                        if (start <= timeStart && end >= timeStart ||
+                                start <= timeEnd && end >= timeEnd)
+                            return true;
+                        else
+                            return false;
+                    }).Count();
+                    Top.HourPlotData.Add(new DataPoint(quantity,timeStart.ToString("HH:mm")));
+                    ts = new TimeSpan(x+1,0,0);
+                }
 
                 //Get best day of the week
                 foreach(DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
                 {
-                    Top.InfoDaysOfWeek.Add(day, Appointments.Where(a => a.AppointmentStatusId == AppointmentStatusEnum.Completed &&
-                       a.Start.DayOfWeek == day).Sum(a => a.Cost));
+                    var value = Appointments.Where(a => a.AppointmentStatusId == AppointmentStatusEnum.Completed &&
+                       a.Start.DayOfWeek == day).Sum(a => a.Cost);
+
+                    Top.InfoDaysOfWeek.Add(new DataPoint(value,nameof(day)));
+
                 }
-                Top.InfoDaysOfWeek.OrderBy(v => v.Value);
 
                 topStations.Add(Top);
             }
@@ -99,8 +128,12 @@ namespace E_Recarga.App_Code
         {
             DashboardViewModel model = new DashboardViewModel();
 
+            if (stations.Count <= 0)
+                return model;
+
             model.TopStations = GetTopStations(3, stations);
-            model.AverageCost = stations.Average(s => s.Appointments.Average(a => a.Cost));
+
+            model.AverageCost = stations.Average(s => s.Appointments.Count > 0? s.Appointments.Average(a => a.Cost): 0);
 
             model.TotalProfit = stations.Sum(s => s.Appointments.Sum(a => a.Cost));
             model.DailyProfit = stations.Sum(s => s.Appointments
@@ -136,26 +169,20 @@ namespace E_Recarga.App_Code
                     PodTypeEnum.Fast : PodTypeEnum.Normal;
 
             //Average Cost of appointments
-            model.AverageCost = stations.Average(s => s.Appointments.Average(a => a.Cost));
+            model.AverageCost = stations.Average(s => s.Appointments.Count > 0? s.Appointments.Average(a => a.Cost) : 0);
 
-            model.AverageChargingTime = stations.Average(s => s.Appointments
-                    .Select(a => a.End.TimeOfDay - a.Start.TimeOfDay).Average(p => p.Hours));
-
-            //Best and Worst time of day
-            var groups = stations.Select(s => s.Appointments
-                    .GroupBy(a => a.Start.TimeOfDay, x => x.End.TimeOfDay - x.Start.TimeOfDay));
-
-            model.BestTimeAvg =  groups.Max(gs => gs.Average(g => g.Average(a => a.Hours)));
-            model.WorstTimeAvg = groups.Min(gs => gs.Average(g => g.Average(a => a.Hours)));
+            model.AverageChargingTime = stations.Average(s => s.Appointments.Count > 0?
+                    s.Appointments.Select(a => a.End - a.Start).Average(p => p.Hours): 0);
 
             //Get best day of the week
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                model.InfoDaysOfWeek.Add(day, stations.Sum(s => s.Appointments
+                var sum = stations.Sum(s => s.Appointments
                     .Where(a => a.AppointmentStatusId == AppointmentStatusEnum.Completed &&
-                    a.Start.DayOfWeek == day).Sum(a => a.Cost)));
+                    a.Start.DayOfWeek == day).Sum(a => a.Cost));
+
+                model.InfoDaysOfWeek.Add(new DataPoint(sum,nameof(day)));
             }
-            model.InfoDaysOfWeek.OrderBy(v => v.Value);
 
             return model;
         }

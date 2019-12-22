@@ -26,7 +26,7 @@ namespace E_Recarga.ViewModels
             AverageCost = 0;
             FastChargerUsage = 0;
             NormalChargerUsage = 0;
-            BestDayOfWeek = new Dictionary<DayOfWeek, double>();
+            InfoDaysOfWeek = new List<DataPoint>();
         }
 
         //Appointments and station general info
@@ -55,17 +55,11 @@ namespace E_Recarga.ViewModels
         public double MonthlyProfit { get; set; }
 
         //Station Appointments info
-        [Display(Name = "Média de Horas de carregamentos")]
+        [Display(Name = "Hora de Ponta")]
         public int HourlyUsageAvg { get; set; }
 
         [Display(Name = "Receita Média por Carregamento")]
         public double AverageCost { get; set; }
-
-        [Display(Name = "Melhor Horário")]
-        public double BestTimeAvg { get; set; }
-
-        [Display(Name = "Pior Horário")]
-        public double WorstTimeAvg { get; set; }
 
         [Display(Name = "Tempo de Carregamento Médio")]
         public double AverageChargingTime { get; set; }
@@ -77,6 +71,6 @@ namespace E_Recarga.ViewModels
         public int NormalChargerUsage { get; set; }
 
         [Display(Name = "Dias da Semana")]
-        public Dictionary<DayOfWeek, double> InfoDaysOfWeek { get; set; }
+        public List<DataPoint> InfoDaysOfWeek { get; set; }
     }
 }

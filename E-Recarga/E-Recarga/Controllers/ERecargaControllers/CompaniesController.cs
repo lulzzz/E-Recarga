@@ -11,6 +11,7 @@ using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
 using E_Recarga.ViewModels;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -18,6 +19,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
     public class CompaniesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
+
+        private JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
 
         // GET: Companies
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
@@ -184,7 +187,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        //[Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DashBoard()
         {
             DashboardViewModel model;
@@ -195,15 +198,21 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
             model = DataHandler.GetDashboardData(stations);
 
+            foreach(var top in model.TopStations)
+            {
+                top.HourPlotJSON = JsonConvert.SerializeObject(top.HourPlotData, _jsonSetting);
+                top.InfoDaysJSON = JsonConvert.SerializeObject(top.InfoDaysOfWeek, _jsonSetting);
+            }
+
             return View(model);
         }
 
-        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
-        public PartialViewResult DashBoardStation(int stationId)
+        //[Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        [ChildActionOnly]
+        [ActionName("GetTopStation")]
+        public PartialViewResult DashBoardStation(TopStation station)
         {
-
-
-            return PartialView();
+            return PartialView("_StationStatsDashboard", station);
         }
 
         protected override void Dispose(bool disposing)
