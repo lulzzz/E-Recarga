@@ -1,0 +1,178 @@
+﻿@model E_Recarga.ViewModels.TopStation
+
+<div class="card card-columns" style="width: 50%">
+
+    <div class="card">
+
+        <div style="padding-bottom:20px;padding-top:5px;padding-left:5px;">
+            <h3 class="card-title">
+                <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                @Model.Station.Company.Name - @Model.Station.ComercialName
+            </h3>
+            <h5 class="card-subtitle">
+                <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+                @Model.Station.StreetName, Nº @Model.Station.BuildingNumber, @Model.Station.PostalCode, @Model.Station.Parish, @Model.Station.Region
+            </h5>
+        </div>
+
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#Overview_@Model.Station.Id">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    Resumo
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#Profit_@Model.Station.Id">
+                    <span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
+                    Lucro
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#Detailed_@Model.Station.Id">
+                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                    Detalhes
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="tab-content" style="width:50%;">
+
+    <div id="Overview_@Model.Station.Id" class="tab-pane fade in active">
+        <div class="row">
+            @*Graph*@
+            <div id="overviewchart__@Model.Station.Id" class="col-md-6" style="height:200px; width:50%"></div>
+
+            @*Info*@
+            <div class="form-group col-md-6" style="width:50%; height:200px;max-height:200px">
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-md-2">
+                        @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.AverageChargingTime, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-md-2">
+                        @Html.DisplayFor(model => model.AverageChargingTime, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-md-2">
+                        @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.PreferedPodType, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.PreferedPodType, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    @*Profit tab*@
+    <div id="Profit_@Model.Station.Id" class="tab-pane fade">
+        <div class="row">
+            @*Graph*@
+            <div id="monthlyProfitChart" class="col-xs-6 col-sm-3" style="height:200px; width:50%"></div>
+
+            @*Info*@
+            <div class="form-group col-xs-6 col-sm-3" style="width:50%; height:200px;max-height:200px">
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-xs-6 col-sm-3 form-control-static">
+                        @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.PreferedPodType, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-xs-6 col-sm-3 form-control-static">
+                        @Html.DisplayFor(model => model.PreferedPodType, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.TotalSuccessfulChargings, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-xs-6 col-sm-3 form-control-static">
+                        @Html.DisplayFor(model => model.TotalSuccessfulChargings, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.InfoDaysOfWeek, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                    <div class="col-xs-6 col-sm-3 form-control-static">
+                        @Html.DisplayFor(model => model.InfoDaysOfWeek, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="Detailed_@Model.Station.Id" class="card tab-pane fade">
+        <div class="form-group ">
+            @Html.LabelFor(model => model.TotalProfit, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TotalProfit, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+
+</div>
+  
+
+<style>
+    .line-separator {
+        border-bottom: 2px dotted lightgrey;
+    }
+
+    .vertical-separator {
+        border-left: 2px dotted lightgrey;
+    }
+
+    .card-special {
+        /* Add shadows to create the "card" effect */
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+        /* On mouse-over, add a deeper shadow */
+        .card-special:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+    /* Add some padding inside the card container */
+    .container {
+        padding: 2px 16px;
+    }
+
+    .card-special {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        border-radius: 5px; /* 5px rounded corners */
+    }
+</style>
