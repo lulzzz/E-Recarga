@@ -167,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\DataHandler.cs" />
-    <Content Include="App_Code\PriceGenerator.cs" />
+    <Compile Include="App_Code\PriceGenerator.cs" />
     <Compile Include="App_Code\ScheduleGenerator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
