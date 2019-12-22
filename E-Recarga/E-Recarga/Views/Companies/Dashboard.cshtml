@@ -1,0 +1,28 @@
+﻿@model E_Recarga.ViewModels.DashboardViewModel
+@using E_Recarga.ViewModels;
+
+
+<div class="row">
+
+    <div>
+        @foreach (var top in Model.TopStations)
+        {
+            Html.RenderAction("GetTopStation", new { station = top });
+        }
+    </div>
+   
+</div>
+
+
+<script>
+
+    window.onload = function loadAllPieCharts() {
+
+
+        @foreach (var station in Model.TopStations)
+        {
+            @:drawpiechart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
+        }
+    }
+  
+</script>
