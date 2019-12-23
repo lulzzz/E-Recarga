@@ -72,7 +72,7 @@
     <div class="text-right">
         @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
         {
-            @Html.ActionLink("Editar", "Edit")
+            @Html.ActionLink("Editar", "Edit", new { id = Model.Id },null)
         }
     </div>
     <hr />
@@ -85,7 +85,7 @@
     @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
     {
         <div class="text-right">
-             @Html.ActionLink("Criar", "Create", "Employees", new { companyId = Model.CompanyId, stationId = Model.Id }, null)<br /><br />
+             @Html.ActionLink("Criar", "Create", "Employees")<br /><br />
         </div>
     }
 
