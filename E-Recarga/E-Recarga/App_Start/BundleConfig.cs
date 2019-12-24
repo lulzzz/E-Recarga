@@ -26,9 +26,6 @@ namespace E_Recarga
                       "~/Content/united.bootstrap.css",
                       "~/Content/site.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/datetime").Include(
-                      "~/Scripts/moment*",
-                      "~/Scripts/bootstrap-datetimepicker*"));
         }
     }
 }
