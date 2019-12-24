@@ -32,7 +32,9 @@ namespace E_Recarga
                       "~/Scripts/moment.js",
                       "~/Scripts/moment-with-locales.js"));
 
-
+            bundles.Add(new ScriptBundle("~/bundles/globalize").Include(
+                      "~/Scripts/globalize.js",
+                      "~/Scripts/globalize/date.js"));
         }
     }
 }

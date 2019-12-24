@@ -58,7 +58,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.Start, "{0:dd/MM/yyyy}", new { @id = "startTime", @class = "form-control" })
+            @Html.TextBoxFor(model => model.Start, new { @id = "startTime", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Start, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -66,7 +66,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.End, "{0:dd/MM/yyyy}", new { @id = "endTime", @class = "form-control" })
+            @Html.TextBoxFor(model => model.End, new { @id = "endTime", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
         </div>
     </div>

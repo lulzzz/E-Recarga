@@ -21,19 +21,19 @@
             </div>
 
             <br /><br />
-            <divclass class="form-group" id="InitTimeSearch">
+            <div class="form-group" id="InitTimeSearch">
                 <label>Horário de Início </label> &nbsp
-                @Html.EditorFor(model => model.InitCharge, new { htmlAttributes = new { @class = "form-control", @id = "init_id" } })
+                @Html.TextBoxFor(model => model.InitCharge, new { @id = "startTime", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
 
-            </divclass>
+            </div>
 
             <br /><br />
-            <divclass class="form-group" id="EndTimeSearch">
+            <div class="form-group" id="EndTimeSearch">
                 &nbsp <label>Horário de Fim</label> &nbsp
-                @Html.EditorFor(model => model.EndCharge, new { htmlAttributes = new { @class = "form-control", @id = "end_id" } })
-                @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
-            </divclass>
+                @Html.TextBoxFor(model => model.EndCharge, new { @id = "endTime", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EndCharge, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="col-lg-offset-10" style="display:table-cell;vertical-align: middle;">
@@ -46,37 +46,24 @@
 </form>
 <br /><br />
 
+@Html.AjaxGrid(Url.Action("IndexGrid"))
 
 <script>
     function myFunction() {
         var grid = new MvcGrid(document.querySelector('.mvc-grid'));
         var selectedRegion = $(document.getElementById("region_id")).children("option:selected").val();
         var selectedType = $(document.getElementById("pod_id")).children("option:selected").val();
-        var startDate = $(document.getElementById('init_id')).val();
-        var endDate = $(document.getElementById('end_id')).val();
+        var startDate = $(document.getElementById('startTime')).val();
+        var endDate = $(document.getElementById('endTime')).val();
+
+        alert("values: " + selectedRegion + " --- " + selectedType + "-----\n" +
+            startDate + "---" + endDate);
 
         grid.query.set('region', selectedRegion);
         grid.query.set('recharge_type', selectedType);
         grid.query.set('init_time', startDate);
         grid.query.set('final_time', endDate);
 
-        grid.reload();
-    }
-</script>
-
-<script>
-    window.onload = function () {
-        var grid = new MvcGrid(document.querySelector('.mvc-grid'));
-
-        var selectedRegion = $(document.getElementById("region_id")).children("option:selected").val();
-        var selectedType = $(document.getElementById("pod_id")).children("option:selected").val();
-        var startDate = $(document.getElementById('init_id')).val();
-        var endDate = $(document.getElementById('end_id')).val();
-
-        grid.query.set('region', selectedRegion);
-        grid.query.set('recharge_type', selectedType);
-        grid.query.set('init_time', startDate);
-        grid.query.set('final_time', endDate);
         grid.reload();
     }
 </script>
@@ -85,22 +72,36 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
-        $(function () {
 
-            $('#init_id').datetimepicker({
-                showClose: true,
-                showClear: true,
-                toolbarPlacement: 'top'
+        var today = new Date();
+        var _maxDate = today.getDate() + 7;
+
+        $(function (e) {
+            $('#startTime').datetimepicker({
+                locale: 'pt',
+                minDate: today,
             });
-            $('#end_id').datetimepicker({
-                showClose: true,
-                showClear: true,
-                toolbarPlacement: 'top',
-                stepping: 15
+
+            $('#endTime').datetimepicker({
+                useCurrent: false, //Important! See issue #1075
+                locale: 'pt',
+                minDate: today
             });
+
+
+            $("#startTime").on("dp.change", function (e) {
+                $('#endTime').data("DateTimePicker").minDate(e.date);
+                //Adds 5 hours, this is ridiculous
+                $('#endTime').data("DateTimePicker").maxDate(new Date(e.date + (5 * 60 * 60 * 1000)));
+            });
+
+            $("#endTime").on("dp.change", function (e) {
+                $('#startTime').data("DateTimePicker").maxDate(e.date);
+            });
+
+            $("#startTime").attr("autocomplete", "off");
+            $("#endTime").attr("autocomplete", "off");
         });
     </script>
 
 }
-
-@Html.AjaxGrid(Url.Action("IndexGrid"))
