@@ -79,7 +79,7 @@
                     }
                     else if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                     {
-                        <li>@Html.ActionLink("Centro de Controlo", "CompanyTop", "Companies")</li>
+                        <li>@Html.ActionLink("Centro de Controlo", "Dashboard", "Companies")</li>
                         <li>@Html.ActionLink("Empresa", "Details", "Companies")</li>
                         <li>@Html.ActionLink("Marcações", "Index", "Appointments")</li>
                         <li>@Html.ActionLink("Estações", "Index", "Stations")</li>
@@ -106,7 +106,7 @@
 
     <script src="~/Scripts/MvcGrid/mvc-grid.js"></script>
     <script type="text/javascript" src="~/Scripts/canvasjs.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/DrawPieChart.js"></script>
+    <script src="~/Scripts/drawcharts.js"></script>
 
     <script>
         [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {

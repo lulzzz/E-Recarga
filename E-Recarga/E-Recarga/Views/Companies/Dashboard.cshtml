@@ -2,27 +2,45 @@
 @using E_Recarga.ViewModels;
 
 
-<div class="row">
+<center>
+    <br /><h1>Dashboard</h1><br />
+</center>
 
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-body">
+            <h4 class="card-title">Lucro de @DateTime.Now.ToShortDateString() a @DateTime.Now.AddYears(-1).ToShortDateString() <span>@Model.TotalProfit</span></h4>
+        </div>
+    </div>
+</div>
+
+<div id="globalRevenueChart" class="col-md-12" style="width:100%;height:360px"></div>
+
+<div style="margin">
     <div>
         @foreach (var top in Model.TopStations)
         {
             Html.RenderAction("GetTopStation", new { station = top });
         }
     </div>
-   
 </div>
+
 
 
 <script>
 
     window.onload = function loadAllPieCharts() {
 
-
         @foreach (var station in Model.TopStations)
         {
-            @:drawpiechart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
+            @:DrawOverviewPieChart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
+            @:DrawProfitPieChart(@station.Station.Id, @Html.Raw(station.InfoDaysJSON));
+
         }
+
+        DrawRevenueChart(@Html.Raw(Model.InfoProfitPerMonthJSON));
     }
-  
+
 </script>
