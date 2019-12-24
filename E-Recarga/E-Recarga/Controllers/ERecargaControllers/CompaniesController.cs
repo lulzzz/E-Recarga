@@ -20,8 +20,6 @@ namespace E_Recarga.Controllers.ERecargaControllers
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
-        private JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
-
         // GET: Companies
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult Index()
@@ -197,12 +195,6 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 .Include(x=>x.Prices).Include(x=>x.Pods).Where(x=>x.CompanyId == companyId).ToList();
 
             model = DataHandler.GetDashboardData(stations);
-
-            foreach(var top in model.TopStations)
-            {
-                top.HourPlotJSON = JsonConvert.SerializeObject(top.HourPlotData, _jsonSetting);
-                top.InfoDaysJSON = JsonConvert.SerializeObject(top.InfoDaysOfWeek, _jsonSetting);
-            }
 
             return View(model);
         }
