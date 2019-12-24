@@ -254,7 +254,7 @@
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
     <Content Include="Scripts\cldr\unresolved.js" />
-    <Content Include="Scripts\DrawPieChart.js" />
+    <Content Include="Scripts\drawcharts.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />
     <Content Include="Scripts\globalize\date.js" />
@@ -349,7 +349,6 @@
     <Content Include="Views\Users\AddMoney.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="ViewBag\" />
   </ItemGroup>
   <ItemGroup>
