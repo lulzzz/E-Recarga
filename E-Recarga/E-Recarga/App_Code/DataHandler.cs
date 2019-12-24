@@ -183,23 +183,37 @@ namespace E_Recarga.App_Code
             }
 
             //Get monthly profit and montly pod usage
-            string[] Months = DateTimeFormatInfo.CurrentInfo.MonthNames;
-            foreach (string month in Months)
+            var pt = CultureInfo.CreateSpecificCulture("pt-PT").DateTimeFormat;
+            var Months = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+            Months.RemoveAt(Months.Count - 1);
+
+
+            //Cycle goes backwards to keep month/year order on the view
+            for(int i = 12; i >= 1; i--)
             {
+                DateTime temp = DateTime.Now.AddMonths(-i);
+
                 var profit = stations.Sum(s => s.Appointments.Where(a =>
-                    a.Start.Month.ToString("MMMM") == month).Sum(a => a.Cost));
+                    a.Start.Year == temp.Year &&
+                    a.Start.Month == temp.Month).Sum(a => a.Cost));
 
                 var normal = stations.Sum(s => s.Appointments.Where(a =>
-                    a.Start.Month.ToString("MMMM") == month && a.Pod.PodId == PodTypeEnum.Normal)
+                    a.Start.Year == temp.Year &&
+                    a.Start.Month == temp.Month &&
+                    a.Pod.PodId == PodTypeEnum.Normal)
                     .Count());
 
                 var fast = stations.Sum(s => s.Appointments.Where(a =>
-                    a.Start.Month.ToString("MMMM") == month && a.Pod.PodId == PodTypeEnum.Fast)
+                    a.Start.Year == temp.Year &&
+                    a.Start.Month == temp.Month &&
+                    a.Pod.PodId == PodTypeEnum.Fast)
                     .Count());
 
-                model.InfoPodUsagePerMonth.Add(new DataPoint(normal, month));
-                model.InfoPodUsagePerMonth.Add(new DataPoint(fast, month));
-                model.InfoProfitPerMonth.Add(new DataPoint(profit, month));
+                model.InfoPodUsagePerMonth.Add(new DataPoint(normal, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
+                model.InfoPodUsagePerMonth.Add(new DataPoint(fast, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
+                model.InfoProfitPerMonth.Add(new DataPoint(profit, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
+
+               // return DateTime.Now.Subtract(new DateTime(1970, 1,1)).TotalMilliseconds
             }
 
 

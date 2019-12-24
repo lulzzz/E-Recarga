@@ -109,8 +109,7 @@ function DrawRevenueChart(data) {
             prefix: "€",
             tickColor: "#a2a2a2",
 
-            title: "Units Sold",
-            valueFormatString: "#0,,."
+            title: "Lucro Bruto"
         },
         toolTip: {
             borderThickness: 0,
@@ -119,7 +118,7 @@ function DrawRevenueChart(data) {
         },
         data: [
             {
-                toolTipContent: "{y} units",
+                toolTipContent: "{y} €",
                 color: "#393f63",
                 markerSize: 0,
                 type: "splineArea",
