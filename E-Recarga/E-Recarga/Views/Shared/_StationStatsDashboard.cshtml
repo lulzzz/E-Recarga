@@ -11,7 +11,9 @@
             </h3>
             <h5 class="card-subtitle">
                 <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                @Model.Station.StreetName, Nº @Model.Station.BuildingNumber, @Model.Station.PostalCode, @Model.Station.Parish, @Model.Station.Region
+                <font size="+0.8">
+                    @Model.Station.StreetName, Nº @Model.Station.BuildingNumber, @Model.Station.PostalCode, @Model.Station.Parish, @Model.Station.Region
+                </font>
             </h5>
         </div>
 
@@ -39,95 +41,93 @@
 
 </div>
 
-<div class="tab-content" @*style="width:50%;*@">
-
+<div class="tab-content" @*style="width:50%;*@ ">
+    @*Info*@
     <div id="Overview_@Model.Station.Id" class="tab-pane fade in active">
         <div class="row">
             @*Graph*@
-            <div id="overviewchart__@Model.Station.Id" class="col-md-6" style="height:200px; @*width:45%*@"></div>
+            <br />
+            <div class="col col-md-8" id="overviewchart__@Model.Station.Id" style="position: relative; top:50%; height:380px;margin:auto"></div>
+            <div class="col-md-4" style="height:380px;font-size:1.8rem">
+                <div class="form-group text-right" style="position: relative; top:25%; @*transform:translate(-50%);*@ margin:auto">
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
 
-            @*Info*@
-            <div class="form-group col-md-6" style="height:200px; width:280px; max-height:200px">
-                <br />
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                    <div class="col-md-2">
-                        @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
-                </div>
 
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.AverageChargingTime, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.AverageChargingTime, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
 
-                    <div class="col-md-2">
-                        @Html.DisplayFor(model => model.AverageChargingTime, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.AverageChargingTime, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
-                </div>
 
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
 
-                    <div class="col-md-2">
-                        @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
-                </div>
 
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.PreferedPodType, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.PreferedPodType, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
 
-                    <div class="col-md-2 form-control-static">
-                        @Html.DisplayFor(model => model.PreferedPodType, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.PreferedPodType, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-
         </div>
     </div>
 
     @*Profit tab*@
     <div id="Profit_@Model.Station.Id" class="tab-pane fade">
         <div class="row">
-
+            <br />
             @*Graph*@
-            <div id="monthlyProfitChart__@Model.Station.Id" class="col-md-6" style="height:200px; @*width:45%*@"></div>
-
+            <div id="monthlyProfitChart__@Model.Station.Id" class="col-md-8" style="height:380px; @*width:45%*@"></div>
             @*Info*@
-            <div class="form-group col-md-8" style="width:280px; height:200px;max-height:200px">
-                <br />
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.TotalProfit, htmlAttributes: new { @class = "control-label col-md-8" })
+            <div class="col-md-4" style="height:380px;font-size:1.6rem">
+                <div class="form-group text-right " style="position: relative; top:25%; @*transform:translate(-50%);*@ margin:auto">
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.TotalProfit, htmlAttributes: new { @class = "control-label col-md-10 form-control-static " })
 
-                    <div class="col-md-2 form-control-static">
-                        @Html.DisplayFor(model => model.TotalProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.TotalProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.DailyProfit, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
+
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.DailyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.WeeklyProfit, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
+
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.WeeklyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="row line-separator">
+                        @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-10 form-control-static" })
+
+                        <div class="col-md-2 form-control-static">
+                            @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                     </div>
                 </div>
-
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.DailyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                    <div class="col-md-2 form-control-static">
-                        @Html.DisplayFor(model => model.DailyProfit, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.WeeklyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                    <div class="col-md-2 form-control-static">
-                        @Html.DisplayFor(model => model.WeeklyProfit, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
-                <div class="row line-separator">
-                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                    <div class="col-md-2 form-control-static">
-                        @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -137,94 +137,70 @@
     <div id="Detailed_@Model.Station.Id" class="tab-pane fade">
         <br />
         @*Other Info*@
-        <div class="form-group col-md-6" style="height:200px;max-height:200px; padding:0% 5% 0% 5%">
-            <br />
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.NormalChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
+        <div class="row" style="font-size:1.8rem; height:380px;">
+            <div class="form-group text-right col-md-6" style="padding:0% 5% 0% 5%;top:25%">
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.NormalChargerUsage, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.NormalChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
 
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.NormalChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.FastChargerUsage, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.FastChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.AverageChargingTime, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.AverageChargingTime, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
             </div>
 
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.FastChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
-                </div>
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.FastChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
 
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.AverageChargingTime, htmlAttributes: new { @class = "control-label col-md-8" })
+            <div class="form-group text-right col-md-6 vertical-separator" style="padding:0% 5% 0% 5%;top:25%">
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.TotalSuccessfulChargings, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.TotalSuccessfulChargings, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
-
-                <div class="col-md-2 form-control-static"align="left">
-                    @Html.DisplayFor(model => model.AverageChargingTime, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.DailyProfit, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.DailyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
 
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group col-md-6 vertical-separator" align="center" style="height:200px;max-height:200px;padding:0% 5% 0% 5%">
-            <br />
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.TotalSuccessfulChargings, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
 
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.TotalSuccessfulChargings, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-            
-
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.DailyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-                </div>
-
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.DailyProfit, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-                </div>
-
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="row line-separator">
-                <div class="col-md-10 form-control-static" align="right">
-                    @Html.LabelFor(model => model.TotalProfit, htmlAttributes: new { @class = "control-label col-md-8" })
-                </div>
-
-                <div class="col-md-2 form-control-static" align="left">
-                    @Html.DisplayFor(model => model.TotalProfit, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="row line-separator">
+                    @Html.LabelFor(model => model.TotalProfit, htmlAttributes: new { @class = "control-label col-md-9 form-control-static" })
+                    <div class="col-md-2 form-control-static">
+                        @Html.DisplayFor(model => model.TotalProfit, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
                 </div>
             </div>
         </div>
-        <br />
 
-    </div>
+     </div>
 
 </div>
   

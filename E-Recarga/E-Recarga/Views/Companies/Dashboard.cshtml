@@ -3,7 +3,7 @@
 
 
 <center>
-    <br /><h1 style="font-size: 7rem;">Dashboard</h1><br /> @*make this bigger*@
+    <br /><h2 style="font-size:4rem">Centro de Controlo</h2><br /> @*make this bigger*@
 </center>
 
 <br />
@@ -13,25 +13,30 @@
 
 <div>
     <p>
-        <span class="text-info" style="font-size:3rem;">Rendimento Total: </span> &nbsp;
-        <span style="font-size:3rem;">@Model.TotalProfit</span>
+        <span class="text-info" style="font-size:2.2rem;">Rendimento Total: </span> &nbsp;
+        <span style="font-size:2.2rem;">@Model.TotalProfit €</span>
     </p>
 </div>
 <hr />
 <br />
 
-<div id="globalRevenueChart" class="col-md-12" style="width:100%;height:360px"></div>
-<div id="globalDaysStats" class="col-md-12" style="width:100%;height:360px"></div>
-<div id="podUsageStats" class="col-md-12" style="width:100%;height:360px"></div>
+<div class="row">
+    <div id="globalRevenueChart" class="col-md-8" style="height:360px"></div>
+    <div id="globalDaysStats" class="col-md-4" style="height:360px"></div>
+    @*<div id="podUsageStats" class="col-md-12" style="width:100%;height:360px"></div>*@
+</div>
 
+<br /><br /><br /><br />
+<hr />
+<h3 style="text-align:center"> Resultados das 3 Melhores Estações: </h3>
+<br />
 
-    @foreach (var top in Model.TopStations)
-    {
-       Html.RenderAction("GetTopStation", new { station = top });
-        <br />
-        <hr />
-    }
-
+@foreach (var top in Model.TopStations)
+{
+    Html.RenderAction("GetTopStation", new { station = top });
+    <br />
+    <hr />
+}
 
 
 
@@ -43,11 +48,9 @@
         {
             @:DrawOverviewPieChart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
             @:DrawProfitPieChart(@station.Station.Id, @Html.Raw(station.InfoDaysJSON));
-
         }
 
         DrawRevenueChart(@Html.Raw(Model.InfoProfitPerMonthJSON));
-
         DrawDaysOverviewPieChart("globalDaysStats",@Html.Raw(Model.InfoDaysOfWeekJSON));
         //DrawPodUsagePieChart("podUsageStats",@Html.Raw(Model.InfoPodUsagePerMonthJSON));
     }
