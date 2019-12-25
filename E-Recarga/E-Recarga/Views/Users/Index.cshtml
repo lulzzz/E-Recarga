@@ -80,12 +80,20 @@
             $('#startTime').datetimepicker({
                 locale: 'pt',
                 minDate: today,
+                showClose: true,
+                showClear: true,
+                toolbarPlacement: 'top',
+                stepping: 15
             });
 
             $('#endTime').datetimepicker({
                 useCurrent: false, //Important! See issue #1075
                 locale: 'pt',
-                minDate: today
+                minDate: today,
+                showClose: true,
+                showClear: true,
+                toolbarPlacement: 'top',
+                stepping: 30
             });
 
 
