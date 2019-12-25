@@ -39,12 +39,12 @@
 
 </div>
 
-<div class="tab-content" style="width:50%;">
+<div class="tab-content" @*style="width:50%;*@">
 
     <div id="Overview_@Model.Station.Id" class="tab-pane fade in active">
         <div class="row">
             @*Graph*@
-            <div id="overviewchart__@Model.Station.Id" class="col-md-6" style="height:200px; width:45%"></div>
+            <div id="overviewchart__@Model.Station.Id" class="col-md-6" style="height:200px; @*width:45%*@"></div>
 
             @*Info*@
             <div class="form-group col-md-6" style="height:200px; width:280px; max-height:200px">
@@ -91,7 +91,7 @@
         <div class="row">
 
             @*Graph*@
-            <div id="monthlyProfitChart__@Model.Station.Id" class="col-md-6" style="height:200px; width:45%"></div>
+            <div id="monthlyProfitChart__@Model.Station.Id" class="col-md-6" style="height:200px; @*width:45%*@"></div>
 
             @*Info*@
             <div class="form-group col-md-8" style="width:280px; height:200px;max-height:200px">
@@ -134,75 +134,91 @@
     </div>
 
 
-    <div id="Detailed_@Model.Station.Id" class="card tab-pane fade">
+    <div id="Detailed_@Model.Station.Id" class="tab-pane fade">
         <br />
         @*Other Info*@
-        <div class="form-group col-md-8" style="width:45%; height:200px;max-height:200px">
+        <div class="form-group col-md-6" style="height:200px;max-height:200px; padding:0% 5% 0% 5%">
             <br />
             <div class="row line-separator">
-                @Html.LabelFor(model => model.FastChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.NormalChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
 
-                <div class="col-md-2 form-control-static">
+                <div class="col-md-2 form-control-static" align="left">
+                    @Html.DisplayFor(model => model.NormalChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="row line-separator">
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.FastChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
+                <div class="col-md-2 form-control-static" align="left">
                     @Html.DisplayFor(model => model.FastChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
 
             <div class="row line-separator">
-                @Html.LabelFor(model => model.TotalSuccessfulChargings, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.AverageChargingTime, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
 
-                <div class="col-md-2 form-control-static">
-                    @Html.DisplayFor(model => model.TotalSuccessfulChargings, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-2 form-control-static"align="left">
+                    @Html.DisplayFor(model => model.AverageChargingTime, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
 
             <div class="row line-separator">
-                @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
 
-                <div class="col-md-2 form-control-static">
+                <div class="col-md-2 form-control-static" align="left">
                     @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-            </div>
-
-            <div class="row line-separator">
-                @Html.LabelFor(model => model.NormalChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                <div class="col-md-2 form-control-static">
-                    @Html.DisplayFor(model => model.NormalChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
         </div>
 
-        <div class="form-group col-md-8 vertical-separator" style="width:280px; height:200px;max-height:200px">
+        <div class="form-group col-md-6 vertical-separator" align="center" style="height:200px;max-height:200px;padding:0% 5% 0% 5%">
             <br />
             <div class="row line-separator">
-                @Html.LabelFor(model => model.FastChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                <div class="col-md-2 form-control-static">
-                    @Html.DisplayFor(model => model.FastChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.TotalSuccessfulChargings, htmlAttributes: new { @class = "control-label col-md-8" })
                 </div>
-            </div>
 
-            <div class="row line-separator">
-                @Html.LabelFor(model => model.TotalSuccessfulChargings, htmlAttributes: new { @class = "control-label col-md-8" })
-
-                <div class="col-md-2 form-control-static">
+                <div class="col-md-2 form-control-static" align="left">
                     @Html.DisplayFor(model => model.TotalSuccessfulChargings, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
+            
 
             <div class="row line-separator">
-                @Html.LabelFor(model => model.AverageCost, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.DailyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
 
-                <div class="col-md-2 form-control-static">
-                    @Html.DisplayFor(model => model.AverageCost, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-2 form-control-static" align="left">
+                    @Html.DisplayFor(model => model.DailyProfit, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
 
             <div class="row line-separator">
-                @Html.LabelFor(model => model.NormalChargerUsage, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.MonthlyProfit, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
 
-                <div class="col-md-2 form-control-static">
-                    @Html.DisplayFor(model => model.NormalChargerUsage, new { htmlAttributes = new { @class = "form-control" } })
+                <div class="col-md-2 form-control-static" align="left">
+                    @Html.DisplayFor(model => model.MonthlyProfit, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="row line-separator">
+                <div class="col-md-10 form-control-static" align="right">
+                    @Html.LabelFor(model => model.TotalProfit, htmlAttributes: new { @class = "control-label col-md-8" })
+                </div>
+
+                <div class="col-md-2 form-control-static" align="left">
+                    @Html.DisplayFor(model => model.TotalProfit, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
         </div>
@@ -235,10 +251,10 @@
         transition: 0.3s;
     }
 
-        /* On mouse-over, add a deeper shadow */
-        .card-special:hover {
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-        }
+    /* On mouse-over, add a deeper shadow */
+    .card-special:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
 
     /* Add some padding inside the card container */
     .container {

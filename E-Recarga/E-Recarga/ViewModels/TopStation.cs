@@ -52,7 +52,7 @@ namespace E_Recarga.ViewModels
         [Display(Name = "Receita Mensal")]
         public double MonthlyProfit { get; set; }
 
-        [Display(Name = "Média de Horas de carregamentos")]
+        [Display(Name = "Horas médias de carregamento")]
         public double AverageChargingTime { get; set; }
 
         [Display(Name = "Receita Média por Carregamento")]
