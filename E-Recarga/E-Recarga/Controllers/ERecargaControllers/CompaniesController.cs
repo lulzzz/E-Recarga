@@ -185,7 +185,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return RedirectToAction("Index");
         }
 
-        //[Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DashBoard()
         {
             DashboardViewModel model;
@@ -199,7 +199,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(model);
         }
 
-        //[Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         [ChildActionOnly]
         [ActionName("GetTopStation")]
         public PartialViewResult DashBoardStation(TopStation station)
