@@ -47,53 +47,6 @@ function DrawProfitPieChart(id, data) {
     chart.render();
 }
 
-
-//function DrawRevenueChart(data) {
-//    var chart = new CanvasJS.Chart("globalRevenueChart", {
-//		animationEnabled: true,
-//        backgroundColor: "transparent",
-//        title: {
-//            text: "Rendimento Anual"
-//        },
-//		axisX: {
-//			labelFontColor: "#717171",
-//			labelFontSize: 16,
-//			lineColor: "#a2a2a2",
-//			minimum: new Date("1 Jan 2015"),
-//			tickColor: "#a2a2a2",
-//			valueFormatString: "MMM YYYY"
-//		},
-//		axisY: {
-//			gridThickness: 0,
-//			includeZero: false,
-//			labelFontColor: "#717171",
-//			labelFontSize: 16,
-//			lineColor: "#a2a2a2",
-//			prefix: "$",
-//			tickColor: "#a2a2a2"
-//		},
-//		toolTip: {
-//			borderThickness: 0,
-//			cornerRadius: 0,
-//			fontStyle: "normal"
-//		},
-//		data: [
-//			{
-//				color: "#393f63",
-//				markerSize: 0,
-//				type: "spline",
-//				yValueFormatString: "$###,###.##",
-//				dataPoints: data,
-//			}
-//		]
-//    });
-
-//    showDefaultText(chart,"dados inexistentes");
-
-//    chart.render();
-
-//}
-
 function DrawRevenueChart(data) {
     var chart = new CanvasJS.Chart("globalRevenueChart", {
         animationEnabled: true,
@@ -186,7 +139,7 @@ function DrawPodUsagePieChart(id, data) {
         }]
     });
 
-    showDefaultText(chart, "dados inexistentes");
+    showDefaultText(chart, "Dados Inexistentes");
 
     chart.render();
 }
@@ -201,6 +154,9 @@ function showDefaultText(chart, text) {
     if (isEmpty)
         chart.options.subtitles.push({
             text: text,
+            fontSize: 18,
+            fontColor: "#606060",
+            fontFamily: "Calibri",
             verticalAlign: 'center',
         });
     else

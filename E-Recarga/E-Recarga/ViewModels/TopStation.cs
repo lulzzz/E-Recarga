@@ -23,8 +23,6 @@ namespace E_Recarga.ViewModels
 
             AverageChargingTime = 0;
             AverageCost = 0;
-            FastChargerUsage = 0;
-            NormalChargerUsage = 0;
             InfoDaysOfWeek = new List<DataPoint>();
             HourPlotData = new List<DataPoint>();
         }
@@ -70,5 +68,6 @@ namespace E_Recarga.ViewModels
         public List<DataPoint> HourPlotData { get; set; }
 
         public string HourPlotJSON { get; set; }
+
     }
 }
