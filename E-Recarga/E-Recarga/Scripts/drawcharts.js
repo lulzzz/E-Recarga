@@ -91,7 +91,7 @@ function DrawRevenueChart(data) {
         animationEnabled: true,
         backgroundColor: "transparent",
         title: {
-            text: "Rendimento Anual"
+            text: "Rendimento Médio Mensal"
         },
         animationEnabled: true,
         axisX: {
@@ -118,7 +118,7 @@ function DrawRevenueChart(data) {
         },
         data: [
             {
-                toolTipContent: "{y} €",
+                toolTipContent: "{y}",
                 color: "#393f63",
                 markerSize: 0,
                 type: "splineArea",
@@ -128,6 +128,46 @@ function DrawRevenueChart(data) {
                 dataPoints: data,
             }
         ]
+    });
+
+    showDefaultText(chart, "dados inexistentes");
+
+    chart.render();
+}
+
+function DrawDaysOverviewPieChart(id, data) {
+    var chart = new CanvasJS.Chart(id, {
+        animationEnabled: true,
+        title: {
+            text: "Lucro por dias"
+        },
+        data: [{
+            type: "pie",
+            startAngle: 240,
+            yValueFormatString: "##0.00",
+            indexLabel: "{label} {y}",
+            dataPoints: data,
+        }]
+    });
+
+    showDefaultText(chart, "dados inexistentes");
+
+    chart.render();
+}
+
+function DrawPodUsagePieChart(id, data) {
+    var chart = new CanvasJS.Chart(id, {
+        animationEnabled: true,
+        title: {
+            text: "Detalhes dos Postos"
+        },
+        data: [{
+            type: "pie",
+            startAngle: 240,
+            yValueFormatString: "##0.00",
+            indexLabel: "{label} {y}",
+            dataPoints: data,
+        }]
     });
 
     showDefaultText(chart, "dados inexistentes");
