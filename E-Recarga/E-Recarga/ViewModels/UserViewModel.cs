@@ -1,4 +1,5 @@
 ﻿using E_Recarga.Models.CustomValidators;
+using E_Recarga.Models.ERecargaModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,5 +22,7 @@ namespace E_Recarga.ViewModels
 
         //[RegularExpression("([0][1-9]|[1][0-9]|[2][0-9]|[3][0-1])/([0][1-9]|[1][0-2])/([1][9][0-9]{2}|[2][0-9]{3})( ([0-1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])", ErrorMessage = "O número deve respeitar o formato: 12/01/2016 23:55:31")]
         public DateTime EndCharge { get; set; }
+
+        public List<Station> Stations { get; set; }
     }
 }
