@@ -42,6 +42,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult Details(int? id)
         {
             Station station;
+            var user = db.Employees.Find(User.Identity.GetUserId());
 
             if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
             {
@@ -54,12 +55,18 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 {
                     return HttpNotFound();
                 }
+                if(station.CompanyId != user.CompanyId)
+                {
+                    return HttpNotFound();
+                }
+
             }
             else
             {
-                var user = db.Employees.Find(User.Identity.GetUserId());
                 if(user.Station == null)
+                {
                     return HttpNotFound();
+                }
 
                 station = user.Station;
             }

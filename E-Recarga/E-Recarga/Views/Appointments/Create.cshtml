@@ -18,7 +18,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Company.Name, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Company.Name, new { htmlAttributes = new { @class = "form-control" ,@readonly="readonly"} })
+            @Html.EditorFor(model => model.Company.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             @Html.ValidationMessageFor(model => model.Company.Name, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -50,7 +50,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control" , @readonly = "readonly"} })
+            @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -58,16 +58,15 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.TextBoxFor(model => model.Start, new { @id = "startTime", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Start, "", new { @class = "text-danger" })
         </div>
     </div>
 
-
     <div class="form-group">
         @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.End, new { htmlAttributes = new { @class = "form-control"} })
+            @Html.TextBoxFor(model => model.End, new { @id = "endTime", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -95,36 +94,41 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    $(function () {
+        $.validator.methods.date = function (value, element) {
+            Globalize.culture("pt-PT");
+            // you can alternatively pass the culture to parseDate instead of
+            // setting the culture above, like so:
+            // parseDate(value, null, "en-AU")
+            return this.optional(element) || Globalize.parseDate(value) !== null;
+        }
+    });
 
-        $(function () {
-            $.validator.methods.date = function (value, element) {
-                Globalize.culture("pt-PT");
-                // you can alternatively pass the culture to parseDate instead of
-                // setting the culture above, like so:
-                // parseDate(value, null, "en-AU")
-                return this.optional(element) || Globalize.parseDate(value) !== null;
-            }
+    var today = new Date();
+    var _maxDate = today.getDate() + 7;
+
+    $(function () {
+        $('#startTime').datetimepicker({
+            locale: 'pt',
+            minDate: today,
         });
 
-        $(function () {
-            today = moment();
+        $('#endTime').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            locale: 'pt',
+            minDate: today
+        });
 
-            $('#Start').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-                minDate: today,
-                showClose: true,
-                showClear: true,
-                toolbarPlacement: 'top'
-            });
-            $('#End').datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-                showClose: true,
-                showClear: true,
-                toolbarPlacement: 'top',
-                stepping: 15
-            });
-  });
-    </script>
+
+        $("#startTime").on("dp.change", function (e) {
+            $('#endTime').data("DateTimePicker").minDate(e.date);
+        });
+
+        $("#endTime").on("dp.change", function (e) {
+            $('#startTime').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>
 
 }

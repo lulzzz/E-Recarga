@@ -92,8 +92,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(appointment);
         }
 
-        // GET: Appointments/Create
-        [Authorize(Roles = nameof(RoleEnum.Employee))]
+        //[Authorize(Roles = nameof(RoleEnum.Employee))]
         public ActionResult Create()
         {
             ViewBag.PodId = new SelectList(db.Pods, "Id", "Id");
@@ -101,10 +100,10 @@ namespace E_Recarga.Controllers.ERecargaControllers
             ViewBag.AppointmentStatusId = new SelectList(db.AppointmentStatuses, "Id", "Name");
             ViewBag.UserId = new SelectList(db.Users, "Id", "Name");
 
-            string userId = User.Identity.GetUserId();
-            int companyId = db.Employees.Where(e => e.Id == userId).Select(e => e.CompanyId).First();
+            var user = db.Employees.Find(User.Identity.GetUserId());
+            int companyId = user.CompanyId;
 
-            return View(new Appointment() {CompanyId = companyId, Company=db.Companies.Find(companyId)});
+            return View(new Appointment() { CompanyId = companyId, Company = user.Company, Start = DateTime.Now.AddMinutes(30), End = DateTime.Now.AddHours(5) });
         }
 
         // POST: Appointments/Create
@@ -112,16 +111,16 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = nameof(RoleEnum.Employee))]
-        public ActionResult Create([Bind(Include = "Id,CompanyId,StationId,PodId,UserId,Cost,Start,End,AppointmentStatusId")] Appointment appointment)
+        //[Authorize(Roles = nameof(RoleEnum.Employee))]
+        public ActionResult Create([Bind(Include = "Id,StationId,PodId,UserId,Cost,Start,End,AppointmentStatusId")] Appointment appointment)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
+            var prices = db.Stations.Where(s => s.Id == appointment.StationId).Select(s => s.Prices).FirstOrDefault();
+            appointment.CompanyId = user.CompanyId;
+            appointment.Cost = PriceGenerator.CalculatePrice(appointment.Start, appointment.End, prices, db.Pods.Find(appointment.PodId).PodType.Id);
+
             if (ModelState.IsValid)
             {
-                string userId = User.Identity.GetUserId();
-                int stationId = (int)db.Employees.Where(e => e.Id == userId).Select(e => e.StationId).First();
-
-                var prices = db.Stations.Where(s => s.Id == stationId).Select(s => s.Prices).First();
-                appointment.Cost = PriceGenerator.CalculatePrice(appointment.Start, appointment.End, prices, db.Pods.Find(appointment.PodId).PodType.Id);
                 db.Appointments.Add(appointment);
                 db.SaveChanges();
                 return RedirectToAction("Index");

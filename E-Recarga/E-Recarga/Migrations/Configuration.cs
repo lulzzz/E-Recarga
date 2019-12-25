@@ -170,6 +170,41 @@ namespace E_Recarga.Migrations
                 if (res.Succeeded)
                     manager.AddToRole(user.Id, nameof(RoleEnum.User));
             }
+
+            context.Appointments.AddOrUpdate(x => x.Id,
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 7, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 45.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-80), End = DateTime.Now.AddDays(-80).AddHours(5) },
+
+                new Appointment() { StationId = 8, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 100.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-78), End = DateTime.Now.AddDays(-78).AddHours(5) },
+
+                new Appointment() { StationId = 7, PodId = 49, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 15.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddMonths(-6), End = DateTime.Now.AddMonths(-6).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+
+                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
+                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) }
+                );
         }
     }
 }

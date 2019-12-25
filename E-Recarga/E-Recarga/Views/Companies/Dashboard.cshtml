@@ -2,27 +2,54 @@
 @using E_Recarga.ViewModels;
 
 
-<div class="row">
+<center>
+    <br /><h1 style="font-size: 7rem;">Dashboard</h1><br /> @*make this bigger*@
+</center>
 
-    <div>
-        @foreach (var top in Model.TopStations)
-        {
-            Html.RenderAction("GetTopStation", new { station = top });
-        }
-    </div>
-   
+<br />
+<br />
+<br />
+
+
+<div>
+    <p>
+        <span class="text-info" style="font-size:3rem;">Rendimento Total: </span> &nbsp;
+        <span style="font-size:3rem;">@Model.TotalProfit</span>
+    </p>
 </div>
+<hr />
+<br />
+
+<div id="globalRevenueChart" class="col-md-12" style="width:100%;height:360px"></div>
+<div id="globalDaysStats" class="col-md-12" style="width:100%;height:360px"></div>
+<div id="podUsageStats" class="col-md-12" style="width:100%;height:360px"></div>
+
+
+    @foreach (var top in Model.TopStations)
+    {
+       Html.RenderAction("GetTopStation", new { station = top });
+        <br />
+        <hr />
+    }
+
+
 
 
 <script>
 
     window.onload = function loadAllPieCharts() {
 
-
         @foreach (var station in Model.TopStations)
         {
-            @:drawpiechart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
+            @:DrawOverviewPieChart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
+            @:DrawProfitPieChart(@station.Station.Id, @Html.Raw(station.InfoDaysJSON));
+
         }
+
+        DrawRevenueChart(@Html.Raw(Model.InfoProfitPerMonthJSON));
+
+        DrawDaysOverviewPieChart("globalDaysStats",@Html.Raw(Model.InfoDaysOfWeekJSON));
+        //DrawPodUsagePieChart("podUsageStats",@Html.Raw(Model.InfoPodUsagePerMonthJSON));
     }
-  
+
 </script>

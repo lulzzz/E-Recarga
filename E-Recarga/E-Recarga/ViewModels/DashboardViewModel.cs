@@ -27,6 +27,8 @@ namespace E_Recarga.ViewModels
             FastChargerUsage = 0;
             NormalChargerUsage = 0;
             InfoDaysOfWeek = new List<DataPoint>();
+            InfoPodUsagePerMonth = new List<DataPoint>();
+            InfoProfitPerMonth= new List<DataPoint>();
         }
 
         //Appointments and station general info
@@ -72,5 +74,12 @@ namespace E_Recarga.ViewModels
 
         [Display(Name = "Dias da Semana")]
         public List<DataPoint> InfoDaysOfWeek { get; set; }
+        public string InfoDaysOfWeekJSON { get; set; }
+
+        public List<DataPoint> InfoProfitPerMonth { get; set; }
+        public string InfoProfitPerMonthJSON { get; set; }
+
+        public List<DataPoint> InfoPodUsagePerMonth { get; set; }
+        public string InfoPodUsagePerMonthJSON { get; set; }
     }
 }
