@@ -17,8 +17,8 @@ namespace E_Recarga.ViewModels
             WeeklyProfit = 0;
             MonthlyProfit = 0;
 
-            FastChargerUsage = 0;
-            NormalChargerUsage = 0;
+            //FastChargerUsage = 0;
+            //NormalChargerUsage = 0;
             TotalSuccessfulChargings = 0;
 
             AverageChargingTime = 0;

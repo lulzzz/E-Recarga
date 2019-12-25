@@ -23,8 +23,6 @@ namespace E_Recarga.ViewModels
 
             AverageChargingTime = 0;
             AverageCost = 0;
-            FastChargerUsage = 0;
-            NormalChargerUsage = 0;
             InfoDaysOfWeek = new List<DataPoint>();
             HourPlotData = new List<DataPoint>();
         }
@@ -52,7 +50,7 @@ namespace E_Recarga.ViewModels
         [Display(Name = "Receita Mensal")]
         public double MonthlyProfit { get; set; }
 
-        [Display(Name = "Média de Horas de carregamentos")]
+        [Display(Name = "Horas médias de carregamento")]
         public double AverageChargingTime { get; set; }
 
         [Display(Name = "Receita Média por Carregamento")]
@@ -70,5 +68,6 @@ namespace E_Recarga.ViewModels
         public List<DataPoint> HourPlotData { get; set; }
 
         public string HourPlotJSON { get; set; }
+
     }
 }

@@ -1,8 +1,12 @@
 ﻿function DrawOverviewPieChart (id, data) {
     var chart = new CanvasJS.Chart("overviewchart__" + id, {
         animationEnabled: true,
-            title: {
-            text: "Marcações/Hora"
+        title: {
+            text: "Marcações/Hora",
+            fontSize: 22,
+            fontColor: "#606060",
+            fontFamily: "Calibri",
+            fontWeight: "bold",
         },
         data: [{
             type: "pie",
@@ -23,7 +27,11 @@ function DrawProfitPieChart(id, data) {
     var chart = new CanvasJS.Chart("monthlyProfitChart__" + id, {
         animationEnabled: true,
         title: {
-            text: "Lucro/Dia"
+            text: "Lucro/Dia da semana",
+            fontSize: 22,
+            fontColor: "#606060",
+            fontFamily: "Calibri",
+            fontWeight: "bold",
         },
         data: [{
             type: "pie",
@@ -39,59 +47,16 @@ function DrawProfitPieChart(id, data) {
     chart.render();
 }
 
-
-function DrawRevenueChart(data) {
-    var chart = new CanvasJS.Chart("globalRevenueChart", {
-		animationEnabled: true,
-        backgroundColor: "transparent",
-        title: {
-            text: "Rendimento Anual"
-        },
-		axisX: {
-			labelFontColor: "#717171",
-			labelFontSize: 16,
-			lineColor: "#a2a2a2",
-			minimum: new Date("1 Jan 2015"),
-			tickColor: "#a2a2a2",
-			valueFormatString: "MMM YYYY"
-		},
-		axisY: {
-			gridThickness: 0,
-			includeZero: false,
-			labelFontColor: "#717171",
-			labelFontSize: 16,
-			lineColor: "#a2a2a2",
-			prefix: "$",
-			tickColor: "#a2a2a2"
-		},
-		toolTip: {
-			borderThickness: 0,
-			cornerRadius: 0,
-			fontStyle: "normal"
-		},
-		data: [
-			{
-				color: "#393f63",
-				markerSize: 0,
-				type: "spline",
-				yValueFormatString: "$###,###.##",
-				dataPoints: data,
-			}
-		]
-    });
-
-    showDefaultText(chart,"dados inexistentes");
-
-    chart.render();
-
-}
-
 function DrawRevenueChart(data) {
     var chart = new CanvasJS.Chart("globalRevenueChart", {
         animationEnabled: true,
         backgroundColor: "transparent",
         title: {
-            text: "Rendimento Médio Mensal"
+            text: "Rendimento Médio Mensal",
+            fontSize: 24,
+            fontColor: "#606060",
+            fontFamily: "Calibri",
+            fontWeight:"bold"
         },
         animationEnabled: true,
         axisX: {
@@ -109,7 +74,7 @@ function DrawRevenueChart(data) {
             prefix: "€",
             tickColor: "#a2a2a2",
 
-            title: "Lucro Bruto"
+            title: "Rendimento"
         },
         toolTip: {
             borderThickness: 0,
@@ -139,12 +104,16 @@ function DrawDaysOverviewPieChart(id, data) {
     var chart = new CanvasJS.Chart(id, {
         animationEnabled: true,
         title: {
-            text: "Lucro por dias"
+            text: "Lucro /dia da semana",
+            fontSize: 24,
+            fontColor: "#606060",
+            fontFamily: "Calibri",
+            fontWeight: "bold"
         },
         data: [{
             type: "pie",
             startAngle: 240,
-            yValueFormatString: "##0.00",
+            yValueFormatString: "€##0.00",
             indexLabel: "{label} {y}",
             dataPoints: data,
         }]
@@ -170,7 +139,7 @@ function DrawPodUsagePieChart(id, data) {
         }]
     });
 
-    showDefaultText(chart, "dados inexistentes");
+    showDefaultText(chart, "Dados Inexistentes");
 
     chart.render();
 }
@@ -185,6 +154,9 @@ function showDefaultText(chart, text) {
     if (isEmpty)
         chart.options.subtitles.push({
             text: text,
+            fontSize: 18,
+            fontColor: "#606060",
+            fontFamily: "Calibri",
             verticalAlign: 'center',
         });
     else
