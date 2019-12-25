@@ -95,13 +95,20 @@ namespace E_Recarga.App_Code
                         DateTime end = a.End.Date.AddHours(a.End.Hour);
                         timeStart = a.Start.Date + ts;
                         DateTime timeEnd = a.End.Date + ts;
-                        if (start <= timeStart && end >= timeStart ||
-                                start <= timeEnd && end >= timeEnd)
+
+                        //if (start <= timeStart && end >= timeStart ||
+                        //        start <= timeEnd && end >= timeEnd)
+
+                        if (start <= timeStart && end >= timeEnd)
                             return true;
                         else
                             return false;
                     }).Count();
+
+                    if(Top.Station.ComercialName == "Station C")
+                    {}
                     Top.HourPlotData.Add(new DataPoint(quantity,timeStart.ToString("HH:mm")));
+
                     ts = new TimeSpan(x+1,0,0);
                 }
 
@@ -112,7 +119,11 @@ namespace E_Recarga.App_Code
                         a.Start >= DateTime.Now.AddMonths(-1) &&
                         a.Start.DayOfWeek == day).Sum(a => a.Cost);
 
-                    Top.InfoDaysOfWeek.Add(new DataPoint(value,Enum.GetName(typeof(DayOfWeek),day)));
+                    if(!(value < 1))
+                    {
+                        Top.InfoDaysOfWeek.Add(new DataPoint(value, Enum.GetName(typeof(DayOfWeek), day)));
+                    }
+
                 }
 
                 topStations.Add(Top);
@@ -179,7 +190,10 @@ namespace E_Recarga.App_Code
                     a.Start >= DateTime.Now.AddMonths(-1) &&
                     a.Start.DayOfWeek == day).Sum(a => a.Cost));
 
-                model.InfoDaysOfWeek.Add(new DataPoint(sum, Enum.GetName(typeof(DayOfWeek), day)));
+                if(!(sum < 1))
+                {
+                    model.InfoDaysOfWeek.Add(new DataPoint(sum, Enum.GetName(typeof(DayOfWeek), day)));
+                }
             }
 
             //Get monthly profit and montly pod usage
@@ -213,7 +227,6 @@ namespace E_Recarga.App_Code
                 model.InfoPodUsagePerMonth.Add(new DataPoint(fast, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
                 model.InfoProfitPerMonth.Add(new DataPoint(profit, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
 
-               // return DateTime.Now.Subtract(new DateTime(1970, 1,1)).TotalMilliseconds
             }
 
 
