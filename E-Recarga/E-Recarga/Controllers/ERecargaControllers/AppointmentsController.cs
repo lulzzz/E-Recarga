@@ -92,6 +92,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(appointment);
         }
 
+        // GET: Appointments/Create
         //[Authorize(Roles = nameof(RoleEnum.Employee))]
         public ActionResult Create()
         {
@@ -112,7 +113,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize(Roles = nameof(RoleEnum.Employee))]
-        public ActionResult Create([Bind(Include = "Id,StationId,PodId,UserId,Cost,Start,End,AppointmentStatusId")] Appointment appointment)
+        public ActionResult Create([Bind(Include = "Id,CompanyId,StationId,PodId,UserId,Cost,Start,End,AppointmentStatusId")] Appointment appointment)
         {
             var user = db.Employees.Find(User.Identity.GetUserId());
             var prices = db.Stations.Where(s => s.Id == appointment.StationId).Select(s => s.Prices).FirstOrDefault();
