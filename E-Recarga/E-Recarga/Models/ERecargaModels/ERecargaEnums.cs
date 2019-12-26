@@ -45,16 +45,5 @@ namespace E_Recarga.Models
             { nameof(RoleEnum.Employee), "Funcionário" },
             { nameof(RoleEnum.User).ToString(), "Utilizador" }
         };
-
-        public static string GetKeyFromValue(string value)
-        {
-            int size = Translator.Count;
-            for (int i = 0; i < size; i++)
-            {
-                if (Translator[Translator.Keys.ElementAt(i)] == value)
-                    return Translator.Keys.ElementAt(i);
-            }
-            return "";
-        }
     }
 }

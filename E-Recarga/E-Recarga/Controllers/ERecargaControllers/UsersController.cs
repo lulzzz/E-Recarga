@@ -16,21 +16,23 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         [Route("Marcacao")]
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult IndexGet(UserViewModel userVM)
         {
             var stations = db.Stations;
 
-            UserViewModel userVM = new UserViewModel();
+            userVM = userVM ?? new UserViewModel();
             userVM.Stations = new List<Station>();
             userVM.EndCharge = DateTime.Now;
             userVM.InitCharge = DateTime.Now;
             ViewBag.Regions = stations.Select(s => s.Region).Distinct().ToList();
             ViewBag.PodTypes = db.Pods.Select(p=>(p.PodType).Name).Distinct().ToList();
 
-            return View(userVM);
+            return View("Index",userVM);
         }
 
         [HttpPost]
+        [Route("Marcacao")]
         public ViewResult Index([Bind(Include = "Region,PodType,InitCharge,EndCharge")] UserViewModel userVM)
         {
             if (string.IsNullOrEmpty(userVM.Region) || string.IsNullOrEmpty(userVM.PodType) ||
@@ -43,8 +45,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
             var stations = db.Stations.Where(s => s.Region.ToLower().Contains(userVM.Region.ToLower())).ToList();
             stations = stations.FindAll(s => s.Pods.Any(p => p.PodType.Name == userVM.PodType));
             userVM.Stations = stations
-                    .FindAll(s => s.Appointments
-                     .Any(a => a.Start > userVM.EndCharge || a.End < userVM.InitCharge));
+                    .FindAll(s => s.Appointments.Any(a => a.Start > userVM.EndCharge || a.End < userVM.InitCharge) ||
+                    s.Appointments.Count == 0);
 
             ViewBag.Regions = db.Stations.Select(s => s.Region).Distinct().ToList();
             ViewBag.PodTypes = db.Pods.Select(p => (p.PodType).Name).Distinct().ToList();

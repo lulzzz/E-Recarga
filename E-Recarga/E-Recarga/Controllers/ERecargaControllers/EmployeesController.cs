@@ -160,9 +160,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 employee.CompanyId = employeeVM.CompanyId;
                 employee.StationId = employeeVM.StationId;
 
-                string role = Enum_Dictionnary.GetKeyFromValue(employeeVM.EmployeeType);
-
-
+                string role = Enum_Dictionnary.Translator[employeeVM.EmployeeType];
+           
                 //Create Users
                 var store = new UserStore<ApplicationUser>(new ERecargaDbContext());
                 var manager = new UserManager<ApplicationUser>(store);
@@ -258,7 +257,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
                     employee.CompanyId = employeeVM.CompanyId;
                 else
                 {
-                    string employee_role = Enum_Dictionnary.GetKeyFromValue(employeeVM.EmployeeType);
+                    string employee_role = Enum_Dictionnary.Translator[employeeVM.EmployeeType];
 
                     if (employee_role == nameof(RoleEnum.CompanyManager))
                     {
