@@ -15,7 +15,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
-        // GET: Users
+        [Route("Marcacao")]
         public ActionResult Index()
         {
             var stations = db.Stations;
@@ -59,6 +59,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return PartialView("_StationIndexPartialGrid", Stations.AsQueryable());
         }
 
+        [Route("Carteira")]
         public ActionResult AddMoney()
         {
             string userId = User.Identity.GetUserId();
