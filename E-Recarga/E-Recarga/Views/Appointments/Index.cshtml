@@ -27,14 +27,53 @@
         columns.Add(model => model.Start).Titled("Início");
         columns.Add(model => model.End).Titled("Fim");
         columns.Add(model => model.Status.Name).Titled("Estado");
+
         if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null)).Titled("Ação");
+            columns.Add(model => @Html.ActionLink("Detalhes", "Details", new { id = model.Id }, null)).Titled("Ação");
+
         else if (User.IsInRole(nameof(RoleEnum.Employee)))
             columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
+
         else //if is the user
             columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Eliminar", "Delete", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
     })
+    .RowAttributed(model =>
+    {
+        if(model.AppointmentStatusId == AppointmentStatusEnum.Pending)
+        {
+            if(DateTime.Now > model.Start && DateTime.Now < model.End)
+            {
+                return new { @class = "bg-warning" };
+            }
+            else if(DateTime.Now > model.End)
+            {
+                return new { @class = "bg-danger" };
+            }
 
+            return new { };
+        }
+        else if(model.AppointmentStatusId == AppointmentStatusEnum.Ongoing)
+        {
+            if (DateTime.Now.AddMinutes(5) > model.End)
+            {
+                return new { @class = "bg-primary" };
+            }
+
+            return new { @class = "bg-info" };
+        }
+        else if (model.AppointmentStatusId == AppointmentStatusEnum.Cancelled)
+        {
+            return new { @class = "bg-danger" };
+        }
+        else if (model.AppointmentStatusId == AppointmentStatusEnum.Completed)
+        {
+            return new { @class = "bg-completed" };
+        }
+        else
+        {
+            return new { };
+        }
+    })
     .Empty("Não existem dados")
     .Filterable()
     .Sortable()
@@ -46,3 +85,16 @@
         pager.RowsPerPage = 5;
     })
 )
+
+@section Scripts {
+    <script>
+        function reloadgrid() {
+            var grid = new MvcGrid(document.querySelector('.mvc-grid'));
+            grid.reload();
+        }
+
+        $(function () {
+            setInterval(reloadgrid, 60 * 1000);
+        });
+    </script>
+}
