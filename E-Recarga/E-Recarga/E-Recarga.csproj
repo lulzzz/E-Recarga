@@ -175,6 +175,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Migrations\201912260946341_PodIdentifierField.cs" />
+    <Compile Include="Migrations\201912260946341_PodIdentifierField.Designer.cs">
+      <DependentUpon>201912260946341_PodIdentifierField.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AddMoneyViewModel.cs" />
     <Compile Include="Controllers\ERecargaControllers\AppointmentsController.cs" />
     <Compile Include="Controllers\ERecargaControllers\CompaniesController.cs" />
@@ -368,6 +372,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201912170220596_FirstMigration.resx">
       <DependentUpon>201912170220596_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912260946341_PodIdentifierField.resx">
+      <DependentUpon>201912260946341_PodIdentifierField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

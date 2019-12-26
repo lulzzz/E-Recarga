@@ -21,6 +21,10 @@ namespace E_Recarga.Models.ERecargaModels
         public virtual PodType PodType { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Display(Name = "Identificador")]
+        public int Identifier { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Posto Ativo")]
         public bool isActive { get; set; }
 
