@@ -12,5 +12,7 @@ namespace E_Recarga.ViewModels
         public Company Company { get; set; }
 
         public IEnumerable<Employee> Managers { get; set; }
+
+        public Dictionary<Employee, string> EmployeeRoleDictionary { get; set; }
     }
 }

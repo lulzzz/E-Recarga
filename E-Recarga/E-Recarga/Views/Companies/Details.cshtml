@@ -46,7 +46,8 @@
 
 @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
 {
-    <br /><h3>Estações</h3>
+    <br />
+    <h3>Estações</h3>
     <div class="text-right">
         @Html.ActionLink("Criar", "Create", "Stations", new { companyId = Model.Company.Id }, null)<br /><br />
     </div>
@@ -57,49 +58,39 @@
     }
     else
     {
-        <div id="t_est">
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Company.Stations[0].ComercialName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Company.Stations[0].Parish)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Company.Stations[0].Region)
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var item in Model.Company.Stations)
+        @(Html
+            .Grid(Model.Company.Stations)
+            .Build(columns =>
+            {
+                columns.Add(model => model.Company.Name).Titled("Nome da Companhia");
+                columns.Add(model => model.ComercialName);
+                columns.Add(model => model.StreetName);
+                columns.Add(model => model.BuildingNumber);
+                columns.Add(model => model.Parish);
+                columns.Add(model => model.Region);
+                if (User.IsInRole(nameof(RoleEnum.User)))
+                    columns.Add(model => @Html.ActionLink("Marcar", "Create", "Appointments", new { myModel = model }, null)).Titled("Ação");
+                else if (User.IsInRole(nameof(RoleEnum.CompanyManager)) || User.IsInRole(nameof(RoleEnum.Employee)))
+                    columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null)).Titled("Ação");
+            })
+                .Empty("Não existem dados")
+                .Filterable()
+                .Sortable()
+                .Pageable(pager =>
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ComercialName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Parish)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Region)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Editar", "Edit", "Stations", new { id = item.Id }, null) |
-                            @Html.ActionLink("Detalhes", "Details", "Stations", new { id = item.Id }, null) |
-                            @Html.ActionLink("Eliminar", "Delete", "Stations", new { id = item.Id }, null)
-                        </td>
-                    </tr>
-                }
-
-            </table>
-        </div><hr /><br />
+                    pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+                    pager.ShowPageSizes = true;
+                    pager.PagesToDisplay = 3;
+                    pager.RowsPerPage = 5;
+                })
+        )
+        <hr /><br />
     }
 }
 
 <div>
     <h3>Funcionários</h3>
-    @if (Request.IsAuthenticated && ( User.IsInRole(nameof(RoleEnum.CompanyManager)) || User.IsInRole(nameof(RoleEnum.Administrator))))
+    @if (Request.IsAuthenticated && (User.IsInRole(nameof(RoleEnum.CompanyManager)) || User.IsInRole(nameof(RoleEnum.Administrator))))
     {
         <div class="text-right">
             @Html.ActionLink("Criar", "Create", "Employees", new { companyId = Model.Company.Id }, null)<br /><br />
@@ -112,60 +103,37 @@
     }
     else
     {
-        <div id="t_func">
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Company.Employees[0].Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Company.Employees[0].Email)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Company.Employees[0].PhoneNumber)
-                    </th>
-                    @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                    {
-                        <th>
-                            @Html.DisplayNameFor(model => model.Company.Stations[0].ComercialName)
-                        </th>
-                    }
-                    <th></th>
-                </tr>
-
-                @{ 
-                    var data = User.IsInRole(nameof(RoleEnum.Administrator)) ? Model.Managers : Model.Company.Employees;
-                }
-                @foreach (var item in data)
+        string employeeType = "";
+        var data = User.IsInRole(nameof(RoleEnum.Administrator)) ? Model.Managers : Model.EmployeeRoleDictionary.Keys.ToList();
+        @(Html
+            .Grid(data.AsQueryable())
+            .Build(columns =>
+            {
+                columns.Add(model => model.Name);
+                columns.Add(model => model.Email).Titled("Email");
+                columns.Add(model => model.PhoneNumber).Titled("Telefone");
+                if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
-                        </td>
-                        @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                        {
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Station.ComercialName)
-                            </td>
-                        }
-                        <td>
-                            @Html.ActionLink("Editar", "Edit", "Employees", new { id = item.Id }, null) |
-                            @Html.ActionLink("Detalhes", "Details", "Employees", new { id = item.Id }, null) |
-                            @Html.ActionLink("Eliminar", "Delete", "Employees", new { id = item.Id }, null)
-                        </td>
-                    </tr>
+                    columns.Add(model => Model.EmployeeRoleDictionary[model]).Titled("Função");
                 }
-
-            </table>
-        </div>
+                else
+                    columns.Add(model => "Gestor").Titled("Função");
+                columns.Add(model => model.Station.ComercialName).Titled("Estação");
+            })
+            .Empty("Não existem dados")
+            .Filterable()
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+                pager.ShowPageSizes = true;
+                pager.PagesToDisplay = 3;
+                pager.RowsPerPage = 5;
+            })
+        )
+        <hr /><br /><br />
     }
-    <hr /><br /><br />
+    
     @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.Administrator)))
     {
         @Html.ActionLink("Voltar", "Index")
