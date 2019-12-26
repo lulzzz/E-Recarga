@@ -18,27 +18,86 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Appointments
-        [Authorize(Roles=nameof(RoleEnum.CompanyManager)+", "+ nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee))]
-        public ActionResult Index()
-        {//TODO: translate status
-            var appointments = db.Appointments.Include(a => a.Company).Include(a => a.Pod).Include(a => a.Station).Include(a => a.Status).Include(a => a.User);
+        [Authorize(Roles=nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee))]
+        public ActionResult Index(bool viewAll = false, int? id = null)
+        {
+            var user = db.Employees.Find(User.Identity.GetUserId());
 
+            if(id != null)
+            {
+                var station = db.Stations.Find(id);
+                id = station.CompanyId != user.CompanyId ? null : id;
+            }
+
+            List<Appointment> appointments = null;
             if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
             {
-                string userId = User.Identity.GetUserId();
-                int companyId = db.Employees.Where(e => e.Id == userId).Select(e => e.CompanyId).First();
-                appointments = appointments.Where(a => a.CompanyId == companyId);
+                if (viewAll)
+                {
+                    if(id != null)
+                    {
+                        appointments = user.Company.Appointments
+                            .Where(s => s.StationId == (int)id).ToList();
+                    }
+                    else
+                    {
+                        appointments = user.Company.Appointments.ToList();
+                    }
+                }
+                else
+                {
+                    var dayLimit = DateTime.Now.AddDays(1);
+
+                    if(id != null)
+                    {
+                        appointments = user.Company.Appointments
+                            .Where(ap => ap.AppointmentStatusId == AppointmentStatusEnum.Pending ||
+                            ap.AppointmentStatusId == AppointmentStatusEnum.Ongoing &&
+                            ap.Start < dayLimit &&
+                            ap.StationId == id)
+                            .ToList();
+                    }
+                    else
+                    {
+                        appointments = user.Company.Appointments
+                            .Where(ap => ap.AppointmentStatusId == AppointmentStatusEnum.Pending ||
+                            ap.AppointmentStatusId == AppointmentStatusEnum.Ongoing &&
+                            ap.Start < dayLimit)
+                            .ToList();
+                    }
+                }
             }
-            else{
-                string userId = User.Identity.GetUserId();
-                appointments = appointments.Where(a => a.UserId == userId);
+            else
+            {
+                if(user.StationId == null)
+                {
+                    return HttpNotFound();
+                }
+
+                if(viewAll)
+                {
+                    appointments = user.Station.Appointments.ToList();
+                }
+                else
+                {
+                    var dayLimit = DateTime.Now.AddDays(1);
+
+                    appointments = user.Station.Appointments
+                            .Where(ap => ap.AppointmentStatusId == AppointmentStatusEnum.Pending ||
+                            ap.AppointmentStatusId == AppointmentStatusEnum.Ongoing &&
+                            ap.Start < dayLimit)
+                            .ToList();
+                }
+
             }
-                
-            return View(appointments);
+
+            appointments.OrderByDescending(a => a.Start);
+
+            return View(appointments.AsQueryable());
         }
 
         // GET: Appointments/Details/5
-        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee))]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee))]
         public ActionResult Details(int? id)
         {
             if (id == null)
