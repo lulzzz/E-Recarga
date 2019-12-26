@@ -63,18 +63,30 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 var role = db.Roles
                 .Where(x => x.Name == nameof(RoleEnum.CompanyManager))
                 .FirstOrDefault().Id;
-
+                
                 viewModel.Managers = viewModel.Company
                     .Employees.Where(x => x.Roles.Any(r => r.RoleId == role)).ToList();
             }
             else
             {
                 var userId = User.Identity.GetUserId();
-                var user = db.Employees.Include(x => x.Company)
+                var user = db.Employees.Include(u => u.Company).Include(u=>u.Roles).ToList()
                             .Where(x => x.Id == userId).SingleOrDefault();
                 viewModel.Company = user.Company;
-            }
 
+                Dictionary<Employee,string> employees = new Dictionary<Employee, string>();
+                var companyEmployees = viewModel.Company.Employees.ToList();
+                var roles = db.Roles.ToList();
+
+                companyEmployees.ForEach(e =>
+                {
+                    var myRoleId = e.Roles.FirstOrDefault().RoleId;
+                    var myRole = roles.Where(r => r.Id == myRoleId).FirstOrDefault().Name;
+
+                    employees.Add(e, Enum_Dictionnary.Translator[myRole]);
+                });
+                viewModel.EmployeeRoleDictionary = employees;
+            }
             return View(viewModel);
         }
 

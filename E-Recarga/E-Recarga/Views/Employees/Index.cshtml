@@ -16,26 +16,26 @@
 </p>
 
 @(Html
-            .Grid(Model.EmployeesVM)
-            .Build(columns =>
-            {
-                columns.Add(model => model.Employee.Name);
-                columns.Add(model => model.Employee.Email);
-                columns.Add(model => model.Employee.PhoneNumber);
-                columns.Add(model => model.EmployeeType);
-                if (User.IsInRole(nameof(RoleEnum.Administrator)))
-                    columns.Add(model => model.Employee.Company.Name).Titled("Empresa");
-                columns.Add(model => model.Employee.Station.ComercialName).Titled("Estação");
-            })
-            .Empty("Não existem dados")
-            .Filterable()
-            .Sortable()
-            .Pageable(pager =>
-            {
-                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-                pager.ShowPageSizes = true;
-                pager.PagesToDisplay = 3;
-                pager.RowsPerPage = 5;
-            })
+    .Grid(Model.EmployeesVM)
+    .Build(columns =>
+    {
+        columns.Add(model => model.Employee.Name);
+        columns.Add(model => model.Employee.Email).Titled("Email");
+        columns.Add(model => model.Employee.PhoneNumber).Titled("Telefone");
+        columns.Add(model => model.EmployeeType).Titled("Função");
+        if (User.IsInRole(nameof(RoleEnum.Administrator)))
+            columns.Add(model => model.Employee.Company.Name).Titled("Empresa");
+        columns.Add(model => model.Employee.Station.ComercialName).Titled("Estação");
+    })
+    .Empty("Não existem dados")
+    .Filterable()
+    .Sortable()
+    .Pageable(pager =>
+    {
+        pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+        pager.ShowPageSizes = true;
+        pager.PagesToDisplay = 3;
+        pager.RowsPerPage = 5;
+    })
 )
 
