@@ -1,5 +1,9 @@
 ﻿@model E_Recarga.ViewModels.UserViewModel
 
+@{
+    ViewBag.Title = "Pesquisar Estações";
+}
+
 <div align="center">
     <br />
     <h2 align="center">Pesquisar Estações</h2>
@@ -11,7 +15,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <form class="navbar-form" >
+    <form class="navbar-form">
         <div class="row" style="display:table;width: 100%;height:80%; border: 1px solid bisque;border-radius: 10px; padding: 1.2% 3% 1.2% 3%; background-color: linen; width:70%;margin-left:15%">
             <div class="col col-md-6" align="center">
                 <div class="form-group" id="RegionSearch">
@@ -48,7 +52,7 @@
                 <font size="+1.1">Filtrar</font>
             </button>
         </div>
-        
+
 
     </form>
 }
