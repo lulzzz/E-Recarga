@@ -15,10 +15,12 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Users
-        public ActionResult Index([Bind(Include = "Region,PodType,InitCharge,EndCharge")] UserViewModel userVM)
+        public ActionResult Index()
         {
             var stations = db.Stations;
 
+            UserViewModel userVM = new UserViewModel();
+            userVM.Stations = new List<Station>();
             userVM.EndCharge = DateTime.Now;
             userVM.InitCharge = DateTime.Now;
             ViewBag.Regions = stations.Select(s => s.Region).Distinct().ToList();
@@ -27,29 +29,35 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(userVM);
         }
 
-        public PartialViewResult IndexGrid(string region, string init_time, string final_time, string recharge_type)
+        [HttpPost]
+        public ViewResult Index([Bind(Include = "Region,PodType,InitCharge,EndCharge")] UserViewModel userVM)
         {
-            List<Station> stations = db.Stations.ToList();
-            List < Station > stationsWithPodType = stations;
-            DateTime initDate, finalDate;
-            DateTime.TryParse(final_time, out finalDate);
-            DateTime.TryParse(init_time, out initDate);
-
-            if (!String.IsNullOrEmpty(region) )
-                stations = stations.Where(s => s.Region.ToLower().Contains(region.ToLower())).ToList();
-
-            if(init_time != null && final_time != null && initDate > DateTime.Now && finalDate > initDate)
+            if (string.IsNullOrEmpty(userVM.Region) || string.IsNullOrEmpty(userVM.PodType) ||
+                userVM.InitCharge < DateTime.Now || userVM.EndCharge < userVM.InitCharge)
             {
-                stations = stations.FindAll(s => (s.Appointments.Any(a => a.Start > finalDate || a.End < initDate)));
+                userVM.Stations = new List<Station>();
+                return View(userVM);
             }
 
-            if (!String.IsNullOrEmpty(recharge_type))
-                stationsWithPodType = stations.FindAll(s => (s.Pods.Any(p => p.PodType.Name == recharge_type)));
+            var stations = db.Stations.Where(s => s.Region.ToLower().Contains(userVM.Region.ToLower())).ToList();
+            stations = stations.FindAll(s => s.Pods.Any(p => p.PodType.Name == userVM.PodType));
+            userVM.Stations = stations
+                    .FindAll(s => s.Appointments
+                     .Any(a => a.Start > userVM.EndCharge || a.End < userVM.InitCharge));
 
-            var stationsQuery = stations.Intersect(stationsWithPodType);
+            ViewBag.Regions = db.Stations.Select(s => s.Region).Distinct().ToList();
+            ViewBag.PodTypes = db.Pods.Select(p => (p.PodType).Name).Distinct().ToList();
 
-            return PartialView("_StationIndexPartialGrid",stationsQuery.AsQueryable());
+            return View(userVM);
         }
+
+        [ChildActionOnly]
+        public PartialViewResult IndexGrid(List<Station> Stations)
+        {
+            Stations = Stations ?? new List<Station>();
+            return PartialView("_StationIndexPartialGrid", Stations.AsQueryable());
+        }
+
         //get
         public ActionResult AddMoney()
         {
