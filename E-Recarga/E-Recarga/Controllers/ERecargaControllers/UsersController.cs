@@ -1,4 +1,5 @@
-﻿using E_Recarga.Models.ERecargaModels;
+﻿using E_Recarga.Models;
+using E_Recarga.Models.ERecargaModels;
 using E_Recarga.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
@@ -9,7 +10,7 @@ using System.Web.Mvc;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
-    //[Authorize(Roles = nameof(RoleEnum.User))]
+    [Authorize(Roles = nameof(RoleEnum.User))]
     public class UsersController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
@@ -58,16 +59,14 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return PartialView("_StationIndexPartialGrid", Stations.AsQueryable());
         }
 
-        //get
         public ActionResult AddMoney()
         {
             string userId = User.Identity.GetUserId();
             var user = db.Users.Find(userId);
-            user.Wallet = 0;
+            user.Wallet = user.Wallet;
             return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0 });
         }
 
-        //post
         [HttpPost]
         public ActionResult AddMoney([Bind(Include ="Name,Wallet,Input")]AddMoneyViewModel userVM)
         {
@@ -80,81 +79,10 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("AddMoney");
             }
 
             return View(userVM);
-        }
-        // GET: Users/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Users/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Users/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Users/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Users/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Users/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Users/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
