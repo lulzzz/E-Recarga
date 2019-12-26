@@ -98,6 +98,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult Create([Bind(Include = "StationId,PodId,isActive")] Pod pod)
         {
             var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+            var stations = company.Stations.Where(s => s.Id == pod.StationId).SingleOrDefault();
+            pod.Identifier = stations.Pods.Count > 0? stations.Pods.Select(p => p.Identifier).Max() + 1 : 1;
 
             if (ModelState.IsValid)
             {
