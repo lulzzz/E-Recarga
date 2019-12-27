@@ -13,6 +13,7 @@ namespace E_Recarga.ViewModels
 
         [DisplayName("Valor a adicionar")]
         [Required(ErrorMessage = "O valor é obrigatório")]
+        [Range(0, int.MaxValue, ErrorMessage = "O valor não é valido (tem de ser positivo)")]
         public int Input { get; set; }
     }
 }

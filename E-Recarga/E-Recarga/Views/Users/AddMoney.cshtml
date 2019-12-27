@@ -9,50 +9,53 @@
     <br /><h2>Carregar Conta</h2><br />
 </center>
 
+<hr />
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-<div class="row" style="display:table;width:80%;">
-    <div class="col-md-12">
-        <div class="form-horizontal">
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    <div class="row" style="display:table;width:80%;">
+        <div class="col-md-12">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Wallet, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.Wallet, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                    @Html.ValidationMessageFor(model => model.Wallet, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Wallet, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Wallet, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Wallet, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Input, htmlAttributes: new { @class = "control-label col-md-3" })
-                <div class="col-md-9">
-                    @Html.EditorFor(model => model.Input, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Input, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Input, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.Input, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Input, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-offset-12" style="display:table-cell;vertical-align: middle;">
-        <div class="form-group" style="display: block; position: relative; margin:auto;">
-            <input type="submit" value="Carregar" class="btn btn-success" />
+        <div class="col-md-offset-12" style="display:table-cell;vertical-align: middle;">
+            <div class="form-group" style="display: block; position: relative; margin:auto; margin-right:0">
+                <input type="submit" value="Carregar" class="btn btn-success" style="width:120px; height:40px;font-size:larger"/>
+            </div>
         </div>
     </div>
-</div>
 }
 <br /><br />
-<div class="jumbotron" style="background-image:url(../../Images/accepted-payment-methods.png); background-size:contain;">
-</div>
+
+<center>
+    <img src="~/Images/paypal-1.png" alt="Imagem" style="max-width:40%;height:auto; " />
+</center>
+
 <div>
     <a href="javascript:void(0);" onclick="history.go(-1);">Voltar</a>
 </div>
