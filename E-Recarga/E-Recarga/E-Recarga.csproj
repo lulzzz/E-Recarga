@@ -241,6 +241,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\accepted-payment-methods.png" />
+    <Content Include="Images\car-brands.png" />
     <Content Include="Images\car_recharge.jpg" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\image10b.png" />
