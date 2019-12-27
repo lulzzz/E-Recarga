@@ -353,6 +353,7 @@
     <Content Include="Views\Shared\_StationStatsDashboard.cshtml" />
     <Content Include="Views\Companies\Dashboard.cshtml" />
     <Content Include="Views\Users\AddMoney.cshtml" />
+    <Content Include="Views\Users\AppointmentsRecords.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewBag\" />

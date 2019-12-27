@@ -87,5 +87,16 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
             return View(userVM);
         }
+
+        //Get: User appointments
+        [HttpGet]
+        public ActionResult AppointmentsRecords()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            List<Appointment> appointments = user.Appointments.ToList();
+            appointments.OrderByDescending(a => a.Start);
+
+            return View(appointments.AsQueryable());
+        }
     }
 }

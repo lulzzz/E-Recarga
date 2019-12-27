@@ -22,7 +22,7 @@
         {
             columns.Add(model => model.Company.Name.Trim()).Titled("Empresa");
             columns.Add(model => model.Station.ComercialName.Trim()).Titled("Estação");
-            columns.Add(model => model.Pod.Id.ToString()).Titled("Posto");
+            columns.Add(model => model.Pod.Identifier.ToString()).Titled("Posto");
             columns.Add(model => model.User.Name.Trim()).Titled("Utilizador");
             columns.Add(model => model.Cost.ToString()).Titled("Custo");
             columns.Add(model => model.Start).Titled("Início");
