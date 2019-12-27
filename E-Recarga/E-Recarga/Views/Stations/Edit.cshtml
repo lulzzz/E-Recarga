@@ -1,16 +1,21 @@
 ﻿@model E_Recarga.Models.ERecargaModels.Station
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar " + Model.ComercialName;
 }
 
-<h2>Edit</h2>
+<center>
+    <br />
+    <h2>Editar @Model.ComercialName</h2>
+    <br />
+</center>
+<hr />
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Station</h4>
         <hr />
