@@ -1,10 +1,10 @@
 ﻿@model E_Recarga.ViewModels.EmployeeVMs.EmployeeIndexViewModel
-@using E_Recarga.Models
 
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Trabalhadores";
 }
+
 <center>
     <br />
     <h3>Trabalhadores</h3>
@@ -23,9 +23,12 @@
         columns.Add(model => model.Employee.Email).Titled("Email");
         columns.Add(model => model.Employee.PhoneNumber).Titled("Telefone");
         columns.Add(model => model.EmployeeType).Titled("Função");
-        if (User.IsInRole(nameof(RoleEnum.Administrator)))
-            columns.Add(model => model.Employee.Company.Name).Titled("Empresa");
-        columns.Add(model => model.Employee.Station.ComercialName).Titled("Estação");
+        columns.Add(model => @Html.Raw(
+            Html.ActionLink("Detalhes", "Details", new { id = model.Employee.Id }).ToString()) + " | " +
+            Html.ActionLink("Editar", "Edit", new { id = model.Employee.Id }).ToString() + " | " +
+            Html.ActionLink("Apagar", "Delete", new { id = model.Employee.Id }).ToString())
+            .Titled("Ações").Encoded(false);
+
     })
     .Empty("Não existem dados")
     .Filterable()

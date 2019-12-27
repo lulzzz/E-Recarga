@@ -68,10 +68,12 @@
                 columns.Add(model => model.BuildingNumber);
                 columns.Add(model => model.Parish);
                 columns.Add(model => model.Region);
-                if (User.IsInRole(nameof(RoleEnum.User)))
-                    columns.Add(model => @Html.ActionLink("Marcar", "Create", "Appointments", new { myModel = model }, null)).Titled("Ação");
-                else if (User.IsInRole(nameof(RoleEnum.CompanyManager)) || User.IsInRole(nameof(RoleEnum.Employee)))
-                    columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null)).Titled("Ação");
+                if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    columns.Add(model => @Html.Raw(
+                        Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " +
+                        Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString() + " | " +
+                        Html.ActionLink("Apagar", "Delete", new { id = model.Id }).ToString())
+                        .Titled("Ações").Encoded(false);
             })
                 .Empty("Não existem dados")
                 .Filterable()
@@ -103,7 +105,6 @@
     }
     else
     {
-        string employeeType = "";
         var data = User.IsInRole(nameof(RoleEnum.Administrator)) ? Model.Managers : Model.EmployeeRoleDictionary.Keys.ToList();
         @(Html
             .Grid(data.AsQueryable())

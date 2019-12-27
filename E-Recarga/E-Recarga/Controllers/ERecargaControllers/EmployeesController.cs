@@ -13,7 +13,7 @@ using E_Recarga.ViewModels.EmployeeVMs;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
-    [RoutePrefix("Empregados")]
+    [RoutePrefix("Trabalhadores")]
     public class EmployeesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();

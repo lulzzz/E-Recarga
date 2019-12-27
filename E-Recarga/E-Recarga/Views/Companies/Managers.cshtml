@@ -14,6 +14,8 @@
     .Build(columns =>
     {
         columns.Add(model => model.Company.Name).Titled("Nome da Companhia");
+        columns.Add(model => model.Email).Titled("Email");
+        columns.Add(model => model.PhoneNumber).Titled("Telefone");
         columns.Add(model => @Html.Raw(
             Html.ActionLink("Detalhes", "Details","Employees", new { id = model.Id }, null).ToString()) + " | " +
             Html.ActionLink("Editar", "Edit", "Employees", new { id = model.Id },null).ToString() +  " | " +

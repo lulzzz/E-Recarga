@@ -43,7 +43,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(employees.ToList());
         }
 
-        [Route("{id:int}/Detalhes")]
+        [Route("Detalhes")]
         // GET: Companies/Details/5
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
         public ActionResult Details(int? id)
