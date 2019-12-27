@@ -14,11 +14,13 @@ using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
+    [RoutePrefix("Estacoes")]
     public class StationsController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Stations
+        [Route]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Index()
         {
@@ -38,6 +40,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Stations/Details/5
+        [Route("Detalhes")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Details(int? id)
         {
@@ -76,6 +79,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
         // GET: Stations/Create
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        [Route("Criar")]
         public ActionResult Create()
         {
             var company = db.Employees.Find(User.Identity.GetUserId()).Company;
@@ -90,6 +94,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Criar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Create(StationViewModel viewModel)
         {
@@ -102,7 +107,6 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
                 foreach (var price in ScheduleGenerator.GeneratePrices(viewModel.NormalCost, viewModel.FastCost)){
                     price.StationId = viewModel._Station.Id;
-                    //viewModel._Station.Prices.Add(price);
                     db.Prices.Add(price);
                 }
 
@@ -115,6 +119,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
         // GET: Stations/Edit/5
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        [Route("{id:int}/Editar")]
         public ActionResult Edit(int? id)
         {
             var user = db.Employees.Find(User.Identity.GetUserId());
@@ -141,6 +146,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("{id:int}/Editar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Edit([Bind(Include = "ComercialName,StreetName,BuildingNumber,PostalCode,Parish,Region")] Station station)
         {
@@ -156,6 +162,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         //TODO: Attempt to change the ID from the model from the client
         // GET: Stations/Delete/5
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
+        [Route("{id:int}/Apagar")]
         public ActionResult Delete(int? id)
         {
             var user = db.Employees.Find(User.Identity.GetUserId());
@@ -180,6 +187,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // POST: Stations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("{id:int}/Apagar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DeleteConfirmed(int id)
         {

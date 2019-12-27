@@ -13,24 +13,18 @@ using E_Recarga.ViewModels.EmployeeVMs;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
+    [RoutePrefix("Empregados")]
     public class EmployeesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Employees
-        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
+        [Route]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Index()
         {
-            // var users = db.Employees.Include(e => e.Company).Include(e => e.Station);
-            //return View(users.ToList());
-
-            List<Employee> employees = db.Employees.Include(e => e.Company).Include(e => e.Station).ToList();
-            if(User.IsInRole(nameof(RoleEnum.CompanyManager)))
-            {
-                var loggedUserID = User.Identity.GetUserId();
-                var manager = employees.Where(user => user.Id == loggedUserID).SingleOrDefault();
-                employees = employees.Where(e => e.CompanyId == manager.CompanyId).ToList();
-            }
+            var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+            List<Employee> employees = company.Employees.ToList();
 
             EmployeeIndexViewModel employeesIndex = new EmployeeIndexViewModel();
             List<EmployeeViewModel> employeesList = new List<EmployeeViewModel>();
@@ -46,6 +40,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Employees/Details/5
+        [Route("{id}/Detalhes")]
         [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Details(string id)
         {
@@ -53,21 +48,29 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+            Employee employee = db.Employees.Find(id.Trim());
             if (employee == null)
             {
                 return HttpNotFound();
             }
 
+            var check = employee.Roles.FirstOrDefault().RoleId;
+            var role = db.Roles.Where(x => x.Id == check).FirstOrDefault();
+
+            if (User.IsInRole(nameof(RoleEnum.Administrator)))
+            {
+                var managerRole = db.Roles.Where(r => r.Name == nameof(RoleEnum.CompanyManager)).Select(x => x.Id).Single();
+
+                if (role.Id != managerRole)
+                {
+                    return HttpNotFound();
+                }
+            }
+
             EmployeeViewModel employeeVM = new EmployeeViewModel(employee);
-
-            //System.Web.Security.Roles.Enabled = true;
-            var roleId = employee.Roles.FirstOrDefault().RoleId;
-            var role = db.Roles.Where(x => x.Id == roleId).FirstOrDefault();
-
-            string pt_role;
-            Enum_Dictionnary.Translator.TryGetValue(role.Name, out pt_role);
+            Enum_Dictionnary.Translator.TryGetValue(role.Name, out string pt_role);
             employeeVM.EmployeeType = pt_role;
+
             return View(employeeVM);
         }
 
@@ -105,13 +108,11 @@ namespace E_Recarga.Controllers.ERecargaControllers
             }
         }
 
-
+        [Route("Criar")]
         [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         // GET: Employees/Create
         public ActionResult Create(int? companyId, int? stationId)
         {
-            if (User.IsInRole(nameof(RoleEnum.Employee)))
-                RedirectToAction("Index","Home");
             if (stationId != null && User.IsInRole(nameof(RoleEnum.Administrator)))
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
@@ -147,6 +148,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("Criar")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Create(EmployeeViewModel employeeVM) //TODO: BINDS EXCLUDE PARAMeters
@@ -197,6 +199,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Employees/Edit/5
+        [Route("{id}/Editar")]
         [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Edit(string id)
         {
@@ -242,6 +245,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("{id}/Editar")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Edit(EmployeeViewModel employeeVM)
@@ -293,6 +297,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Employees/Delete/5
+        [Route("{id}/Apagar")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -308,6 +313,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // POST: Employees/Delete/5
+        [Route("{id}/Apagar")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)

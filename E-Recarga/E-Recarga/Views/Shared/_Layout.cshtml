@@ -6,7 +6,7 @@
     <link rel="icon" href="~/Images/favicon.ico" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - E-Recarga</title>
+    <title>@ViewBag.Title</title>
     <link href="~/Content/MvcGrid/mvc-grid.css" rel="stylesheet">
 
     @Styles.Render("~/Content/css")
@@ -63,12 +63,13 @@
                     {
                         <li>@Html.ActionLink("Estação", "Details", "Stations")</li>
                         <li>@Html.ActionLink("Marcações", "Index", "Appointments")</li>
+                        <li>@Html.ActionLink("Preçário", "Index", "Prices")</li>
                         <li>@Html.ActionLink("Postos", "Index", "Pods")</li>
                     }
                     else if (User.IsInRole(nameof(RoleEnum.Administrator)))
                     {
-                        <li>@Html.ActionLink("Gestão de Empresas", "Index", "Companies")</li>
-                        <li>@Html.ActionLink("Gestores", "Index", "Employees")</li>
+                        <li>@Html.ActionLink("Empresas", "Index", "Companies")</li>
+                        <li>@Html.ActionLink("Gestores", "Managers", "Companies")</li>
                     }
                     else if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                     {
