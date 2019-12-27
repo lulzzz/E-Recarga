@@ -47,10 +47,16 @@
     </dl>
 </div>
 
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
 <br />
 <h3>Marcações</h3>
 <div class="text-right">
-    @Html.ActionLink("Criar", "Create", "Appointments", null,null)<br /><br />
+    @Html.ActionLink("Criar", "Create", "Appointments", null, null)<br /><br />
 </div>
 @if (Model.Appointments.Count == 0)
 {
@@ -59,38 +65,92 @@
 }
 else
 {
-    @(Html.Grid(Model.Appointments.AsQueryable())
-    .Build(columns =>
-    {
-        columns.Add(model => model.Company.Name).Titled("Empresa");
-        columns.Add(model => model.Station.ComercialName).Titled("Estação");
-        columns.Add(model => model.Pod.Id).Titled("Posto");
-        columns.Add(model => model.User.Name).Titled("Utilizador");
-        columns.Add(model => model.Cost);
-        columns.Add(model => model.Start).Titled("Início");
-        columns.Add(model => model.End).Titled("Fim");
-        columns.Add(model => model.Status.Name).Titled("Estado");
-        if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }, null)).Titled("Ação");
-        else //if (User.IsInRole(nameof(RoleEnum.Employee)))
+    @(Html.Grid(Model.Appointments.OrderByDescending(x => x.Start).AsQueryable())
+                    .Build(columns =>
+                    {
+                        columns.Add(model => model.Company.Name).Titled("Empresa");
+                        columns.Add(model => model.Station.ComercialName).Titled("Estação");
+                        columns.Add(model => model.Pod.Id).Titled("Posto");
+                        columns.Add(model => model.User.Name).Titled("Utilizador");
+                        columns.Add(model => model.Cost);
+                        columns.Add(model => model.Start).Titled("Início");
+                        columns.Add(model => model.End).Titled("Fim");
+                        columns.Add(model => model.Status.Name).Titled("Estado");
+                        if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }, null)).Titled("Ação");
+                        else //if (User.IsInRole(nameof(RoleEnum.Employee)))
             columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", "Appointments", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
-    })
+                    })
 
-    .Empty("Não existem dados")
-    .Filterable()
-    .Sortable()
-    .Pageable(pager =>
-    {
-        pager.PageSizes = new Dictionary<Int32, String>
-    { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-        pager.ShowPageSizes = true;
-        pager.PagesToDisplay = 3;
-        pager.RowsPerPage = 5;
-    })
+                    .Empty("Não existem dados")
+                    .Filterable()
+                    .Sortable()
+                    .Pageable(pager =>
+                    {
+                        pager.PageSizes = new Dictionary<Int32, String>
+                    { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+                        pager.ShowPageSizes = true;
+                        pager.PagesToDisplay = 3;
+                        pager.RowsPerPage = 5;
+                    })
+                    .RowAttributed(model =>
+                        {
+                            if (model.AppointmentStatusId == AppointmentStatusEnum.Pending)
+                            {
+                                if (DateTime.Now > model.Start && DateTime.Now < model.End)
+                                {
+                                    return new { @class = "bg-warning" };
+                                }
+                                else if (DateTime.Now > model.End)
+                                {
+                                    return new { @class = "bg-danger" };
+                                }
+
+                                return new { };
+                            }
+                            else if (model.AppointmentStatusId == AppointmentStatusEnum.Ongoing)
+                            {
+                                if (DateTime.Now.AddMinutes(5) > model.End)
+                                {
+                                    return new { @class = "bg-primary" };
+                                }
+
+                                return new { @class = "bg-info" };
+                            }
+                            else if (model.AppointmentStatusId == AppointmentStatusEnum.Cancelled)
+                            {
+                                return new { @class = "bg-danger" };
+                            }
+                            else if (model.AppointmentStatusId == AppointmentStatusEnum.Completed)
+                            {
+                                return new { @class = "bg-completed" };
+                            }
+                            else
+                            {
+                                return new { };
+                            }
+                        })
     )
     <hr /><br />
 }
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div class="row pull-right" style="width:200px">
+    <br /><br />
+    <div class="row text-center">
+        <font size="+0.5" weight="bolder">Legenda</font>
+    </div>
+    <br />
+    <p class="bg-success text-center">Carregamento concluido com sucesso</p>
+    <p class="bg-info text-center">cliente a utilizar posto</p>
+    <p class="bg-warning text-center">cliente atrasado para marcação</p>
+    <p class="bg-danger text-center">cliente faltou à marcação</p>
+    <p class="bg-primary text-center">cliente excedeu o tempo de marcação</p>
+</div>
+<br />
+
+<style>
+    .mvc-grid th,
+    .mvc-grid td {
+        border-color: grey !important;
+    }
+</style>
