@@ -2,16 +2,21 @@
 @using E_Recarga.Models
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar Posto";
 }
 
-<h2>Edit</h2>
+<center>
+    <br />
+    <h2>Editar Posto: @Model.Identifier</h2>
+    <br />
+</center>
+<hr />
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Pod</h4>
         <hr />
@@ -22,14 +27,14 @@
             @Html.LabelFor(model => model.StationId, htmlAttributes: new { @class = "control-label col-md-2" })
 
             @*if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-            {
-                <div class="col-md-10">
-                    @Html.DropDownList("StationId", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.StationId, "", new { @class = "text-danger" })
-                </div>
-            }
-            else
-            {*@
+                {
+                    <div class="col-md-10">
+                        @Html.DropDownList("StationId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StationId, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {*@
             <div class="col-md-10">
                 @Html.EditorFor(x => x.Station.ComercialName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>

@@ -1,4 +1,15 @@
-﻿<form class="navbar-form">
+﻿@{ 
+    ViewBag.Title = "Estações";
+}
+
+<center>
+    <br />
+    <h1>Estações</h1>
+    <br />
+</center>
+<hr />
+
+<form class="navbar-form">
     <div class="form-group">
         <br />
         <label>Pesquisar: </label>&nbsp
@@ -12,7 +23,7 @@
 @Html.AjaxGrid(Url.Action("IndexGrid"))
 
 <script>
-    document.getElementById('GridSearch').addEventListener('input', function() {
+    document.getElementById('GridSearch').addEventListener('input', function () {
         var grid = new MvcGrid(document.querySelector('.mvc-grid'));
         grid.query.set('search', this.value);
         grid.reload();
@@ -20,7 +31,7 @@
 </script>
 
 <script>
-    window.onload = function() {
+    window.onload = function () {
         var grid = new MvcGrid(document.querySelector('.mvc-grid'));
         grid.query.set('search', this.value);
         grid.reload();

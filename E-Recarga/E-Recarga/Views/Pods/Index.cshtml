@@ -1,8 +1,15 @@
 ﻿@model IEnumerable<E_Recarga.Models.ERecargaModels.Pod>
 @using E_Recarga.Models
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Postos";
 }
+
+<center>
+    <br />
+    <h1>Postos</h1>
+    <br />
+</center>
+<hr />
 
 <h2>Index</h2>
 
@@ -11,28 +18,28 @@
 </p>
 
 @(Html
-        .Grid(Model)
-        .Build(columns =>
-        {
-            columns.Add(model => model.Id).Titled("Número");
-            columns.Add(model => model.PodType.Name);
-            columns.Add(model => model.Station.ComercialName).Titled("Estação");
-            columns.Add(model => model.isActive);
-            columns.Add(model => model.Appointments.ToList().FindAll(a => a.Start >= DateTime.Now &&
-            a.Start <= DateTime.Now.AddHours(24)).Count).Titled("Marcações previstas (próximas 24h)");
-            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString() + " | " + Html.ActionLink("Eliminar", "Delete", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
-            else //if (User.IsInRole(nameof(RoleEnum.Employee)))
-                columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
+            .Grid(Model)
+            .Build(columns =>
+            {
+                columns.Add(model => model.Identifier).Titled("Número");
+                columns.Add(model => model.PodType.Name);
+                columns.Add(model => model.Station.ComercialName).Titled("Estação");
+                columns.Add(model => model.isActive);
+                columns.Add(model => model.Appointments.ToList().FindAll(a => a.Start >= DateTime.Now &&
+                a.Start <= DateTime.Now.AddHours(24)).Count).Titled("Marcações previstas (próximas 24h)");
+                if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString() + " | " + Html.ActionLink("Eliminar", "Delete", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
+                else //if (User.IsInRole(nameof(RoleEnum.Employee)))
+        columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
             })
-        .Empty("Não existem dados")
-        .Filterable()
-        .Sortable()
-        .Pageable(pager =>
-        {
-            pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-            pager.ShowPageSizes = true;
-            pager.PagesToDisplay = 3;
-            pager.RowsPerPage = 5;
-        })
+            .Empty("Não existem dados")
+            .Filterable()
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+                pager.ShowPageSizes = true;
+                pager.PagesToDisplay = 3;
+                pager.RowsPerPage = 5;
+            })
 )

@@ -203,7 +203,7 @@ namespace E_Recarga.App_Code
 
 
             //Cycle goes backwards to keep month/year order on the view
-            for(int i = 12; i >= 1; i--)
+            for(int i = 12; i >= 0; i--)
             {
                 DateTime temp = DateTime.Now.AddMonths(-i);
 

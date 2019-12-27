@@ -12,11 +12,13 @@ using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
+    [RoutePrefix("Postos")]
     public class PodsController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Pods
+        [Route]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Index()
         {
@@ -49,6 +51,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Pods/Details/5
+        [Route("{id:int}/Detalhes")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Details(int? id)
         {
@@ -79,6 +82,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Pods/Create
+        [Route("Criar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Create()
         {
@@ -93,6 +97,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("Criar")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Create([Bind(Include = "StationId,PodId,isActive")] Pod pod)
@@ -114,6 +119,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Pods/Edit/5
+        [Route("{id:int}/Editar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
         public ActionResult Edit(int? id)
         {
@@ -149,6 +155,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // POST: Pods/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("{id:int}/Editar")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
@@ -169,6 +176,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Pods/Delete/5
+        [Route("{id:int}/Apagar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult Delete(int? id)
         {
@@ -193,6 +201,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // POST: Pods/Delete/5
+        [Route("{id:int}/Apagar")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
