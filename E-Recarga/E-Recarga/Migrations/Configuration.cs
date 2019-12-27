@@ -1,5 +1,6 @@
 namespace E_Recarga.Migrations
 {
+    using E_Recarga.App_Code;
     using E_Recarga.Models;
     using E_Recarga.Models.ERecargaModels;
     using Microsoft.AspNet.Identity;
@@ -16,13 +17,8 @@ namespace E_Recarga.Migrations
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(E_Recarga.Models.ERecargaModels.ERecargaDbContext context)
+        private void ClearDB(ERecargaDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
-
             context.Database.Delete();
             context.Database.Create();
 
@@ -34,7 +30,10 @@ namespace E_Recarga.Migrations
             context.Companies.ToList().RemoveAll(x => x.Id == x.Id);
             context.Pods.ToList().RemoveAll(x => x.Id == x.Id);
             context.Prices.ToList().RemoveAll(x => x.Id == x.Id);
+        }
 
+        private void AddEnumsToDB(ERecargaDbContext context)
+        {
             context.AppointmentStatuses
                 .AddOrUpdate(x => x.Id,
                 Enum.GetValues(typeof(AppointmentStatusEnum))
@@ -49,63 +48,82 @@ namespace E_Recarga.Migrations
                                 .OfType<PodTypeEnum>()
                                 .Select(x => new PodType() { Id = x, Name = x.ToString() })
                                 .ToArray());
+        }
 
-
+        private void AddRolesToDB(ERecargaDbContext context)
+        {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             foreach (var Role in Enum.GetValues(typeof(RoleEnum)).OfType<RoleEnum>())
             {
                 if (!roleManager.RoleExists(Role.ToString()))
                     context.Roles.AddOrUpdate(new IdentityRole(Role.ToString()));
             }
+        }
 
-
-            //Add Companies Stations and pods
-            //Add Galp
+        private void AddCompaniesAndStationsToDB(ERecargaDbContext context)
+        {
             context.Companies.AddOrUpdate(x => x.Id,
-                new Company() { Id = 1, Name = "Galp Energy", Email = "GalpEnergy@galp.pt", PhoneNumber = "912345678"},
-                new Company() { Id = 2, Name = "EDP ON", Email = "edpOn@edp.pt", PhoneNumber = "922345678"},
-                new Company() { Id = 3, Name = "Hiberdrola Energy", Email = "Hiber@drola.pt", PhoneNumber = "932345678"}
+                new Company() { Id = 1, Name = "Galp Energy", Email = "GalpEnergy@galp.pt", PhoneNumber = "912345678" },
+                new Company() { Id = 2, Name = "EDP ON", Email = "edpOn@edp.pt", PhoneNumber = "922345678" },
+                new Company() { Id = 3, Name = "Hiberdrola Energy", Email = "Hiber@drola.pt", PhoneNumber = "932345678" }
                 );
 
             context.Stations.AddOrUpdate(x => x.Id,
-                new Station() { Id = 1, BuildingNumber = 1, ComercialName = "Station A", CompanyId = 1, Parish = "Santo Antonio dos Olivais", Region = "Coimbra", PostalCode = "1111-222", StreetName = "Rua da macumba"},
-                new Station() { Id = 2, BuildingNumber = 2, ComercialName = "Station B", CompanyId = 1, Parish = "Chao da forca", Region = "Serta", PostalCode = "1111-222", StreetName = "Rua do Carasco"},
-                new Station() { Id = 3, BuildingNumber = 3, ComercialName = "Station C", CompanyId = 1, Parish = "Portela", Region = "Porto", PostalCode = "1111-269", StreetName = "Rua das portinhas"},
-                new Station() { Id = 4, BuildingNumber = 4, ComercialName = "Station D", CompanyId = 1, Parish = "Amadora", Region = "Setubal", PostalCode = "1345-222", StreetName = "Rua dos assassinos"},
-                new Station() { Id = 5, BuildingNumber = 5, ComercialName = "Station E", CompanyId = 1, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada"}
+                new Station() { Id = 1, BuildingNumber = 1, ComercialName = "Station A", CompanyId = 1, Parish = "Santo Antonio dos Olivais", Region = "Coimbra", PostalCode = "1111-222", StreetName = "Rua da macumba" },
+                new Station() { Id = 2, BuildingNumber = 2, ComercialName = "Station B", CompanyId = 1, Parish = "Chao da forca", Region = "Serta", PostalCode = "1111-222", StreetName = "Rua do Carasco" },
+                new Station() { Id = 3, BuildingNumber = 3, ComercialName = "Station C", CompanyId = 1, Parish = "Portela", Region = "Porto", PostalCode = "1111-269", StreetName = "Rua das portinhas" },
+                new Station() { Id = 4, BuildingNumber = 4, ComercialName = "Station D", CompanyId = 1, Parish = "Amadora", Region = "Setubal", PostalCode = "1345-222", StreetName = "Rua dos assassinos" },
+                new Station() { Id = 5, BuildingNumber = 5, ComercialName = "Station E", CompanyId = 1, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada" }
                 );
 
             context.Stations.AddOrUpdate(x => x.Id,
-                new Station() { Id = 6, BuildingNumber = 2, ComercialName = "Station A", CompanyId = 2, Parish = "Santo Antonio dos Olivais", Region = "Coimbra", PostalCode = "1111-222", StreetName = "Rua da macumba"},
-                new Station() { Id = 7, BuildingNumber = 3, ComercialName = "Station B", CompanyId = 2, Parish = "Chao da forca", Region = "Serta", PostalCode = "1111-222", StreetName = "Rua do Carasco"},
-                new Station() { Id = 8, BuildingNumber = 4, ComercialName = "Station C", CompanyId = 2, Parish = "Portela", Region = "Porto", PostalCode = "1111-269", StreetName = "Rua das portinhas"},
-                new Station() { Id = 9, BuildingNumber = 5, ComercialName = "Station D", CompanyId = 2, Parish = "Amadora", Region = "Setubal", PostalCode = "1345-222", StreetName = "Rua dos assassinos"},
-                new Station() { Id = 10, BuildingNumber = 6, ComercialName = "Station E", CompanyId = 2, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada"}
+                new Station() { Id = 6, BuildingNumber = 2, ComercialName = "Station A", CompanyId = 2, Parish = "Santo Antonio dos Olivais", Region = "Coimbra", PostalCode = "1111-222", StreetName = "Rua da macumba" },
+                new Station() { Id = 7, BuildingNumber = 3, ComercialName = "Station B", CompanyId = 2, Parish = "Chao da forca", Region = "Serta", PostalCode = "1111-222", StreetName = "Rua do Carasco" },
+                new Station() { Id = 8, BuildingNumber = 4, ComercialName = "Station C", CompanyId = 2, Parish = "Portela", Region = "Porto", PostalCode = "1111-269", StreetName = "Rua das portinhas" },
+                new Station() { Id = 9, BuildingNumber = 5, ComercialName = "Station D", CompanyId = 2, Parish = "Amadora", Region = "Setubal", PostalCode = "1345-222", StreetName = "Rua dos assassinos" },
+                new Station() { Id = 10, BuildingNumber = 6, ComercialName = "Station E", CompanyId = 2, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada" }
                 );
 
             context.Stations.AddOrUpdate(x => x.Id,
-                new Station() { Id = 11, BuildingNumber = 3, ComercialName = "Station A", CompanyId = 3, Parish = "Santo Antonio dos Olivais", Region = "Coimbra", PostalCode = "1111-222", StreetName = "Rua da macumba"},
-                new Station() { Id = 12, BuildingNumber = 4, ComercialName = "Station B", CompanyId = 3, Parish = "Chao da forca", Region = "Serta", PostalCode = "1111-222", StreetName = "Rua do Carasco"},
-                new Station() { Id = 13, BuildingNumber = 5, ComercialName = "Station C", CompanyId = 3, Parish = "Portela", Region = "Porto", PostalCode = "1111-269", StreetName = "Rua das portinhas"},
-                new Station() { Id = 14, BuildingNumber = 6, ComercialName = "Station D", CompanyId = 3, Parish = "Amadora", Region = "Setubal", PostalCode = "1345-222", StreetName = "Rua dos assassinos"},
-                new Station() { Id = 15, BuildingNumber = 7, ComercialName = "Station E", CompanyId = 3, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada"}
+                new Station() { Id = 11, BuildingNumber = 3, ComercialName = "Station A", CompanyId = 3, Parish = "Santo Antonio dos Olivais", Region = "Coimbra", PostalCode = "1111-222", StreetName = "Rua da macumba" },
+                new Station() { Id = 12, BuildingNumber = 4, ComercialName = "Station B", CompanyId = 3, Parish = "Chao da forca", Region = "Serta", PostalCode = "1111-222", StreetName = "Rua do Carasco" },
+                new Station() { Id = 13, BuildingNumber = 5, ComercialName = "Station C", CompanyId = 3, Parish = "Portela", Region = "Porto", PostalCode = "1111-269", StreetName = "Rua das portinhas" },
+                new Station() { Id = 14, BuildingNumber = 6, ComercialName = "Station D", CompanyId = 3, Parish = "Amadora", Region = "Setubal", PostalCode = "1345-222", StreetName = "Rua dos assassinos" },
+                new Station() { Id = 15, BuildingNumber = 7, ComercialName = "Station E", CompanyId = 3, Parish = "Vale das Flores", Region = "Coimbra", PostalCode = "1234-222", StreetName = "Rua da emaculada" }
                 );
+        }
 
+
+        private void AddPodsAndPricesToDB(ERecargaDbContext context)
+        {
+            Random gen = new Random();
             int podId = 1;
-            for(int i = 1; i < 16; i++)
+            for (int i = 1; i < 16; i++)
             {
-                for (int j = 1; j < 11; j++) {
+                int podIdentifier = 1;
+                for (int j = 1; j < 11; j++)
+                {
                     context.Pods.AddOrUpdate(x => x.Id,
-                        new Pod() { Id = podId++, isActive = true, StationId = i, PodId = PodTypeEnum.Normal });
+                        new Pod() { Id = podId++, isActive = true, StationId = i, PodId = PodTypeEnum.Normal, Identifier = podIdentifier++ });
                 }
 
                 for (int j = 1; j < 11; j++)
                 {
                     context.Pods.AddOrUpdate(x => x.Id,
-                        new Pod() { Id = podId++, isActive = true, StationId = i, PodId = PodTypeEnum.Fast });
+                        new Pod() { Id = podId++, isActive = true, StationId = i, PodId = PodTypeEnum.Fast, Identifier = podIdentifier++ });
+                }
+
+                foreach (var price in ScheduleGenerator.GeneratePrices(gen.Next(5,15), gen.Next(10, 25)))
+                {
+                    price.StationId = i;
+                    context.Prices.Add(price);
                 }
             }
+        }
 
+
+        private void AddUsersToDB(ERecargaDbContext context)
+        {
             //Create Users
             var store = new UserStore<ApplicationUser>(context);
             var manager = new UserManager<ApplicationUser>(store);
@@ -170,41 +188,90 @@ namespace E_Recarga.Migrations
                 if (res.Succeeded)
                     manager.AddToRole(user.Id, nameof(RoleEnum.User));
             }
+        }
 
-            context.Appointments.AddOrUpdate(x => x.Id,
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
 
-                new Appointment() { StationId = 7, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 45.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-80), End = DateTime.Now.AddDays(-80).AddHours(5) },
+        private void AddAppointmentsToDB(ERecargaDbContext context)
+        {
+            Random generator = new Random();
+            DateTime end = DateTime.Now.AddDays(1);
+            List<AppointmentStatusEnum> appointmentStatuses = Enum.GetValues(typeof(AppointmentStatusEnum)).OfType<AppointmentStatusEnum>().ToList();
+            var users = context.Users.ToList();
 
-                new Appointment() { StationId = 8, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 100.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-78), End = DateTime.Now.AddDays(-78).AddHours(5) },
+            for (DateTime i = DateTime.Now.AddMonths(-3); i < end; i = i.AddDays(1))
+            {
+                for(int quant = generator.Next(15, 25); quant > 0; quant--)
+                {
+                    var tempA = i.AddMinutes(generator.Next(30, 800));
+                    var tempB = i.AddMinutes(generator.Next(30, 800));
+                    var tempC = i.AddMinutes(generator.Next(30, 800));
+                    var tempD = i.AddMinutes(generator.Next(30, 800));
 
-                new Appointment() { StationId = 7, PodId = 49, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 15.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+                    context.Appointments.AddOrUpdate(x => x.Id,
+                        new Appointment()
+                        {
+                            StationId = generator.Next(1, 16),
+                            PodId = generator.Next(1, context.Pods.Count()),
+                            AppointmentStatusId = AppointmentStatusEnum.Completed,
+                            Cost = generator.Next(5, 200),
+                            CompanyId = 1,
+                            UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
+                            Start = tempA,
+                            End = tempA.AddMinutes(generator.Next(60, 300)),
+                        },
 
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+                        new Appointment()
+                        {
+                            StationId = generator.Next(1, 16),
+                            PodId = generator.Next(1, context.Pods.Count()),
+                            AppointmentStatusId = appointmentStatuses.ElementAt(generator.Next(0,appointmentStatuses.Count)),
+                            Cost = generator.Next(5, 200),
+                            CompanyId = 1,
+                            UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
+                            Start = tempB,
+                            End = tempB.AddMinutes(generator.Next(60, 300)),
+                        },
+                        
+                        new Appointment()
+                        {
+                            StationId = generator.Next(1, 16),
+                            PodId = generator.Next(1, context.Pods.Count()),
+                            AppointmentStatusId = AppointmentStatusEnum.Completed,
+                            Cost = generator.Next(5, 200),
+                            CompanyId = 2,
+                            UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
+                            Start = tempC,
+                            End = tempC.AddMinutes(generator.Next(60, 300)),
+                        },
 
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddMonths(-6), End = DateTime.Now.AddMonths(-6).AddHours(5) },
+                        new Appointment()
+                        {
+                            StationId = generator.Next(1, 16),
+                            PodId = generator.Next(1, context.Pods.Count()),
+                            AppointmentStatusId = appointmentStatuses.ElementAt(generator.Next(0,appointmentStatuses.Count)),
+                            Cost = generator.Next(5, 200),
+                            CompanyId = 2,
+                            UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
+                            Start = tempD,
+                            End = tempD.AddMinutes(generator.Next(60, 300)),
+                        }
+                    );
+                }
+            }
+        }
 
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
 
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+        protected override void Seed(ERecargaDbContext context)
+        {
+            ClearDB(context);
+            AddEnumsToDB(context);
+            AddRolesToDB(context);
 
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
+            AddCompaniesAndStationsToDB(context);
+            AddPodsAndPricesToDB(context);
+            AddUsersToDB(context);
 
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) },
-
-                new Appointment() { StationId = 6, PodId = 46, AppointmentStatusId = AppointmentStatusEnum.Completed, Cost = 30.0, CompanyId = 2, UserId = context.Users.FirstOrDefault().Id,
-                    Start = DateTime.Now.AddDays(-20), End = DateTime.Now.AddDays(-20).AddHours(5) }
-                );
+            AddAppointmentsToDB(context);
         }
     }
 }

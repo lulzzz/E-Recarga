@@ -76,7 +76,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Editar")]
+        [Route("{id:int}/Editar")]
         public ActionResult Edit([Bind(Include = "Id,CostNormal,CostUltra")]Price price)
         {
             var myPrice = db.Prices.Find(price.Id);
