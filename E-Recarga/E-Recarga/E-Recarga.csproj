@@ -242,11 +242,11 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\accepted-payment-methods.png" />
     <Content Include="Images\car-brands.png" />
-    <Content Include="Images\car_recharge.jpg" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\image10b.png" />
     <Content Include="Images\Logo-128.png" />
     <Content Include="Images\Logo-64.png" />
+    <Content Include="Images\paypal-1.png" />
     <Content Include="Images\qualidade-reconhecida.jpg" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -353,6 +353,7 @@
     <Content Include="Views\Shared\_StationStatsDashboard.cshtml" />
     <Content Include="Views\Companies\Dashboard.cshtml" />
     <Content Include="Views\Users\AddMoney.cshtml" />
+    <Content Include="Views\Users\AppointmentsRecords.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewBag\" />

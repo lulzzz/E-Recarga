@@ -62,30 +62,41 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         [Route("Carteira")]
+        [HttpGet]
         public ActionResult AddMoney()
         {
             string userId = User.Identity.GetUserId();
             var user = db.Users.Find(userId);
-            user.Wallet = user.Wallet;
+
             return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0 });
         }
 
+        [Route("Carteira")]
         [HttpPost]
         public ActionResult AddMoney([Bind(Include ="Name,Wallet,Input")]AddMoneyViewModel userVM)
         {
+            string userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+
             if (ModelState.IsValid)
             {
-                string userId = User.Identity.GetUserId();
-                var user = db.Users.Find(userId);
-
                 user.Wallet += userVM.Input;
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-
-                return RedirectToAction("AddMoney");
             }
 
-            return View(userVM);
+            return RedirectToAction("AddMoney");
+        }
+
+        //Get: User appointments
+        [HttpGet]
+        public ActionResult AppointmentsRecords()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            List<Appointment> appointments = user.Appointments.ToList();
+            appointments.OrderByDescending(a => a.Start);
+
+            return View(appointments.AsQueryable());
         }
     }
 }

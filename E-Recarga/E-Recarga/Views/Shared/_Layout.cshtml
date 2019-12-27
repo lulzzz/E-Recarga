@@ -56,7 +56,7 @@
                     @if (User.IsInRole(nameof(RoleEnum.User)))
                     {
                         <li>@Html.ActionLink("Realizar Marcação", "IndexGet", "Users")</li>
-                        <li>@Html.ActionLink("Historico de Marcações", "IndexGet", "Users")</li>
+                        <li>@Html.ActionLink("Historico de Marcações", "AppointmentsRecords", "Users")</li>
                         <li>@Html.ActionLink("Carteira", "AddMoney", "Users")</li>
                     }
                     else if (User.IsInRole(nameof(RoleEnum.Employee)))

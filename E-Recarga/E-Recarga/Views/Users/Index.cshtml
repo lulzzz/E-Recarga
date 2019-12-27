@@ -16,34 +16,39 @@
     @Html.AntiForgeryToken()
 
     <form class="navbar-form">
-        <div class="row" style="display:table;width: 100%;height:80%; border: 1px solid bisque;border-radius: 10px; padding: 1.2% 3% 1.2% 3%; background-color: linen; width:70%;margin-left:15%">
-            <div class="col col-md-6" align="center">
+        <div class="row" style="display:table;width: 100%;height:80%; border: 1px solid bisque; border-radius: 10px; margin-left:0.1%; padding: 1.2% 3% 0.9% 3%; background-color: linen; ">
+            <div class="col col-md-3" align="center">
                 <div class="form-group" id="RegionSearch">
                     <label>Filtrar por Região</label>&nbsp
                     @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
                     @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
                 </div>
+            </div>
 
-                <div class="form-group" id="InitTimeSearch">
+            <div class="col col-md-3" align="center">
+                <div class="form-group" id="PodTypeSearch">
+                    <label>Tipo de Carregamento </label> &nbsp
+                    @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
+                    @Html.ValidationMessageFor(model => model.PodType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col col-md-3" align="center">
+                <div class="form-group" id="InitTimeSearch" style="bottom: 0;">
                     <label>Horário de Início </label> &nbsp
                     @Html.TextBoxFor(model => model.InitCharge, new { @id = "startTime", @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.InitCharge, "", new { @class = "text-danger" })
                 </div>
             </div>
 
-            <div class="col col-md-6" align="center" @*style="display:table-cell;vertical-align: middle;"*@>
-                <div class="form-group" id="PodTypeSearch">
-                    <label>Tipo de Carregamento </label> &nbsp
-                    @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
-                    @Html.ValidationMessageFor(model => model.PodType, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="form-group" id="EndTimeSearch">
+            <div class="col col-md-3" align="center" @*style="display:table-cell;vertical-align: middle;"*@>
+                <div class="form-group" id="EndTimeSearch" style="bottom: 0;">
                     &nbsp <label>Horário de Fim</label> &nbsp
                     @Html.TextBoxFor(model => model.EndCharge, new { @id = "endTime", @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EndCharge, "", new { @class = "text-danger" })
                 </div>
             </div>
+
         </div>
 
         <div class="row" style="height:20%" align="center">
