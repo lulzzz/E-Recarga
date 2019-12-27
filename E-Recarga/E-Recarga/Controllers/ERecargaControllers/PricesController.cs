@@ -13,11 +13,13 @@ using Microsoft.AspNet.Identity;
 namespace E_Recarga.Controllers.ERecargaControllers
 {
     [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
+    [RoutePrefix("Precos")]
     public class PricesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Prices
+        [Route]
         public ActionResult Index()
         {
             var user = db.Employees.Find(User.Identity.GetUserId());
@@ -36,6 +38,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Prices/Edit/5
+        [Route("{id:int}/Editar")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -73,6 +76,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Editar")]
         public ActionResult Edit([Bind(Include = "Id,CostNormal,CostUltra")]Price price)
         {
             var myPrice = db.Prices.Find(price.Id);

@@ -15,18 +15,20 @@ using Newtonsoft.Json;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
-
+    [RoutePrefix("Empresas")]
     public class CompaniesController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Companies
+        [Route]
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult Index()
         {
             return View(db.Companies.ToList());
         }
 
+        [Route("Gestores")]
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult Managers()
         {
@@ -38,9 +40,10 @@ namespace E_Recarga.Controllers.ERecargaControllers
                             where u.Roles.Any(r => r.RoleId == id)
                             select u;
 
-            return RedirectToAction("Index", "Employees", employees);
+            return View(employees.ToList());
         }
 
+        [Route("Detalhes")]
         // GET: Companies/Details/5
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
         public ActionResult Details(int? id)
@@ -100,6 +103,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // POST: Companies/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Criar")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
@@ -116,6 +120,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Companies/Edit/5
+        [Route("{id:int}/Editar")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
         public ActionResult Edit(int? id)
         {
@@ -148,6 +153,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // POST: Companies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("{id:int}/Editar")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Administrator))]
@@ -167,6 +173,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Companies/Delete/5
+        [Route("{id:int}/Apagar")]
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult Delete(int? id)
         {
@@ -185,6 +192,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // POST: Companies/Delete/5
+        [Route("{id:int}/Apagar")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
@@ -197,6 +205,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return RedirectToAction("Index");
         }
 
+        [Route("CetroDeControlo")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DashBoard()
         {

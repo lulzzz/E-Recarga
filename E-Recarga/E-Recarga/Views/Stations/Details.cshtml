@@ -2,7 +2,7 @@
 @using E_Recarga.Models
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalhes da Estação";
 }
 
 <center>
@@ -104,10 +104,11 @@
                 columns.Add(model => model.PhoneNumber).Titled("Telefone");
                 if(User.IsInRole(nameof(RoleEnum.CompanyManager)))
                 {
-                    columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details","Employees",
-                        new { id = model.Id },null).ToString()) + " | " + Html.ActionLink("Editar","Edit",
-                        "Employees",new { id = model.Id },null).ToString() + " | " + Html.ActionLink("Eliminar",
-                        "Delete","Employees", new { id = model.Id },null).ToString()).Titled("Ações").Encoded(false);
+                    columns.Add(model => @Html.Raw(
+                        Html.ActionLink("Detalhes", "Details","Employees", new { id = model.Id },null).ToString()) + " | " +
+                        Html.ActionLink("Editar","Edit","Employees",new { id = model.Id },null).ToString() + " | " + 
+                        Html.ActionLink("Eliminar", "Delete","Employees", new { id = model.Id },null).ToString())
+                        .Titled("Ações").Encoded(false);
                 }
             })
             .Empty("Não existem dados")
@@ -154,13 +155,16 @@ else
             columns.Add(model => model.Appointments.ToList().FindAll(a => a.Start >= DateTime.Now &&
             a.Start <= DateTime.Now.AddHours(24)).Count).Titled("Marcações previstas (próximas 24h)");
             if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details","Pods", 
-                    new { id = model.Id },null).ToString()) + " | " + Html.ActionLink("Editar", 
-                    "Edit", "Pods", new { id = model.Id },null).ToString() + " | " + 
-                    Html.ActionLink("Eliminar", "Delete", "Pods", new { id = model.Id },null)
-                    .ToString()).Titled("Ações").Encoded(false);
+                columns.Add(model => @Html.Raw(
+                    Html.ActionLink("Detalhes", "Details","Pods", new { id = model.Id },null).ToString()) + " | " +
+                    Html.ActionLink("Editar","Edit", "Pods", new { id = model.Id },null).ToString() + " | " + 
+                    Html.ActionLink("Eliminar", "Delete", "Pods", new { id = model.Id },null).ToString())
+                    .Titled("Ações").Encoded(false);
             else //if (User.IsInRole(nameof(RoleEnum.Employee)))
-                columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", "Pods", new { id = model.Id },null).ToString()) + " | " + Html.ActionLink("Editar", "Edit", "Stations", new { id = model.Id },null).ToString()).Titled("Ações").Encoded(false);
+                columns.Add(model => @Html.Raw(
+                    Html.ActionLink("Detalhes", "Details", "Pods", new { id = model.Id },null).ToString()) + " | " + 
+                    Html.ActionLink("Editar", "Edit", "Pods", new { id = model.Id },null).ToString())
+                    .Titled("Ações").Encoded(false);
         })
         .Empty("Não existem dados")
         .Filterable()

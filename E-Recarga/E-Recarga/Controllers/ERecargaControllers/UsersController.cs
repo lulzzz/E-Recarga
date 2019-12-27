@@ -11,12 +11,13 @@ using System.Web.Mvc;
 namespace E_Recarga.Controllers.ERecargaControllers
 {
     [Authorize(Roles = nameof(RoleEnum.User))]
+    [RoutePrefix("Utilizador")]
     public class UsersController : Controller
     {
         private ERecargaDbContext db = new ERecargaDbContext();
 
-        [Route("Marcacao")]
         [HttpGet]
+        [Route("Agendar")]
         public ActionResult IndexGet(UserViewModel userVM)
         {
             var stations = db.Stations;
@@ -32,7 +33,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         [HttpPost]
-        [Route("Marcacao")]
+        [Route("Agendar")]
         public ViewResult Index([Bind(Include = "Region,PodType,InitCharge,EndCharge")] UserViewModel userVM)
         {
             if (string.IsNullOrEmpty(userVM.Region) || string.IsNullOrEmpty(userVM.PodType) ||
@@ -61,8 +62,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return PartialView("_StationIndexPartialGrid", Stations.AsQueryable());
         }
 
-        [Route("Carteira")]
         [HttpGet]
+        [Route("Carteira")]
         public ActionResult AddMoney()
         {
             string userId = User.Identity.GetUserId();
@@ -71,8 +72,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
             return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0 });
         }
 
-        [Route("Carteira")]
         [HttpPost]
+        [Route("Carteira")]
         public ActionResult AddMoney([Bind(Include ="Name,Wallet,Input")]AddMoneyViewModel userVM)
         {
             string userId = User.Identity.GetUserId();
@@ -90,6 +91,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
         //Get: User appointments
         [HttpGet]
+        [Route("Historico")]
         public ActionResult AppointmentsRecords()
         {
             var user = db.Users.Find(User.Identity.GetUserId());

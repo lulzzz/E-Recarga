@@ -1,15 +1,17 @@
 ﻿@model E_Recarga.ViewModels.EmployeeViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalhes Trabalhador";
 }
 
 <center>
-    <br /><h2>Detalhes</h2><br />
+    <br />
+    <h2>Detalhes: @Model.Name</h2>
+    <br />
 </center>
+<hr />
 
 <div>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
