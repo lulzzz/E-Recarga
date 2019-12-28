@@ -11,19 +11,19 @@
     <br />
 </center>
 
-<div class="pull-left">
-    <p>Ver tudo</p>
-    <label class="switch">
-        <input type="checkbox" id="slider">
-        <span class="slider round"></span>
-    </label>
+<div class="row" align="right" width="100px">
+    <div class="col col-md-9" align="left">@Html.ActionLink("Criar Marcação", "Create")</div>
+    <div class="col col-md-2" style="height:32px"><label class="col-form-label" style="font-size:18px">Ver tudo</label></div>
+    <div class="col col-md-1">
+        <label class="switch" >
+            <input type="checkbox" id="slider">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    
 </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-
+<br />
 @(Html
             .Grid(Model)
             .Build(columns =>
@@ -49,7 +49,7 @@
                 {
                     if (DateTime.Now > model.Start && DateTime.Now < model.End)
                     {
-                        return new { @class = "bg-warning" };
+                        return new { @class = "color_td2" };
                     }
                     else if (DateTime.Now > model.End)
                     {
@@ -62,7 +62,7 @@
                 {
                     if (DateTime.Now.AddMinutes(5) > model.End)
                     {
-                        return new { @class = "bg-primary" };
+                        return new { @class = "color_td1" };
                     }
 
                     return new { @class = "bg-info" };
@@ -87,22 +87,22 @@
             {
                 pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
                 pager.ShowPageSizes = true;
-                pager.PagesToDisplay = 3;
+                pager.PagesToDisplay = 6;
                 pager.RowsPerPage = 5;
             })
 )
 <br /><br />
 
-<div class="row center-block" align="center" style="border:0.5px solid #eaeaea;background-color:#fafafa;border-radius: 10px; padding:10px 0 10px 0">
+<div class="row center-block" align="center" style="@*border:0.5px solid #eaeaea;*@background-color:#fafafa;border-radius: 10px; padding:10px 0 10px 0">
     <div class="row text-center">
-        <font size="+1.5" weight="bolder">Legenda</font>
+        <font size="+1.5">Legenda</font>
     </div>
     <br />
     <div class="col col-md-2 col-md-offset-1"><p class="bg-success text-center" style="border:solid 1px lightgrey;height:45px">Carregamento concluido com sucesso</p></div>
     <div class="col col-md-2"><p class="bg-info text-center" style="border:solid 1px lightgrey;height:45px">cliente a utilizar posto</p> </div>
-    <div class="col col-md-2"><p class="bg-warning text-center" style="border:solid 1px lightgrey;height:45px">cliente atrasado para marcação</p></div>
+    <div class="col col-md-2"><p class="color_td2 text-center" style="border:solid 1px lightgrey;height:45px">cliente atrasado para marcação</p></div>
     <div class="col col-md-2"><p class="bg-danger text-center" style="border:solid 1px lightgrey;height:45px">cliente faltou à marcação</p> </div>
-    <div class="col col-md-2"><p class="bg-primary text-center" style="border:solid 1px lightgrey;height:45px">cliente excedeu o tempo de marcação</p></div>
+    <div class="col col-md-2"><p class="color_td1 text-center" style="border:solid 1px lightgrey;height:45px">cliente excedeu o tempo de marcação</p></div>
 </div>
 <br />
 
@@ -110,6 +110,12 @@
     .mvc-grid th,
     .mvc-grid td {
         border-color: grey !important;
+    }
+    .color_td1{
+        background-color:darksalmon;
+    }
+    .color_td2 {
+        background-color: papayawhip;
     }
 </style>
 
@@ -152,7 +158,7 @@
         }
 
     input:checked + .slider {
-        background-color: #2196F3;
+        background-color: #772953;
     }
 
     input:focus + .slider {
