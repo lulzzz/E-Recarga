@@ -240,7 +240,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\accepted-payment-methods.png" />
     <Content Include="Images\car-brands.png" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\image10b.png" />
@@ -354,6 +353,7 @@
     <Content Include="Views\Companies\Dashboard.cshtml" />
     <Content Include="Views\Users\AddMoney.cshtml" />
     <Content Include="Views\Users\AppointmentsRecords.cshtml" />
+    <Content Include="Views\Appointments\UserAppointmentCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewBag\" />

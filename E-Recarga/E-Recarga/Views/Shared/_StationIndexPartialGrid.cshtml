@@ -11,7 +11,7 @@
         columns.Add(model => model.Parish);
         columns.Add(model => model.Region);
         if (User.IsInRole(nameof(RoleEnum.User)))
-            columns.Add(model => @Html.ActionLink("Marcar", "Create", "Appointments", new { myModel = model}, null)).Titled("Ação");
+            columns.Add(model => @Html.ActionLink("Marcar", "UserAppointmentCreate", "Appointments", new { myModel = model}, null)).Titled("Ação");
         else if (User.IsInRole(nameof(RoleEnum.CompanyManager)) || User.IsInRole(nameof(RoleEnum.Employee)))
             columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Stations", new { id = model.Id }, null)).Titled("Ação");
     })

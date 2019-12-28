@@ -26,28 +26,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-
-
-                @if (!User.Identity.IsAuthenticated)
-                {
-                    @Html.ActionLink("E-Recarga", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                }
-                else if (User.IsInRole(nameof(RoleEnum.User)))
-                {
-                    @Html.ActionLink("E-Recarga", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                }
-                else if (User.IsInRole(nameof(RoleEnum.Employee)))
-                {
-                    @Html.ActionLink("E-Recarga", "Index", "Station", new { area = "" }, new { @class = "navbar-brand" })
-                }
-                else if (User.IsInRole(nameof(RoleEnum.Administrator)))
-                {
-                    @Html.ActionLink("E-Recarga", "Index", "Companies", new { area = "" }, new { @class = "navbar-brand" })
-                }
-                else if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                {
-                    @Html.ActionLink("E-Recarga", "Details", "Companies", new { area = "" }, new { @class = "navbar-brand" })
-                }
+                @Html.ActionLink("E-Recarga", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 
             </div>
             <div class="navbar-collapse collapse">

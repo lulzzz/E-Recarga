@@ -34,7 +34,7 @@
     <div class="text-right">
         @if (Request.IsAuthenticated && User.IsInRole(nameof(RoleEnum.CompanyManager)))
         {
-            @Html.ActionLink("Editar", "Edit")
+            @Html.ActionLink("Editar", "Edit", new { id = Model.Company.Id })
         }
         else
         {
@@ -70,9 +70,9 @@
                 columns.Add(model => model.Region);
                 if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                     columns.Add(model => @Html.Raw(
-                        Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " +
-                        Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString() + " | " +
-                        Html.ActionLink("Apagar", "Delete", new { id = model.Id }).ToString())
+                        Html.ActionLink("Detalhes", "Details","Stations", new { id = model.Id },null).ToString()) + " | " +
+                        Html.ActionLink("Editar", "Edit", "Stations", new { id = model.Id }, null).ToString() + " | " +
+                        Html.ActionLink("Apagar", "Delete", "Stations", new { id = model.Id }, null).ToString())
                         .Titled("Ações").Encoded(false);
             })
                 .Empty("Não existem dados")
@@ -113,13 +113,22 @@
                 columns.Add(model => model.Name);
                 columns.Add(model => model.Email).Titled("Email");
                 columns.Add(model => model.PhoneNumber).Titled("Telefone");
+                columns.Add(model => model.Station.ComercialName).Titled("Estação");
+
                 if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                 {
                     columns.Add(model => Model.EmployeeRoleDictionary[model]).Titled("Função");
+                    columns.Add(model => @Html.Raw(
+                    Html.ActionLink("Detalhes", "Details", "Employees", new { id = model.Id }, null).ToString()) + " | " +
+                    Html.ActionLink("Editar", "Edit", "Employees", new { id = model.Id }, null).ToString() + " | " +
+                    Html.ActionLink("Apagar", "Delete", "Employees", new { id = model.Id }, null).ToString())
+                    .Titled("Ações").Encoded(false);
                 }
                 else
+                {
                     columns.Add(model => "Gestor").Titled("Função");
-                columns.Add(model => model.Station.ComercialName).Titled("Estação");
+                }
+
             })
             .Empty("Não existem dados")
             .Filterable()

@@ -90,8 +90,8 @@
             columns.Add(model => model.Time);
             columns.Add(model => model.Station.Company.Name);
 
-            columns.Add(model => model.CostNormal);
-            columns.Add(model => model.CostUltra);
+            columns.Add(model => model.CostNormal.ToString()+"€").Titled("Custo Normal");
+            columns.Add(model => model.CostUltra.ToString()+"€").Titled("Custo Ultra");
             if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
             {
                 columns.Add(model => @Html.Raw(
