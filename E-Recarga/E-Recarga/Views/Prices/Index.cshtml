@@ -12,42 +12,25 @@
 <hr />
 
 <br />
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Station.ComercialName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CostNormal)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CostUltra)
-        </th>
-        <th></th>
-    </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Station.ComercialName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CostNormal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CostUltra)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-            </td>
-        </tr>
-    }
-
-</table>
+@(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.Station.ComercialName).Titled("Estação");
+            columns.Add(model => model.Time).Titled("Horário");
+            columns.Add(model => model.CostNormal.ToString()+" €").Titled("Custo Normal");
+            columns.Add(model => model.CostUltra.ToString() + " €").Titled("Custo Ultra");
+            columns.Add(model => @Html.ActionLink("Editar", "Edit", new { id = model.Id })).Titled("Ação");
+        })
+        .Empty("Não existem dados")
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+            pager.ShowPageSizes = true;
+            pager.PagesToDisplay = 3;
+            pager.RowsPerPage = 5;
+        })
+)

@@ -32,7 +32,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Pod.Id)
+            @Html.DisplayFor(model => model.Pod.Identifier)
         </dd>
 
         <dt>
@@ -77,10 +77,18 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index") | 
-    @if (User.IsInRole(nameof(RoleEnum.Employee)))
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-    }
-</p>
+
+@if (User.IsInRole(nameof(RoleEnum.Employee)))
+{
+    @Html.ActionLink("Voltar", "Index");
+    <span> | </span>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id });
+}
+else if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+{
+    @Html.ActionLink("Voltar", "Index");
+}
+else
+{
+    @Html.ActionLink("Voltar", "AppointmentsRecords","Users",null,null);
+}
