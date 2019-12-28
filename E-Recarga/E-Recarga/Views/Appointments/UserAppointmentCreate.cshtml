@@ -1,0 +1,133 @@
+﻿@model E_Recarga.Models.ERecargaModels.Appointment
+
+@{
+    ViewBag.Title = "Confirmar Marcação";
+}
+
+<br /><br />
+<h3>Confirmar Marcação</h3>
+<br />
+<hr />
+<h4>
+    Preços da Estação @Html.DisplayFor(model => model.Station.ComercialName)
+</h4><br />
+
+@if (Model.Station.Prices == null)
+{
+    <p>
+        Não existem preços definidos para a estação selecionada. A marcação não poderá ser realizada.
+    </p>
+    <br />
+    <div align="right">
+        <a href="javascript:void(0);" onclick="history.go(-1);">Cancelar</a>
+    </div>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Station.Prices[0].Time).ToString()
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Station.Prices[0].CostNormal).ToString()
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Station.Prices[0].CostUltra).ToString()
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Station.Prices)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CostNormal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CostUltra)
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+}
+<br />
+
+<hr />
+<h4>
+    Marcação
+</h4><br />
+
+
+@using (Html.BeginForm("UserAppointmentCreate", "Appointments", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+     <div class="form-horizontal">
+         @Html.HiddenFor(x => x.Pod.Id)
+         @Html.HiddenFor(x => x.PodId)
+         @*<h4>Appointment</h4>
+        <hr />*@
+         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+         <div class="form-group">
+             @Html.LabelFor(model => model.Company.Name, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.Company.Name, Model.Company.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                 @Html.ValidationMessageFor(model => model.Company.Name, "", new { @class = "text-danger" })
+             </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(model => model.Station.ComercialName, "StationId", htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.Station.ComercialName, Model.Station.ComercialName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                 @Html.ValidationMessageFor(model => model.Station.ComercialName, "", new { @class = "text-danger" })
+             </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(model => model.Pod.PodType.Id, "Pod", htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.Pod.PodType.Id, nameof(Model.Pod.PodType.Id), new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                 @Html.ValidationMessageFor(model => model.Pod.PodType.Id, "", new { @class = "text-danger" })
+             </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                 @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+             </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                 @Html.ValidationMessageFor(model => model.Start, "", new { @class = "text-danger" })
+             </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
+             <div class="col-md-10">
+                 @Html.EditorFor(model => model.End, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                 @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
+             </div>
+         </div>
+         <br /><br />
+         <div class="form-group" align="right">
+             <a href="javascript:void(0);" onclick="history.go(-1);">Cancelar</a>
+             @*@if (Model.Station.Prices.Count() != 0)
+            {*@
+             <span>  |  </span>
+             <input type="submit" value="Guardar" class="btn btn-success" />
+             @*}*@
+         </div>
+     </div>
+}

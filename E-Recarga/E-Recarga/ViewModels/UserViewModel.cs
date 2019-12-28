@@ -24,5 +24,6 @@ namespace E_Recarga.ViewModels
         public DateTime EndCharge { get; set; }
 
         public List<Station> Stations { get; set; }
+        public Station SelectedStation { get; set; }
     }
 }

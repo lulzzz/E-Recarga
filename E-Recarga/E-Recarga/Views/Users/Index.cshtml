@@ -1,4 +1,7 @@
 ﻿@model E_Recarga.ViewModels.UserViewModel
+@using E_Recarga.Models
+@using E_Recarga.ViewModels
+@using System.Web.Script.Serialization
 
 @{
     ViewBag.Title = "Pesquisar Estações";
@@ -20,7 +23,7 @@
             <div class="col col-md-3" align="center">
                 <div class="form-group" id="RegionSearch">
                     <label>Filtrar por Região</label>&nbsp
-                    @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control", @id = "region_id" })
+                    @Html.DropDownListFor(model => model.Region, new SelectList(ViewBag.Regions), "Região", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -28,7 +31,7 @@
             <div class="col col-md-3" align="center">
                 <div class="form-group" id="PodTypeSearch">
                     <label>Tipo de Carregamento </label> &nbsp
-                    @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control", @id = "pod_id" })
+                    @Html.DropDownListFor(model => model.PodType, new SelectList(ViewBag.PodTypes), "Tipo de Carregamento", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.PodType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -64,9 +67,27 @@
 
 <br /><br />
 
-@{
-    Html.RenderAction("IndexGrid", new { Stations = Model.Stations });
-}
+
+@(Html
+        .Grid(Model.Stations.AsQueryable())
+        .Build(columns =>
+        {
+            columns.Add(model => model.Company.Name).Titled("Nome da Companhia");
+            columns.Add(model => model.ComercialName);
+            columns.Add(model => model.StreetName);
+            columns.Add(model => model.BuildingNumber);
+            columns.Add(model => model.Parish);
+            columns.Add(model => model.Region);
+            columns.Add(model => Html.ActionLink("Marcar","UserAppointmentCreate", "Appointments",
+                new{
+                    initCharge = Model.InitCharge,
+                    endCharge = Model.EndCharge,
+                    podTypeStr = Model.PodType,
+                    stationId = model.Id,
+                }, null)).Titled("Ação");
+        })
+            .Empty("Não existem dados")
+)
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -17,94 +17,91 @@
 
 
 @(Html
-        .Grid(Model)
-        .Build(columns =>
-        {
-            columns.Add(model => model.Company.Name.Trim()).Titled("Empresa");
-            columns.Add(model => model.Station.ComercialName.Trim()).Titled("Estação");
-            columns.Add(model => model.Pod.Identifier.ToString()).Titled("Posto");
-            columns.Add(model => model.User.Name.Trim()).Titled("Utilizador");
-            columns.Add(model => model.Cost.ToString()).Titled("Custo");
-            columns.Add(model => model.Start).Titled("Início");
-            columns.Add(model => model.End).Titled("Fim");
-            columns.Add(model => Enum_Dictionnary.Translator[model.Status.Name]).Titled("Estado");
-
-            if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                columns.Add(model => @Html.ActionLink("Detalhes", "Details", new { id = model.Id }, null)).Titled("Ação");
-
-            else if (User.IsInRole(nameof(RoleEnum.Employee)))
-                columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
-
-            else //if is the user
-    columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Eliminar", "Delete", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
-        })
-        .RowAttributed(model =>
-        {
-            if (model.AppointmentStatusId == AppointmentStatusEnum.Pending)
+            .Grid(Model)
+            .Build(columns =>
             {
-                if (DateTime.Now > model.Start && DateTime.Now < model.End)
+                columns.Add(model => model.Company.Name.Trim()).Titled("Empresa");
+                columns.Add(model => model.Station.ComercialName.Trim()).Titled("Estação");
+                columns.Add(model => model.Pod.Identifier.ToString()).Titled("Posto");
+                columns.Add(model => model.User.Name.Trim()).Titled("Utilizador");
+                columns.Add(model => model.Cost.ToString()).Titled("Custo");
+                columns.Add(model => model.Start).Titled("Início");
+                columns.Add(model => model.End).Titled("Fim");
+                columns.Add(model => Enum_Dictionnary.Translator[model.Status.Name]).Titled("Estado");
+
+                if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    columns.Add(model => @Html.ActionLink("Detalhes", "Details", new { id = model.Id })).Titled("Ação");
+
+                else if (User.IsInRole(nameof(RoleEnum.Employee)))
+                    columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString() + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString())).Titled("Ações").Encoded(false);
+            })
+            .RowAttributed(model =>
+            {
+                if (model.AppointmentStatusId == AppointmentStatusEnum.Pending)
                 {
-                    return new { @class = "bg-warning" };
+                    if (DateTime.Now > model.Start && DateTime.Now < model.End)
+                    {
+                        return new { @class = "bg-warning" };
+                    }
+                    else if (DateTime.Now > model.End)
+                    {
+                        return new { @class = "bg-danger" };
+                    }
+
+                    return new { };
                 }
-                else if (DateTime.Now > model.End)
+                else if (model.AppointmentStatusId == AppointmentStatusEnum.Ongoing)
+                {
+                    if (DateTime.Now.AddMinutes(5) > model.End)
+                    {
+                        return new { @class = "bg-primary" };
+                    }
+
+                    return new { @class = "bg-info" };
+                }
+                else if (model.AppointmentStatusId == AppointmentStatusEnum.Cancelled)
                 {
                     return new { @class = "bg-danger" };
                 }
-
-                return new { };
-            }
-            else if (model.AppointmentStatusId == AppointmentStatusEnum.Ongoing)
-            {
-                if (DateTime.Now.AddMinutes(5) > model.End)
+                else if (model.AppointmentStatusId == AppointmentStatusEnum.Completed)
                 {
-                    return new { @class = "bg-primary" };
+                    return new { @class = "bg-completed" };
                 }
-
-                return new { @class = "bg-info" };
-            }
-            else if (model.AppointmentStatusId == AppointmentStatusEnum.Cancelled)
+                else
+                {
+                    return new { };
+                }
+            })
+            .Empty("Não existem dados")
+            .Filterable()
+            .Sortable()
+            .Pageable(pager =>
             {
-                return new { @class = "bg-danger" };
-            }
-            else if (model.AppointmentStatusId == AppointmentStatusEnum.Completed)
-            {
-                return new { @class = "bg-completed" };
-            }
-            else
-            {
-                return new { };
-            }
-        })
-        .Empty("Não existem dados")
-        .Filterable()
-        .Sortable()
-        .Pageable(pager =>
-        {
-            pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-            pager.ShowPageSizes = true;
-            pager.PagesToDisplay = 3;
-            pager.RowsPerPage = 5;
-        })
+                pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+                pager.ShowPageSizes = true;
+                pager.PagesToDisplay = 3;
+                pager.RowsPerPage = 5;
+            })
 )
+<br /><br />
 
-<div class="row pull-right" style="width:200px">
-    <br /><br />
+<div class="row center-block" align="center" style="border:0.5px solid #eaeaea;background-color:#fafafa;border-radius: 10px; padding:10px 0 10px 0">
     <div class="row text-center">
-        <font size="+0.5" weight="bolder">Legenda</font>
+        <font size="+1.5" weight="bolder">Legenda</font>
     </div>
     <br />
-    <p class="bg-success text-center">Carregamento concluido com sucesso</p>
-    <p class="bg-info text-center">cliente a utilizar posto</p>
-    <p class="bg-warning text-center">cliente atrasado para marcação</p>
-    <p class="bg-danger text-center">cliente faltou à marcação</p>
-    <p class="bg-primary text-center">cliente excedeu o tempo de marcação</p>
+    <div class="col col-md-2 col-md-offset-1"><p class="bg-success text-center" style="border:solid 1px lightgrey;height:45px">Carregamento concluido com sucesso</p></div>
+    <div class="col col-md-2"><p class="bg-info text-center" style="border:solid 1px lightgrey;height:45px">cliente a utilizar posto</p> </div>
+    <div class="col col-md-2"><p class="bg-warning text-center" style="border:solid 1px lightgrey;height:45px">cliente atrasado para marcação</p></div>
+    <div class="col col-md-2"><p class="bg-danger text-center" style="border:solid 1px lightgrey;height:45px">cliente faltou à marcação</p> </div>
+    <div class="col col-md-2"><p class="bg-primary text-center" style="border:solid 1px lightgrey;height:45px">cliente excedeu o tempo de marcação</p></div>
 </div>
 <br />
 
 <style>
     .mvc-grid th,
-    .mvc-grid td{
-        border-color:grey !important;
+    .mvc-grid td {
+        border-color: grey !important;
     }
 </style>
 

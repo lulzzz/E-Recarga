@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E_Recarga.Models.CustomValidators;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -36,6 +37,7 @@ namespace E_Recarga.Models.ERecargaModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Inicio da Marcação")]
+        [DateValidation("Start","End")]
         public DateTime Start { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
