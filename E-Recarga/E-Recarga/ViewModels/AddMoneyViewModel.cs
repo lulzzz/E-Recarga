@@ -15,5 +15,8 @@ namespace E_Recarga.ViewModels
         [Required(ErrorMessage = "O valor é obrigatório")]
         [Range(0, int.MaxValue, ErrorMessage = "O valor não é valido (tem de ser positivo)")]
         public int Input { get; set; }
+
+        [DisplayName("Valor a pagar")]
+        public double? RechargeCost { get; set; }
     }
 }

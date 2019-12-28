@@ -407,6 +407,10 @@ namespace E_Recarga.Controllers.ERecargaControllers
                     user.Wallet += appointment.Cost * 0.15;
                     db.Entry(user).State = EntityState.Modified;
                 }
+                else
+                {
+                    return RedirectToAction("AppointmentsRecords", "Users", null);
+                }
             }
             else
             {

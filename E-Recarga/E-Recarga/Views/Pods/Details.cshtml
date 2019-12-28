@@ -6,7 +6,7 @@
     ViewBag.Title = "Detalhes do Posto: " + Model.Identifier;
 }
 <center>
-    <h2>Posto @Html.DisplayFor(model => model.Id)</h2>
+    <h2>Posto @Html.DisplayFor(model => model.Identifier)</h2>
 </center>
 
 <div>
@@ -48,10 +48,10 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Voltar", "Index")
 </p>
-
+<hr />
 
 <br />
 <h3>Marcações</h3>
@@ -66,85 +66,84 @@
 else
 {
     @(Html.Grid(Model.Appointments.OrderByDescending(x => x.Start).AsQueryable())
-                    .Build(columns =>
-                    {
-                        columns.Add(model => model.Company.Name).Titled("Empresa");
-                        columns.Add(model => model.Station.ComercialName).Titled("Estação");
-                        columns.Add(model => model.Pod.Id).Titled("Posto");
-                        columns.Add(model => model.User.Name).Titled("Utilizador");
-                        columns.Add(model => model.Cost);
-                        columns.Add(model => model.Start).Titled("Início");
-                        columns.Add(model => model.End).Titled("Fim");
-                        columns.Add(model => model.Status.Name).Titled("Estado");
-                        if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
-                            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }, null)).Titled("Ação");
-                        else //if (User.IsInRole(nameof(RoleEnum.Employee)))
-            columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }).ToString()) + " | " + Html.ActionLink("Editar", "Edit", "Appointments", new { id = model.Id }).ToString()).Titled("Ações").Encoded(false);
-                    })
+                .Build(columns =>
+                {
+                    columns.Add(model => model.Company.Name.Trim()).Titled("Empresa");
+                    columns.Add(model => model.Station.ComercialName.Trim()).Titled("Estação");
+                    columns.Add(model => model.Pod.Identifier.ToString()).Titled("Posto");
+                    columns.Add(model => model.User.Name.Trim()).Titled("Utilizador");
+                    columns.Add(model => model.Cost.ToString()).Titled("Custo");
+                    columns.Add(model => model.Start).Titled("Início");
+                    columns.Add(model => model.End).Titled("Fim");
+                    columns.Add(model => Enum_Dictionnary.Translator[model.Status.Name]).Titled("Estado");
 
-                    .Empty("Não existem dados")
-                    .Filterable()
-                    .Sortable()
-                    .Pageable(pager =>
+                    if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                        columns.Add(model => @Html.ActionLink("Detalhes", "Details", new { id = model.Id })).Titled("Ação");
+
+                    else if (User.IsInRole(nameof(RoleEnum.Employee)))
+                        columns.Add(model => @Html.Raw(Html.ActionLink("Detalhes", "Details", new { id = model.Id }).ToString() + " | " + Html.ActionLink("Editar", "Edit", new { id = model.Id }).ToString())).Titled("Ações").Encoded(false);
+                })
+                .RowAttributed(model =>
+                {
+                    if (model.AppointmentStatusId == AppointmentStatusEnum.Pending)
                     {
-                        pager.PageSizes = new Dictionary<Int32, String>
-                    { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-                        pager.ShowPageSizes = true;
-                        pager.PagesToDisplay = 3;
-                        pager.RowsPerPage = 5;
-                    })
-                    .RowAttributed(model =>
+                        if (DateTime.Now > model.Start && DateTime.Now < model.End)
                         {
-                            if (model.AppointmentStatusId == AppointmentStatusEnum.Pending)
-                            {
-                                if (DateTime.Now > model.Start && DateTime.Now < model.End)
-                                {
-                                    return new { @class = "bg-warning" };
-                                }
-                                else if (DateTime.Now > model.End)
-                                {
-                                    return new { @class = "bg-danger" };
-                                }
+                            return new { @class = "color_td2" };
+                        }
+                        else if (DateTime.Now > model.End)
+                        {
+                            return new { @class = "bg-danger" };
+                        }
 
-                                return new { };
-                            }
-                            else if (model.AppointmentStatusId == AppointmentStatusEnum.Ongoing)
-                            {
-                                if (DateTime.Now.AddMinutes(5) > model.End)
-                                {
-                                    return new { @class = "bg-primary" };
-                                }
+                        return new { };
+                    }
+                    else if (model.AppointmentStatusId == AppointmentStatusEnum.Ongoing)
+                    {
+                        if (DateTime.Now.AddMinutes(5) > model.End)
+                        {
+                            return new { @class = "color_td1" };
+                        }
 
-                                return new { @class = "bg-info" };
-                            }
-                            else if (model.AppointmentStatusId == AppointmentStatusEnum.Cancelled)
-                            {
-                                return new { @class = "bg-danger" };
-                            }
-                            else if (model.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                            {
-                                return new { @class = "bg-completed" };
-                            }
-                            else
-                            {
-                                return new { };
-                            }
-                        })
+                        return new { @class = "bg-info" };
+                    }
+                    else if (model.AppointmentStatusId == AppointmentStatusEnum.Cancelled)
+                    {
+                        return new { @class = "bg-danger" };
+                    }
+                    else if (model.AppointmentStatusId == AppointmentStatusEnum.Completed)
+                    {
+                        return new { @class = "bg-completed" };
+                    }
+                    else
+                    {
+                        return new { };
+                    }
+                })
+                .Empty("Não existem dados")
+                .Filterable()
+                .Sortable()
+                .Pageable(pager =>
+                {
+                    pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+                    pager.ShowPageSizes = true;
+                    pager.PagesToDisplay = 3;
+                    pager.RowsPerPage = 5;
+                })
     )
     <hr /><br />
 }
 
-<div class="row pull-right" style="width:200px">
-    <br /><br />
+<div class="row center-block" align="center" style="@*border:0.5px solid #eaeaea;*@background-color:#fafafa;border-radius: 10px; padding:10px 0 10px 0">
     <div class="row text-center">
-        <font size="+0.5" weight="bolder">Legenda</font>
+        <font size="+1.5">Legenda</font>
     </div>
     <br />
-    <p class="bg-success text-center">Carregamento concluido com sucesso</p>
-    <p class="bg-info text-center">cliente a utilizar posto</p>
-    <p class="bg-warning text-center">cliente atrasado para marcação</p>
-    <p class="bg-danger text-center">cliente faltou à marcação</p>
-    <p class="bg-primary text-center">cliente excedeu o tempo de marcação</p>
+    <div class="col col-md-2 col-md-offset-1"><p class="bg-success text-center" style="border:solid 1px lightgrey;height:45px">Carregamento concluido com sucesso</p></div>
+    <div class="col col-md-2"><p class="bg-info text-center" style="border:solid 1px lightgrey;height:45px">cliente a utilizar posto</p> </div>
+    <div class="col col-md-2"><p class="color_td2 text-center" style="border:solid 1px lightgrey;height:45px">cliente atrasado para marcação</p></div>
+    <div class="col col-md-2"><p class="bg-danger text-center" style="border:solid 1px lightgrey;height:45px">cliente faltou à marcação</p> </div>
+    <div class="col col-md-2"><p class="color_td1 text-center" style="border:solid 1px lightgrey;height:45px">cliente excedeu o tempo de marcação</p></div>
 </div>
 <br />
 
@@ -152,5 +151,13 @@ else
     .mvc-grid th,
     .mvc-grid td {
         border-color: grey !important;
+    }
+
+    .color_td1 {
+        background-color: darksalmon;
+    }
+
+    .color_td2 {
+        background-color: papayawhip;
     }
 </style>

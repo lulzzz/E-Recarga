@@ -88,10 +88,8 @@
         .Build(columns =>
         {
             columns.Add(model => model.Time);
-            columns.Add(model => model.Station.Company.Name);
-
-            columns.Add(model => model.CostNormal.ToString()+"€").Titled("Custo Normal");
-            columns.Add(model => model.CostUltra.ToString()+"€").Titled("Custo Ultra");
+            columns.Add(model => model.CostNormal).Titled("Custo Normal (€)");
+            columns.Add(model => model.CostUltra).Titled("Custo Ultra (€)");
             if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
             {
                 columns.Add(model => @Html.Raw(
@@ -100,6 +98,7 @@
             }
         })
         .Empty("Não existem preços associados a esta estação")
+        .Named("first")
         .Filterable()
         .Sortable()
         .Pageable(pager =>
@@ -134,8 +133,8 @@
             .Build(columns =>
             {
                 columns.Add(model => model.Name);
-                columns.Add(model => model.Email).Titled("Email");
-                columns.Add(model => model.PhoneNumber).Titled("Telefone");
+                columns.Add(model => model.Email.ToString()).Titled("Email");
+                columns.Add(model => model.PhoneNumber.ToString()).Titled("Telefone");
                 if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                 {
                     columns.Add(model => @Html.Raw(
@@ -146,6 +145,7 @@
                 }
             })
             .Empty("Não existem dados")
+            .Named("second")
             .Filterable()
             .Sortable()
             .Pageable(pager =>
@@ -182,12 +182,11 @@ else
                 .Grid(Model.Pods.AsQueryable())
                 .Build(columns =>
                 {
-                    columns.Add(model => model.Id).Titled("Número");
+                    columns.Add(model => model.Identifier).Titled("Número");
                     columns.Add(model => model.PodType.Name);
-                    columns.Add(model => model.Station.ComercialName).Titled("Estação");
-                    columns.Add(model => model.isActive);
+                    columns.Add(model => model.isActive).RenderedAs(model => model.isActive ? "sim" : "não");
                     columns.Add(model => model.Appointments.ToList().FindAll(a => a.Start >= DateTime.Now &&
-                    a.Start <= DateTime.Now.AddHours(24)).Count).Titled("Marcações previstas (próximas 24h)");
+                    a.Start <= DateTime.Now.AddHours(24)).Count.ToString()).Titled("Marcações previstas (próximas 24h)");
                     if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
                         columns.Add(model => @Html.Raw(
                             Html.ActionLink("Detalhes", "Details", "Pods", new { id = model.Id }, null).ToString()) + " | " +
@@ -195,12 +194,13 @@ else
                             Html.ActionLink("Eliminar", "Delete", "Pods", new { id = model.Id }, null).ToString())
                             .Titled("Ações").Encoded(false);
                     else //if (User.IsInRole(nameof(RoleEnum.Employee)))
-            columns.Add(model => @Html.Raw(
-                            Html.ActionLink("Detalhes", "Details", "Pods", new { id = model.Id }, null).ToString()) + " | " +
-                            Html.ActionLink("Editar", "Edit", "Pods", new { id = model.Id }, null).ToString())
-                            .Titled("Ações").Encoded(false);
+                        columns.Add(model => @Html.Raw(
+                                        Html.ActionLink("Detalhes", "Details", "Pods", new { id = model.Id }, null).ToString()) + " | " +
+                                        Html.ActionLink("Editar", "Edit", "Pods", new { id = model.Id }, null).ToString())
+                                        .Titled("Ações").Encoded(false);
                 })
                 .Empty("Não existem dados")
+                .Named("third")
                 .Filterable()
                 .Sortable()
                 .Pageable(pager =>

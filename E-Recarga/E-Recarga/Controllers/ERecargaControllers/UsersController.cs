@@ -64,17 +64,17 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
         [HttpGet]
         [Route("Carteira")]
-        public ActionResult AddMoney()
+        public ActionResult AddMoney(double? value)
         {
             string userId = User.Identity.GetUserId();
             var user = db.Users.Find(userId);
 
-            return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0 });
+            return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0, RechargeCost = value });
         }
 
         [HttpPost]
         [Route("Carteira")]
-        public ActionResult AddMoney([Bind(Include ="Name,Wallet,Input")]AddMoneyViewModel userVM)
+        public ActionResult AddMoney([Bind(Include = "Name,Wallet,Input,RechargeCost")]AddMoneyViewModel userVM)
         {
             string userId = User.Identity.GetUserId();
             var user = db.Users.Find(userId);
@@ -85,6 +85,9 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
             }
+
+            if (userVM.RechargeCost != null && (double)userVM.Input >= (double)userVM.RechargeCost)
+                userVM.RechargeCost = null;
 
             return RedirectToAction("AddMoney");
         }
