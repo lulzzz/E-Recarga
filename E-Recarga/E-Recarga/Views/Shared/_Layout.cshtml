@@ -27,41 +27,65 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("E-Recarga", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
 
-                    @if (User.IsInRole(nameof(RoleEnum.User)))
+                    @if (User.Identity.IsAuthenticated && !User.IsInRole(nameof(RoleEnum.Administrator)))
                     {
-                        <li>@Html.ActionLink("Realizar Marcação", "IndexGet", "Users")</li>
-                        <li>@Html.ActionLink("Historico de Marcações", "AppointmentsRecords", "Users")</li>
-                        <li>@Html.ActionLink("Carteira", "AddMoney", "Users")</li>
+
+                        if (User.IsInRole(nameof(RoleEnum.User)))
+                        {
+                            <li>@Html.ActionLink("Realizar Marcação", "IndexGet", "Users")</li>
+                            <li>@Html.ActionLink("Historico de Marcações", "AppointmentsRecords", "Users")</li>
+                            <li>@Html.ActionLink("Carteira", "AddMoney", "Users")</li>
+                        }
+                        else if (User.IsInRole(nameof(RoleEnum.Employee)))
+                        {
+                            <li>@Html.ActionLink("Estação", "Details", "Stations")</li>
+                            <li>@Html.ActionLink("Marcações", "Index", "Appointments")</li>
+                            <li>@Html.ActionLink("Preçário", "Index", "Prices")</li>
+                            <li>@Html.ActionLink("Postos", "Index", "Pods")</li>
+                        }
+                        else //if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                        {
+                            <li>@Html.ActionLink("Centro de Controlo", "Dashboard", "Companies")</li>
+                            <li>@Html.ActionLink("Empresa", "Details", "Companies")</li>
+                            <li>@Html.ActionLink("Estações", "Index", "Stations")</li>
+                            <li>@Html.ActionLink("Funcionários", "Index", "Employees")</li>
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
+                                   aria-haspopup="true" aria-expanded="false">Utilidades <span class="caret"></span></a>
+                                <ul class="dropdown-menu" aria-labelledby="Informações">
+                                    <li><a href="@Url.Action("Index", "Appointments")">Marcações</a></li>
+                                    <li><a href="@Url.Action("Index", "Pods")">Postos</a></li>
+                                    <li><a href="@Url.Action("Index", "Prices")">Preçário</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Informações <span class="caret"></span></a>
+                            <ul class="dropdown-menu" aria-labelledby="Informações">
+                                <li><a href="@Url.Action("About", "Home")">Sobre</a></li>
+                                <li><a href="@Url.Action("Contact", "Home")">Contacto</a></li>
+                            </ul>
+                        </li>
                     }
-                    else if (User.IsInRole(nameof(RoleEnum.Employee)))
-                    {
-                        <li>@Html.ActionLink("Estação", "Details", "Stations")</li>
-                        <li>@Html.ActionLink("Marcações", "Index", "Appointments")</li>
-                        <li>@Html.ActionLink("Preçário", "Index", "Prices")</li>
-                        <li>@Html.ActionLink("Postos", "Index", "Pods")</li>
-                    }
-                    else if (User.IsInRole(nameof(RoleEnum.Administrator)))
+
+                    @if (User.IsInRole(nameof(RoleEnum.Administrator)))
                     {
                         <li>@Html.ActionLink("Empresas", "Index", "Companies")</li>
                         <li>@Html.ActionLink("Gestores", "Managers", "Companies")</li>
+                        <li>@Html.ActionLink("Sobre", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
                     }
-                    else if (User.IsInRole(nameof(RoleEnum.CompanyManager)))
+                    else if (!User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Centro de Controlo", "Dashboard", "Companies")</li>
-                        <li>@Html.ActionLink("Empresa", "Details", "Companies")</li>
-                        <li>@Html.ActionLink("Preçário", "Index", "Prices")</li>
-                        <li>@Html.ActionLink("Marcações", "Index", "Appointments")</li>
-                        <li>@Html.ActionLink("Estações", "Index", "Stations")</li>
-                        <li>@Html.ActionLink("Postos", "Index", "Pods")</li>
+                        <li>@Html.ActionLink("Sobre", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
                     }
-
-                    <li>@Html.ActionLink("Sobre", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
 
                 </ul>
                 @Html.Partial("_LoginPartial")
