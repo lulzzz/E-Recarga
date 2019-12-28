@@ -194,7 +194,7 @@ namespace E_Recarga.Migrations
         private void AddAppointmentsToDB(ERecargaDbContext context)
         {
             Random generator = new Random();
-            DateTime end = DateTime.Now.AddDays(1);
+            DateTime end = DateTime.Now;
             List<AppointmentStatusEnum> appointmentStatuses = Enum.GetValues(typeof(AppointmentStatusEnum)).OfType<AppointmentStatusEnum>().ToList();
             var users = context.Users.ToList();
 
@@ -219,18 +219,6 @@ namespace E_Recarga.Migrations
                             Start = tempA,
                             End = tempA.AddMinutes(generator.Next(60, 300)),
                         },
-
-                        new Appointment()
-                        {
-                            StationId = generator.Next(1, 16),
-                            PodId = generator.Next(1, context.Pods.Count()),
-                            AppointmentStatusId = appointmentStatuses.ElementAt(generator.Next(0,appointmentStatuses.Count)),
-                            Cost = generator.Next(5, 200),
-                            CompanyId = 1,
-                            UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
-                            Start = tempB,
-                            End = tempB.AddMinutes(generator.Next(60, 300)),
-                        },
                         
                         new Appointment()
                         {
@@ -242,18 +230,6 @@ namespace E_Recarga.Migrations
                             UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
                             Start = tempC,
                             End = tempC.AddMinutes(generator.Next(60, 300)),
-                        },
-
-                        new Appointment()
-                        {
-                            StationId = generator.Next(1, 16),
-                            PodId = generator.Next(1, context.Pods.Count()),
-                            AppointmentStatusId = appointmentStatuses.ElementAt(generator.Next(0,appointmentStatuses.Count)),
-                            Cost = generator.Next(5, 200),
-                            CompanyId = 2,
-                            UserId = users.ElementAt(generator.Next(1, context.Users.Count())).Id,
-                            Start = tempD,
-                            End = tempD.AddMinutes(generator.Next(60, 300)),
                         }
                     );
                 }

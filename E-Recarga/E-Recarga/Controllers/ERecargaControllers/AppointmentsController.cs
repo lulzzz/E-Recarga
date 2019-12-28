@@ -98,7 +98,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Appointments/Details/5
-        [Route("Detalhes/{id:int}")]
+        [Route("{id:int}/Detalhes")]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee) + ", " + nameof(RoleEnum.User))]
         public ActionResult Details(int id)
         {
@@ -300,7 +300,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Appointments/Edit/5
-        [Route("Editar/{id:int}")]
+        [Route("{id:int}/Editar")]
         [Authorize(Roles = nameof(RoleEnum.Employee))]
         public ActionResult Edit(int id)
         {
@@ -321,11 +321,15 @@ namespace E_Recarga.Controllers.ERecargaControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Route("Editar")]
+        [Route("{id:int}/Editar")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.Employee))]
-        public ActionResult Edit([Bind(Include = "Id,CompanyId,StationId,PodId,UserId,Cost,Start,End,AppointmentStatusId")] Appointment appointment)
+        public ActionResult Edit([Bind(Include = "Id,AppointmentStatusId")] Appointment appointment)
         {
+            var temp = db.Appointments.Find(appointment.Id);
+            temp.AppointmentStatusId = appointment.AppointmentStatusId;
+            appointment = temp;
+
             if (ModelState.IsValid)
             {
                 if (appointment.AppointmentStatusId == AppointmentStatusEnum.Completed)
@@ -348,7 +352,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Appointments/Delete/5
-        [Route("Apagar/{id:int}")]
+        [Route("{id:int}/Apagar")]
         [Authorize(Roles = nameof(RoleEnum.Employee) + "," + nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.User))]
         public ActionResult Delete(int id)
         {
@@ -391,7 +395,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // POST: Appointments/Delete/5
-        [Route("Apagar/{id:int}")]
+        [Route("{id:int}/Apagar")]
         [Authorize(Roles = nameof(RoleEnum.Employee) + "," + nameof(RoleEnum.CompanyManager))]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
