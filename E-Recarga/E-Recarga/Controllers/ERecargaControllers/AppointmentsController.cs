@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -136,7 +136,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
             var user = db.Users.Find(User.Identity.GetUserId());
             if(user.Appointments.Where(x => x.Start < DateTime.Now).Count() > 0)
             {
-                return RedirectToAction("AppointmentRecords","Users");
+                TempData["msg"] = "Existe outro agendamento, se pretender, elimine-o e crie um novo.";
+                return RedirectToAction("AppointmentsRecords", "Users",null);
             }
 
             var station = db.Stations.Find(stationId);
@@ -153,6 +154,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
             if (cost > user.Wallet)
             {
+                TempData["msg"] = "Dinheiro insuficiente, para efectuar agendamento tem de conter: " + cost + "€ .";
                 return RedirectToAction("AddMoney", "Users", null);
             }
 
