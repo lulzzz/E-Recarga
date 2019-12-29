@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -105,7 +106,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 db.Stations.Add(viewModel._Station);
 
-                foreach (var price in ScheduleGenerator.GeneratePrices(viewModel.NormalCost, viewModel.FastCost)){
+                foreach (var price in ScheduleGenerator.GeneratePrices(Double.Parse(viewModel.NormalCost), Double.Parse(viewModel.FastCost))){
                     price.StationId = viewModel._Station.Id;
                     db.Prices.Add(price);
                 }
