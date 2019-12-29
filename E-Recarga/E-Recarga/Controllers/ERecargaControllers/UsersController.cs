@@ -1,4 +1,4 @@
-﻿using E_Recarga.Models;
+using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
 using E_Recarga.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -69,7 +69,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
             string userId = User.Identity.GetUserId();
             var user = db.Users.Find(userId);
 
-            return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet, Input = 0, RechargeCost = value });
+            return View(new AddMoneyViewModel() { Name = user.Name, Wallet = user.Wallet.ToString(), Input = 0, RechargeCost = value });
         }
 
         [HttpPost]
