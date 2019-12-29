@@ -218,6 +218,7 @@
     <Compile Include="ViewModels\DataPoint.cs" />
     <Compile Include="ViewModels\EmployeeVMs\EmployeeIndexViewModel.cs" />
     <Compile Include="ViewModels\EmployeeVMs\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\PriceEditViewModel.cs" />
     <Compile Include="ViewModels\StationViewModel.cs" />
     <Compile Include="ViewModels\TopStation.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />

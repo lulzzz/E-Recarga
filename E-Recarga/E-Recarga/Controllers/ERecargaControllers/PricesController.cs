@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using E_Recarga.Models;
 using E_Recarga.Models.ERecargaModels;
+using E_Recarga.ViewModels;
 using Microsoft.AspNet.Identity;
 
 namespace E_Recarga.Controllers.ERecargaControllers
@@ -67,8 +68,9 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 }
             }
             ViewBag.PriceStationId = price.StationId;
-
-            return View(price);
+            PriceEditViewModel priceVM = new PriceEditViewModel() { Id = price.Id, StationName = price.Station.ComercialName,
+                Time = price.Time, CostNormal = price.CostNormal.ToString(), CostUltra = price.CostUltra.ToString() };
+            return View(priceVM);
         }
 
         // POST: Prices/Edit/5
@@ -77,11 +79,18 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{id:int}/Editar")]
-        public ActionResult Edit([Bind(Include = "Id,CostNormal,CostUltra")]Price price)
+        public ActionResult Edit([Bind(Include = "Id,StationName,CostNormal,CostUltra")]PriceEditViewModel price)
         {
             var myPrice = db.Prices.Find(price.Id);
-            myPrice.CostNormal = price.CostNormal;
-            myPrice.CostUltra = price.CostUltra;
+            if (Double.TryParse(price.CostNormal, out double normal) && Double.TryParse(price.CostUltra, out double ultra))
+            {
+                myPrice.CostUltra = ultra;
+                myPrice.CostNormal = normal;
+            }
+            else{
+                TempData["msg"] = "Formato de custo errado (deve ser: 1,33)";
+                return View(price);
+            }
 
             if (ModelState.IsValid)
             {
