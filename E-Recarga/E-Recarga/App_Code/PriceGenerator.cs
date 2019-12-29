@@ -39,7 +39,7 @@ namespace E_Recarga.App_Code
                 }
             }
 
-            return finalPrice;
+            return Math.Round(finalPrice,2);
         }
     }
 }

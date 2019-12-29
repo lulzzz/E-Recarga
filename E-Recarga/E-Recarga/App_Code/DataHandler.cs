@@ -46,21 +46,21 @@ namespace E_Recarga.App_Code
                 }
 
                 //Profit
-                Top.TotalProfit = Appointments.Sum(a => a.Cost);
-                Top.DailyProfit = Appointments
+                Top.TotalProfit = Math.Round(Appointments.Sum(a => a.Cost),2);
+                Top.DailyProfit = Math.Round(Appointments
                         .Where(a => a.Start >= DateTime.Now.AddDays(-1) &&
                         a.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                        .Sum(a => a.Cost);
+                        .Sum(a => a.Cost),2);
 
-                Top.WeeklyProfit = Appointments
+                Top.WeeklyProfit = Math.Round(Appointments
                         .Where(a => a.Start >= DateTime.Now.AddDays(-7) &&
                         a.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                        .Sum(a=> a.Cost);
+                        .Sum(a=> a.Cost),2);
 
-                Top.MonthlyProfit = Appointments
+                Top.MonthlyProfit = Math.Round(Appointments
                         .Where(a => a.Start >= DateTime.Now.AddMonths(-1) &&
                         a.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                        .Sum(a=> a.Cost);
+                        .Sum(a=> a.Cost),2);
 
                 //Amount of charge cycles
                 Top.TotalSuccessfulChargings = Appointments
@@ -80,10 +80,10 @@ namespace E_Recarga.App_Code
                         PodTypeEnum.Fast : PodTypeEnum.Normal;
 
                 //Average Cost of appointments
-                Top.AverageCost = Appointments.Average(a => a.Cost);
+                Top.AverageCost = Math.Round(Appointments.Average(a => a.Cost),2);
 
-                Top.AverageChargingTime = Appointments
-                        .Select(a => a.End - a.Start).Average(s => s.Hours);
+                Top.AverageChargingTime = Math.Round(Appointments
+                        .Select(a => a.End - a.Start).Average(s => s.Hours),2);
 
                 TimeSpan ts = new TimeSpan(0, 0, 0);
                 DateTime timeStart = new DateTime();
@@ -141,23 +141,23 @@ namespace E_Recarga.App_Code
 
             model.TopStations = GetTopStations(3, stations);
 
-            model.AverageCost = stations.Average(s => s.Appointments.Count > 0 ? s.Appointments.Average(a => a.Cost) : 0);
+            model.AverageCost = Math.Round(stations.Average(s => s.Appointments.Count > 0 ? s.Appointments.Average(a => a.Cost) : 0),2);
 
-            model.TotalProfit = stations.Sum(s => s.Appointments.Sum(a => a.Cost));
-            model.DailyProfit = stations.Sum(s => s.Appointments
+            model.TotalProfit = Math.Round(stations.Sum(s => s.Appointments.Sum(a => a.Cost)),2);
+            model.DailyProfit = Math.Round(stations.Sum(s => s.Appointments
                     .Where(a => a.Start >= DateTime.Now.AddDays(-1) &&
                     a.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                    .Sum(a => a.Cost));
+                    .Sum(a => a.Cost)),2);
 
-            model.WeeklyProfit = stations.Sum(s => s.Appointments
+            model.WeeklyProfit = Math.Round(stations.Sum(s => s.Appointments
                     .Where(a => a.Start >= DateTime.Now.AddDays(-7) &&
                     a.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                    .Sum(a => a.Cost));
+                    .Sum(a => a.Cost)),2);
 
-            model.MonthlyProfit = stations.Sum(s => s.Appointments
+            model.MonthlyProfit = Math.Round(stations.Sum(s => s.Appointments
                     .Where(a => a.Start >= DateTime.Now.AddMonths(-1) &&
                     a.AppointmentStatusId == AppointmentStatusEnum.Completed)
-                    .Sum(a => a.Cost));
+                    .Sum(a => a.Cost)),2);
 
             //Amount of charge cycles
             model.TotalSuccessfulChargings = stations.Sum(s => s.Appointments
@@ -177,10 +177,10 @@ namespace E_Recarga.App_Code
                     PodTypeEnum.Fast : PodTypeEnum.Normal;
 
             //Average Cost of appointments
-            model.AverageCost = stations.Average(s => s.Appointments.Count > 0 ? s.Appointments.Average(a => a.Cost) : 0);
+            model.AverageCost = Math.Round(stations.Average(s => s.Appointments.Count > 0 ? s.Appointments.Average(a => a.Cost) : 0),2);
 
-            model.AverageChargingTime = stations.Average(s => s.Appointments.Count > 0 ?
-                    s.Appointments.Select(a => a.End - a.Start).Average(p => p.Hours) : 0);
+            model.AverageChargingTime = Math.Round(stations.Average(s => s.Appointments.Count > 0 ?
+                    s.Appointments.Select(a => a.End - a.Start).Average(p => p.Hours) : 0),2);
 
             //Get days
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
@@ -192,7 +192,7 @@ namespace E_Recarga.App_Code
 
                 if(!(sum < 1))
                 {
-                    model.InfoDaysOfWeek.Add(new DataPoint(sum, Enum.GetName(typeof(DayOfWeek), day)));
+                    model.InfoDaysOfWeek.Add(new DataPoint(Math.Round(sum,2), Enum.GetName(typeof(DayOfWeek), day)));
                 }
             }
 
@@ -207,9 +207,9 @@ namespace E_Recarga.App_Code
             {
                 DateTime temp = DateTime.Now.AddMonths(-i);
 
-                var profit = stations.Sum(s => s.Appointments.Where(a =>
+                var profit = Math.Round(stations.Sum(s => s.Appointments.Where(a =>
                     a.Start.Year == temp.Year &&
-                    a.Start.Month == temp.Month).Sum(a => a.Cost));
+                    a.Start.Month == temp.Month).Sum(a => a.Cost)),2);
 
                 var normal = stations.Sum(s => s.Appointments.Where(a =>
                     a.Start.Year == temp.Year &&
