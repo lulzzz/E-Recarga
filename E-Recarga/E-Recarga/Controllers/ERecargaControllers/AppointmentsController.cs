@@ -9,6 +9,7 @@ using E_Recarga.Models.ERecargaModels;
 using Microsoft.AspNet.Identity;
 using E_Recarga.App_Code;
 using System.Globalization;
+using System.Data.Entity.Validation;
 
 namespace E_Recarga.Controllers.ERecargaControllers
 {
@@ -132,6 +133,12 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Authorize(Roles = nameof(RoleEnum.User))]
         public ActionResult UserAppointmentCreate(string initCharge,string endCharge,string podTypeStr,int stationId)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            if(user.Appointments.Where(x => x.Start < DateTime.Now).Count() > 0)
+            {
+                return RedirectToAction("AppointmentRecords","Users");
+            }
+
             var station = db.Stations.Find(stationId);
             var pods = station.Pods.Where(p => p.PodType.Name == podTypeStr && p.isActive);
             var podType = podTypeStr == nameof(PodTypeEnum.Fast) ? PodTypeEnum.Fast : PodTypeEnum.Normal;
@@ -143,9 +150,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 return View();
                        
             double cost = PriceGenerator.CalculatePrice(init, end, station.Prices, podType);
-            var user = db.Users.Find(User.Identity.GetUserId());
 
-            if (cost> user.Wallet)
+            if (cost > user.Wallet)
             {
                 return RedirectToAction("AddMoney", "Users", null);
             }
@@ -240,7 +246,12 @@ namespace E_Recarga.Controllers.ERecargaControllers
         {
             var employee = db.Employees.Find(User.Identity.GetUserId());
             var user = db.Users.Find(appointment.UserId);
-            
+
+            if (user.Appointments.Where(x => x.Start < DateTime.Now).Count() > 0)
+            {
+                return RedirectToAction("AppointmentRecords", "Users");
+            }
+
             var prices = db.Stations.Where(s => s.Id == appointment.StationId).Select(s => s.Prices).FirstOrDefault();
             if (prices.Count == 0)
             {
@@ -324,23 +335,35 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Route("{id:int}/Editar")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.Employee))]
-        public ActionResult Edit([Bind(Include = "Id,AppointmentStatusId")] Appointment appointment)
+        public ActionResult Edit([Bind(Include = "Id,AppointmentStatusId")] Appointment temp)
         {
-            var temp = db.Appointments.Find(appointment.Id);
-            temp.AppointmentStatusId = appointment.AppointmentStatusId;
-            appointment = temp;
+            var appointment = db.Appointments.Find(temp.Id);
+            appointment.AppointmentStatusId = temp.AppointmentStatusId;
 
             if (ModelState.IsValid)
             {
                 if (appointment.AppointmentStatusId == AppointmentStatusEnum.Completed)
                 {
-                    var user = db.Employees.Find(appointment.UserId);
+                    var user = appointment.User;
                     user.Wallet -= appointment.Cost * 0.85;
                     db.Entry(user).State = EntityState.Modified;
                 }
+                try { 
+                    db.Entry(appointment).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                db.Entry(appointment).State = EntityState.Modified;
-                db.SaveChanges();
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            System.Console.WriteLine("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                        }
+                    }
+                    throw dbEx;
+                }
                 return RedirectToAction("Index");
             }
             string userId = User.Identity.GetUserId();

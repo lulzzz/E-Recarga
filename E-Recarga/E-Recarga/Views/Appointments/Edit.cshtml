@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Appointment</h4>
         <hr />
@@ -36,7 +36,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Pod.Identifier, "Posto", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Pod.Identifier, null, htmlAttributes: new { @class = "form-control" })
+                @Html.EditorFor(model => model.Pod.Identifier, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.Pod.Identifier, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Cost, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control", @readonly="readonly"} })
+                @Html.EditorFor(model => model.Cost, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -60,7 +60,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.TextBoxFor(model => model.Start, new { @id = "startTime", @class = "form-control", @readonly = "readonly" })
                 @Html.ValidationMessageFor(model => model.Start, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.End, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.TextBoxFor(model => model.End, new { @id = "endTime", @class = "form-control", @readonly = "readonly" })
                 @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -94,5 +94,5 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+
 }
