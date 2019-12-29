@@ -168,26 +168,26 @@ namespace E_Recarga.Migrations
                     manager.AddToRole(user.Id, nameof(RoleEnum.Administrator));
             }
 
-            foreach (var user in companyManagers)
-            {
-                var res = manager.Create(user, password);
-                if (res.Succeeded)
-                    manager.AddToRole(user.Id, nameof(RoleEnum.CompanyManager));
-            }
+            //foreach (var user in companyManagers)
+            //{
+            //    var res = manager.Create(user, password);
+            //    if (res.Succeeded)
+            //        manager.AddToRole(user.Id, nameof(RoleEnum.CompanyManager));
+            //}
 
-            foreach (var user in workers)
-            {
-                var res = manager.Create(user, password);
-                if (res.Succeeded)
-                    manager.AddToRole(user.Id, nameof(RoleEnum.Employee));
-            }
+            //foreach (var user in workers)
+            //{
+            //    var res = manager.Create(user, password);
+            //    if (res.Succeeded)
+            //        manager.AddToRole(user.Id, nameof(RoleEnum.Employee));
+            //}
 
-            foreach (var user in commonUsers)
-            {
-                var res = manager.Create(user, password);
-                if (res.Succeeded)
-                    manager.AddToRole(user.Id, nameof(RoleEnum.User));
-            }
+            //foreach (var user in commonUsers)
+            //{
+            //    var res = manager.Create(user, password);
+            //    if (res.Succeeded)
+            //        manager.AddToRole(user.Id, nameof(RoleEnum.User));
+            //}
         }
 
 
@@ -198,7 +198,7 @@ namespace E_Recarga.Migrations
             List<AppointmentStatusEnum> appointmentStatuses = Enum.GetValues(typeof(AppointmentStatusEnum)).OfType<AppointmentStatusEnum>().ToList();
             var users = context.Users.ToList();
 
-            for (DateTime i = DateTime.Now.AddMonths(-3); i < end; i = i.AddDays(1))
+            for (DateTime i = DateTime.Now.AddDays(-5); i < end; i = i.AddDays(1))
             {
                 for(int quant = generator.Next(15, 25); quant > 0; quant--)
                 {
@@ -243,11 +243,11 @@ namespace E_Recarga.Migrations
             AddEnumsToDB(context);
             AddRolesToDB(context);
 
-            AddCompaniesAndStationsToDB(context);
-            AddPodsAndPricesToDB(context);
+            //AddCompaniesAndStationsToDB(context);
+            //AddPodsAndPricesToDB(context);
             AddUsersToDB(context);
 
-            AddAppointmentsToDB(context);
+            //AddAppointmentsToDB(context);
         }
     }
 }

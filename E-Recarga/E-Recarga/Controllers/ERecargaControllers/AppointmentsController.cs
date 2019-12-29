@@ -19,7 +19,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         private ERecargaDbContext db = new ERecargaDbContext();
 
         // GET: Appointments
-        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee) + ", " + nameof(RoleEnum.User))]
+        [Authorize(Roles = nameof(RoleEnum.CompanyManager) + ", " + nameof(RoleEnum.Employee))]
         [Route]
         public ActionResult Index(bool viewAll = false, int? id = null)
         {
@@ -134,7 +134,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult UserAppointmentCreate(string initCharge,string endCharge,string podTypeStr,int stationId)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            if(user.Appointments.Where(x => x.Start < DateTime.Now).Count() > 0)
+            if(user.Appointments.Where(x => x.AppointmentStatusId == AppointmentStatusEnum.Pending ||
+                                        x.AppointmentStatusId == AppointmentStatusEnum.Ongoing).Count() > 0)
             {
                 TempData["msg"] = "Existe outro agendamento, se pretender, elimine-o e crie um novo.";
                 return RedirectToAction("AppointmentsRecords", "Users",null);
@@ -249,7 +250,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
             var employee = db.Employees.Find(User.Identity.GetUserId());
             var user = db.Users.Find(appointment.UserId);
 
-            if (user.Appointments.Where(x => x.Start < DateTime.Now).Count() > 0)
+            if (user.Appointments.Where(x => x.AppointmentStatusId == AppointmentStatusEnum.Pending ||
+                                        x.AppointmentStatusId == AppointmentStatusEnum.Ongoing).Count() > 0)
             {
                 return RedirectToAction("AppointmentRecords", "Users");
             }
@@ -421,7 +423,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
         // POST: Appointments/Delete/5
         [Route("{id:int}/Apagar")]
-        [Authorize(Roles = nameof(RoleEnum.Employee) + "," + nameof(RoleEnum.CompanyManager))]
+        [Authorize(Roles = nameof(RoleEnum.Employee) + "," + nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.User))]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -431,7 +433,13 @@ namespace E_Recarga.Controllers.ERecargaControllers
             if (User.IsInRole(nameof(RoleEnum.User)))
             {
                 var user = db.Users.Find(appointment.UserId);
-                if (appointment.Start < DateTime.Now.AddMinutes(-30))
+
+                if (user.Id != appointment.UserId)
+                {
+                    return HttpNotFound();
+                }
+
+                if (appointment.Start > DateTime.Now.AddMinutes(30))
                 {
                     user.Wallet += appointment.Cost * 0.15;
                     db.Entry(user).State = EntityState.Modified;

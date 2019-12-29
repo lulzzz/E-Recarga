@@ -192,9 +192,36 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Authorize(Roles = nameof(RoleEnum.CompanyManager))]
         public ActionResult DeleteConfirmed(int id)
         {
+            var user = db.Employees.Find(User.Identity.GetUserId());
             Station station = db.Stations.Find(id);
-            var employees = station.Employees
-                .Where(x => x.StationId == station.Id);
+            var employees = station.Employees;
+            var pods = station.Pods;
+            var appointments = station.Appointments;
+
+            if (user.CompanyId != station.CompanyId)
+            {
+                return HttpNotFound();
+            }
+
+            appointments.ToList()
+                .ForEach(r =>
+                {
+                    r.StationId = null;
+                    db.Entry(r).State = EntityState.Modified;
+                }
+            );
+
+            pods.ToList()
+                .ForEach(r =>
+                {
+                    r.Appointments.ToList().ForEach(a =>
+                    {
+                        a.PodId = null;
+                    });
+
+                    db.Entry(r).State = EntityState.Deleted;
+                }
+            );
 
             employees.ToList()
                 .ForEach(r =>

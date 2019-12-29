@@ -211,22 +211,7 @@ namespace E_Recarga.App_Code
                     a.Start.Year == temp.Year &&
                     a.Start.Month == temp.Month).Sum(a => a.Cost)),2);
 
-                var normal = stations.Sum(s => s.Appointments.Where(a =>
-                    a.Start.Year == temp.Year &&
-                    a.Start.Month == temp.Month &&
-                    a.Pod.PodId == PodTypeEnum.Normal)
-                    .Count());
-
-                var fast = stations.Sum(s => s.Appointments.Where(a =>
-                    a.Start.Year == temp.Year &&
-                    a.Start.Month == temp.Month &&
-                    a.Pod.PodId == PodTypeEnum.Fast)
-                    .Count());
-
-                model.InfoPodUsagePerMonth.Add(new DataPoint(normal, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
-                model.InfoPodUsagePerMonth.Add(new DataPoint(fast, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
                 model.InfoProfitPerMonth.Add(new DataPoint(profit, Months.ElementAt(temp.Month - 1) + "-" + temp.Year));
-
             }
 
 

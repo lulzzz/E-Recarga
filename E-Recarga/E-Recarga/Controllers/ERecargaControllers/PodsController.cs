@@ -159,13 +159,20 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = nameof(RoleEnum.CompanyManager) + "," + nameof(RoleEnum.Employee))]
-        public ActionResult Edit([Bind(Include = "StationId,PodId,isActive")] Pod pod)
+        public ActionResult Edit([Bind(Include = "PodId, StationId,Id")]Pod pod)
         {
             var company = db.Employees.Find(User.Identity.GetUserId()).Company;
+            Pod temp = db.Pods.Find(pod.Id);
+            temp.PodId = pod.PodId;
+
+            if (temp.Station.Id != pod.StationId)
+            {
+                return RedirectToAction("Index");
+            }
 
             if (ModelState.IsValid)
             {
-                db.Entry(pod).State = EntityState.Modified;
+                db.Entry(temp).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -208,6 +215,16 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult DeleteConfirmed(int id)
         {
             Pod pod = db.Pods.Find(id);
+
+            var appointments = pod.Appointments;
+            appointments.ToList()
+                .ForEach(r =>
+                {
+                    r.PodId = null;
+                    db.Entry(r).State = EntityState.Modified;
+                }
+            );
+
             db.Pods.Remove(pod);
             db.SaveChanges();
             return RedirectToAction("Index");
