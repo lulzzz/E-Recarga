@@ -169,12 +169,11 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 var store = new UserStore<ApplicationUser>(new ERecargaDbContext());
                 var manager = new UserManager<ApplicationUser>(store);
 
-                string password = "" + employee.Name.Trim() + employee.PhoneNumber + ".";
+                string password = employee.PhoneNumber + ".";
 
                 var res = manager.Create(employee, password);
                 if (res.Succeeded)
                     manager.AddToRole(employee.Id, role);
-                //
 
                 return RedirectToAction("Index");
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -200,7 +201,13 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult DeleteConfirmed(int id)
         {
             Company company = db.Companies.Find(id);
+
+            db.Appointments.RemoveRange(company.Appointments.ToList());
+            db.Employees.RemoveRange(company.Employees.ToList());
+            db.Stations.RemoveRange(company.Stations.ToList());
+
             db.Companies.Remove(company);
+
             db.SaveChanges();
 
             return RedirectToAction("Index");

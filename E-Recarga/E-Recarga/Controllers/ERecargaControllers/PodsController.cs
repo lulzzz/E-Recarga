@@ -215,6 +215,16 @@ namespace E_Recarga.Controllers.ERecargaControllers
         public ActionResult DeleteConfirmed(int id)
         {
             Pod pod = db.Pods.Find(id);
+
+            var appointments = pod.Appointments;
+            appointments.ToList()
+                .ForEach(r =>
+                {
+                    r.PodId = null;
+                    db.Entry(r).State = EntityState.Modified;
+                }
+            );
+
             db.Pods.Remove(pod);
             db.SaveChanges();
             return RedirectToAction("Index");
