@@ -11,35 +11,6 @@
 <hr />
 <br />
 
-<h3>Realizadas: </h3><br />
-
-@(Html
-    .Grid(Model.Where(a => a.Status.Id != AppointmentStatusEnum.Pending))
-    .Build(columns =>
-    {
-        columns.Add(model => model.Company.Name.Trim()).Titled("Empresa");
-        columns.Add(model => model.Station.ComercialName.Trim()).Titled("Estação");
-        columns.Add(model => model.Pod.PodType.Name).Titled("Carregamento");
-        columns.Add(model => model.Cost).Titled("Custo");
-        columns.Add(model => model.Start).Titled("Início");
-        columns.Add(model => model.End).Titled("Fim");
-        columns.Add(model => Enum_Dictionnary.Translator[model.Status.Name]).Titled("Estado");
-        columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }, null));
-    })
-    .Empty("Não existem dados")
-    .Named("first")
-    .Filterable()
-    .Sortable()
-    .Pageable(pager =>
-    {
-        pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-        pager.ShowPageSizes = true;
-        pager.PagesToDisplay = 6;
-        pager.RowsPerPage = 5;
-    })
-)
-<br /><hr /><br />
-
 <h3>Por realizar: </h3><br />
 
 @(Html
@@ -67,3 +38,48 @@
         pager.RowsPerPage = 5;
     })
 )
+
+
+<br /><hr /><br />
+
+<h3>Realizadas: </h3><br />
+
+@(Html
+        .Grid(Model.Where(a => a.Status.Id != AppointmentStatusEnum.Pending))
+        .Build(columns =>
+        {
+            columns.Add(model => model.Company.Name.Trim()).Titled("Empresa");
+            columns.Add(model => model.Station.ComercialName.Trim()).Titled("Estação");
+            columns.Add(model => model.Pod.PodType.Name).Titled("Carregamento");
+            columns.Add(model => model.Cost).Titled("Custo");
+            columns.Add(model => model.Start).Titled("Início");
+            columns.Add(model => model.End).Titled("Fim");
+            columns.Add(model => Enum_Dictionnary.Translator[model.Status.Name]).Titled("Estado");
+            columns.Add(model => @Html.ActionLink("Detalhes", "Details", "Appointments", new { id = model.Id }, null));
+        })
+        .Empty("Não existem dados")
+        .Named("first")
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+            pager.ShowPageSizes = true;
+            pager.PagesToDisplay = 6;
+            pager.RowsPerPage = 5;
+        })
+)
+
+
+@section Scripts {
+
+    <script>
+    $(document).ready(function () {
+        var msg = '@TempData["msg"]';
+        if (msg.length) {
+            alert(msg);
+        }
+    });
+    </script>
+
+}

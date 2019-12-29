@@ -40,7 +40,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.RechargeCost, htmlAttributes: new { @class = "control-label col-md-3" })
                         <div class="col-md-9">
-                            @Html.EditorFor(model => model.RechargeCost, new { htmlAttributes = new { @class = "form-control", @readonly="readonly"} })
+                            @Html.EditorFor(model => model.RechargeCost, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                             @Html.ValidationMessageFor(model => model.RechargeCost, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -57,7 +57,7 @@
         </div>
         <div class="col-md-offset-12" style="display:table-cell;vertical-align: middle;">
             <div class="form-group" style="display: block; position: relative; margin:auto; margin-right:0">
-                <input type="submit" value="Carregar" class="btn btn-success" style="width:120px; height:40px;font-size:larger"/>
+                <input type="submit" value="Carregar" class="btn btn-success" style="width:120px; height:40px;font-size:larger" />
             </div>
         </div>
     </div>
@@ -69,8 +69,16 @@
 </center>
 
 <div>
-    @Html.ActionLink("Voltar", "Index","Home",null,null)
+    @Html.ActionLink("Voltar", "Index", "Home", null, null)
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    $(document).ready(function () {
+        var msg = '@TempData["msg"]';
+        if (msg.length) {
+            alert(msg);
+        }
+    });
+    </script>
 }
