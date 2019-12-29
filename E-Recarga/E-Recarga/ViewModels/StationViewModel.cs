@@ -15,12 +15,12 @@ namespace E_Recarga.ViewModels
 
         [Display(Name = "Preço de Posto Normal")]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
-        public double NormalCost { get; set; }
+        //[Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
+        public string NormalCost { get; set; }
 
         [Display(Name = "Preço de Posto Rápido")]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
-        public double FastCost { get; set; }
+        //[Range(0.00, double.MaxValue, ErrorMessage = "O {0} deve ser positivo.")]
+        public string FastCost { get; set; }
     }
 }

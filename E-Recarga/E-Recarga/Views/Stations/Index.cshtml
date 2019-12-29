@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     ViewBag.Title = "Estações";
 }
 
@@ -9,8 +9,9 @@
 </center>
 <hr />
 
-<form class="navbar-form">
-    <div class="form-group">
+
+<form class="navbar-form" >
+    <div class="col" align="right">
         <br />
         <label>Pesquisar: </label>&nbsp
         <input id="GridSearch" type="text" class="form-control" placeholder="Preencher">
@@ -19,6 +20,10 @@
     </div>
 </form>
 
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 
 @Html.AjaxGrid(Url.Action("IndexGrid"))
 

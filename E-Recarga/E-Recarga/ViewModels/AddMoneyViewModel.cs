@@ -9,7 +9,7 @@ namespace E_Recarga.ViewModels
         public string Name { get; set; }
 
         [DisplayName("Caixa Actual")]
-        public double Wallet { get; set; }
+        public string Wallet { get; set; }
 
         [DisplayName("Valor a adicionar")]
         [Required(ErrorMessage = "O valor é obrigatório")]
