@@ -33,11 +33,14 @@
 <h3 style="text-align:center"> Resultados das 3 Melhores Estações: </h3>
 <br />
 
-@foreach (var top in Model.TopStations)
+@if (Model.TopStations != null)
 {
-    Html.RenderAction("GetTopStation", new { station = top });
-    <br />
-    <hr />
+    foreach (var top in Model.TopStations)
+    {
+        Html.RenderAction("GetTopStation", new { station = top });
+        <br />
+        <hr />
+    }
 }
 
 
@@ -46,10 +49,13 @@
 
     window.onload = function loadAllPieCharts() {
 
-        @foreach (var station in Model.TopStations)
+        @if (Model.TopStations != null)
         {
-            @:DrawOverviewPieChart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
-            @:DrawProfitPieChart(@station.Station.Id, @Html.Raw(station.InfoDaysJSON));
+            foreach (var station in Model.TopStations)
+            {
+                @:DrawOverviewPieChart(@station.Station.Id,@Html.Raw(station.HourPlotJSON));
+                @:DrawProfitPieChart(@station.Station.Id, @Html.Raw(station.InfoDaysJSON));
+            }
         }
 
         DrawRevenueChart(@Html.Raw(Model.InfoProfitPerMonthJSON));

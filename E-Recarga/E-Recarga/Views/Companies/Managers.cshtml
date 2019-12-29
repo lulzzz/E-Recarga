@@ -9,27 +9,29 @@
 </center>
 <hr />
 
+@Html.ActionLink("Criar", "Create", "Employees",null,null)
+
 @(Html
-    .Grid(Model.AsQueryable())
-    .Build(columns =>
-    {
-        columns.Add(model => model.Company.Name).Titled("Nome da Companhia");
-        columns.Add(model => model.Email).Titled("Email");
-        columns.Add(model => model.PhoneNumber).Titled("Telefone");
-        columns.Add(model => @Html.Raw(
-            Html.ActionLink("Detalhes", "Details","Employees", new { id = model.Id }, null).ToString()) + " | " +
-            Html.ActionLink("Editar", "Edit", "Employees", new { id = model.Id },null).ToString() +  " | " +
-            Html.ActionLink("Apagar", "Delete", "Employees", new { id = model.Id },null).ToString())
-            .Titled("Ações").Encoded(false);
-    })
-    .Empty("Não existem dados")
-    .Filterable()
-    .Sortable()
-    .Pageable(pager =>
-    {
-        pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
-        pager.ShowPageSizes = true;
-        pager.PagesToDisplay = 3;
-        pager.RowsPerPage = 5;
-    })
+        .Grid(Model.AsQueryable())
+        .Build(columns =>
+        {
+            columns.Add(model => model.Company.Name).Titled("Nome da Companhia");
+            columns.Add(model => model.Email).Titled("Email");
+            columns.Add(model => model.PhoneNumber).Titled("Telefone");
+            columns.Add(model => @Html.Raw(
+                Html.ActionLink("Detalhes", "Details", "Employees", new { id = model.Id }, null).ToString()) + " | " +
+                Html.ActionLink("Editar", "Edit", "Employees", new { id = model.Id }, null).ToString() + " | " +
+                Html.ActionLink("Apagar", "Delete", "Employees", new { id = model.Id }, null).ToString())
+                .Titled("Ações").Encoded(false);
+        })
+        .Empty("Não existem dados")
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.PageSizes = new Dictionary<Int32, String> { { 0, "All" }, { 5, "5" }, { 10, "10" }, { 20, "20" } };
+            pager.ShowPageSizes = true;
+            pager.PagesToDisplay = 3;
+            pager.RowsPerPage = 5;
+        })
 )
