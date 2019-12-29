@@ -162,13 +162,14 @@ namespace E_Recarga.Controllers.ERecargaControllers
                 employee.CompanyId = employeeVM.CompanyId;
                 employee.StationId = employeeVM.StationId;
 
-                string role = Enum_Dictionnary.Translator[employeeVM.EmployeeType];
-           
+                var reversedDictionary = Enum_Dictionnary.Translator.ToDictionary(x => x.Value, x => x.Key);
+                string role = reversedDictionary[employeeVM.EmployeeType];
+
                 //Create Users
                 var store = new UserStore<ApplicationUser>(new ERecargaDbContext());
                 var manager = new UserManager<ApplicationUser>(store);
 
-                string password = "" + employee.Name.Trim(' ') + employee.PhoneNumber + ".";
+                string password = "" + employee.Name.Trim() + employee.PhoneNumber + ".";
 
                 var res = manager.Create(employee, password);
                 if (res.Succeeded)
@@ -230,7 +231,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
             }
 
             string pt_role;
-            Enum_Dictionnary.Translator.TryGetValue(roleName, out pt_role);
+            var reversedDictionary = Enum_Dictionnary.Translator.ToDictionary(x => x.Value, x => x.Key);
+            reversedDictionary.TryGetValue(roleName, out pt_role);
 
             EmployeeViewModel employeeVM = new EmployeeViewModel() {Name = employee.Name,
                 Username = employee.UserName, Email = employee.Email, PhoneNumber= employee.PhoneNumber,
@@ -261,7 +263,8 @@ namespace E_Recarga.Controllers.ERecargaControllers
                     employee.CompanyId = employeeVM.CompanyId;
                 else
                 {
-                    string employee_role = Enum_Dictionnary.Translator[employeeVM.EmployeeType];
+                    var reversedDictionary = Enum_Dictionnary.Translator.ToDictionary(x => x.Value, x => x.Key);
+                    string employee_role = reversedDictionary[employeeVM.EmployeeType];
 
                     if (employee_role == nameof(RoleEnum.CompanyManager))
                     {

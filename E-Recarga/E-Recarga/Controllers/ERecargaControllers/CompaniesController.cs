@@ -94,6 +94,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
         }
 
         // GET: Companies/Create
+        [Route("Criar")]
         [Authorize(Roles = nameof(RoleEnum.Administrator))]
         public ActionResult Create()
         {
