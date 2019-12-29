@@ -300,6 +300,7 @@ namespace E_Recarga.Controllers.ERecargaControllers
 
         // GET: Employees/Delete/5
         [Route("{id}/Apagar")]
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -311,6 +312,24 @@ namespace E_Recarga.Controllers.ERecargaControllers
             {
                 return HttpNotFound();
             }
+            var roleId = employee.Roles.FirstOrDefault().RoleId;
+            var role = db.Roles.Where(x => x.Name == nameof(RoleEnum.CompanyManager)).FirstOrDefault();
+
+            if (User.IsInRole(nameof(RoleEnum.Administrator)))
+            {
+                if(role.Id != roleId)
+                {
+                    return HttpNotFound();
+                }
+            }
+            else
+            {
+                if(employee.CompanyId != db.Employees.Find(User.Identity.GetUserId()).CompanyId)
+                {
+                    return HttpNotFound();
+                }
+            }
+
             return View(employee);
         }
 
@@ -318,9 +337,12 @@ namespace E_Recarga.Controllers.ERecargaControllers
         [Route("{id}/Apagar")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = nameof(RoleEnum.Administrator) + "," + nameof(RoleEnum.CompanyManager))]
         public ActionResult DeleteConfirmed(string id)
         {
             Employee employee = db.Employees.Find(id);
+
+
             db.Users.Remove(employee);
             db.SaveChanges();
             return RedirectToAction("Index");
