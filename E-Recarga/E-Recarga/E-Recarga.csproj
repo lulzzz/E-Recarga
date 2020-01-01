@@ -356,9 +356,7 @@
     <Content Include="Views\Users\AppointmentsRecords.cshtml" />
     <Content Include="Views\Appointments\UserAppointmentCreate.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewBag\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

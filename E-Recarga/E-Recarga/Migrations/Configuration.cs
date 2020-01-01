@@ -142,16 +142,16 @@ namespace E_Recarga.Migrations
             };
 
             var workers = new List<Employee>();
-            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace1@worker.pt", UserName = $"Wallace1@worker.pt", CompanyId = 1, StationId = 1 });
-            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace2@worker.pt", UserName = $"Wallace2@worker.pt", CompanyId = 1, StationId = 2 });
-            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace3@worker.pt", UserName = $"Wallace3@worker.pt", CompanyId = 1, StationId = 3 });
-            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace4@worker.pt", UserName = $"Wallace4@worker.pt", CompanyId = 1, StationId = 4 });
+            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace1@worker.pt", UserName = $"Wallace1@worker.pt", PhoneNumber = "123456789", CompanyId = 1, StationId = 1 });
+            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace2@worker.pt", UserName = $"Wallace2@worker.pt", PhoneNumber = "123456789", CompanyId = 1, StationId = 2 });
+            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace3@worker.pt", UserName = $"Wallace3@worker.pt", PhoneNumber = "123456789", CompanyId = 1, StationId = 3 });
+            workers.Add(new Employee { Name = $"Wallace Worker", Email = $"Wallace4@worker.pt", UserName = $"Wallace4@worker.pt", PhoneNumber = "123456789", CompanyId = 1, StationId = 4 });
 
-            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana1@worker.pt", UserName = $"Joana1@worker.pt", CompanyId = 2, StationId = 6 });
-            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana2@worker.pt", UserName = $"Joana2@worker.pt", CompanyId = 2, StationId = 7 });
-            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana3@worker.pt", UserName = $"Joana3@worker.pt", CompanyId = 2, StationId = 8 });
-            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana4@worker.pt", UserName = $"Joana4@worker.pt", CompanyId = 2, StationId = 9 });
-            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana5@worker.pt", UserName = $"Joana5@worker.pt", CompanyId = 2, StationId = 10 });
+            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana1@worker.pt", UserName = $"Joana1@worker.pt", PhoneNumber = "123456789", CompanyId = 2, StationId = 6 });
+            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana2@worker.pt", UserName = $"Joana2@worker.pt", PhoneNumber = "123456789", CompanyId = 2, StationId = 7 });
+            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana3@worker.pt", UserName = $"Joana3@worker.pt", PhoneNumber = "123456789", CompanyId = 2, StationId = 8 });
+            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana4@worker.pt", UserName = $"Joana4@worker.pt", PhoneNumber = "123456789", CompanyId = 2, StationId = 9 });
+            workers.Add(new Employee { Name = $"Joana Worker", Email = $"Joana5@worker.pt", UserName = $"Joana5@worker.pt", PhoneNumber = "123456789", CompanyId = 2, StationId = 10 });
 
             var commonUsers = new List<ApplicationUser>()
             {
@@ -168,26 +168,26 @@ namespace E_Recarga.Migrations
                     manager.AddToRole(user.Id, nameof(RoleEnum.Administrator));
             }
 
-            //foreach (var user in companyManagers)
-            //{
-            //    var res = manager.Create(user, password);
-            //    if (res.Succeeded)
-            //        manager.AddToRole(user.Id, nameof(RoleEnum.CompanyManager));
-            //}
+            foreach (var user in companyManagers)
+            {
+                var res = manager.Create(user, password);
+                if (res.Succeeded)
+                    manager.AddToRole(user.Id, nameof(RoleEnum.CompanyManager));
+            }
 
-            //foreach (var user in workers)
-            //{
-            //    var res = manager.Create(user, password);
-            //    if (res.Succeeded)
-            //        manager.AddToRole(user.Id, nameof(RoleEnum.Employee));
-            //}
+            foreach (var user in workers)
+            {
+                var res = manager.Create(user, password);
+                if (res.Succeeded)
+                    manager.AddToRole(user.Id, nameof(RoleEnum.Employee));
+            }
 
-            //foreach (var user in commonUsers)
-            //{
-            //    var res = manager.Create(user, password);
-            //    if (res.Succeeded)
-            //        manager.AddToRole(user.Id, nameof(RoleEnum.User));
-            //}
+            foreach (var user in commonUsers)
+            {
+                var res = manager.Create(user, password);
+                if (res.Succeeded)
+                    manager.AddToRole(user.Id, nameof(RoleEnum.User));
+            }
         }
 
 
@@ -243,9 +243,11 @@ namespace E_Recarga.Migrations
             AddEnumsToDB(context);
             AddRolesToDB(context);
 
-            //AddCompaniesAndStationsToDB(context);
-            //AddPodsAndPricesToDB(context);
+            AddCompaniesAndStationsToDB(context);
+            AddPodsAndPricesToDB(context);
             AddUsersToDB(context);
+            context.SaveChanges();
+
 
             //AddAppointmentsToDB(context);
         }
